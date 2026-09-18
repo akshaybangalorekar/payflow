@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PayFlow Track — Spring Boot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Fragment+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #f7f5f0; --surface: #ffffff; --surface2: #efece5;
+    --border: rgba(40, 30, 10, 0.1); --text: #28231b; --dim: #847a6c;
+    --accent: #b45309; --accent-dim: rgba(180, 83, 9, 0.08);
+    --code-bg: #20262f; --code-text: #dbe4f0;
+    --postit: #fff6a3; --postit-text: #3b321a;
+    --font-body: 'Bricolage Grotesque', system-ui, sans-serif;
+    --font-mono: 'Fragment Mono', 'SF Mono', Consolas, monospace;
+    --font-hand: 'Caveat', cursive;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); padding: 44px 40px; }
+  .wrap { max-width: 940px; margin: 0 auto; display: grid; gap: 24px; }
+  .eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
+  h1 { font-size: 34px; font-weight: 700; letter-spacing: -0.5px; margin: 6px 0 4px; }
+  .subtitle { color: var(--dim); font-size: 14px; margin-bottom: 6px; }
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; }
+  .sec-label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); margin-bottom: 14px; font-weight: 500; }
+  p { font-size: 14.5px; line-height: 1.7; margin-bottom: 10px; }
+  p:last-child { margin-bottom: 0; }
+  code.i { font-family: var(--font-mono); font-size: 12px; background: var(--accent-dim); color: var(--accent); padding: 1px 5px; border-radius: 3px; }
+  pre.code { font-family: var(--font-mono); font-size: 12px; line-height: 1.65; background: var(--code-bg); color: var(--code-text); border-radius: 8px; padding: 16px 18px; overflow-x: auto; white-space: pre; margin: 12px 0 4px; }
+  pre.code .cm { color: #7d8b9d; }
+  pre.code .kw { color: #8ecb8e; }
+  .unit { border-top: 3px solid var(--accent); }
+  .unit .status { font-family: var(--font-mono); font-size: 10px; float: right; padding: 1px 8px; border-radius: 20px; margin-top: -2px; }
+  .status--done { background: rgba(46, 125, 67, 0.12); color: #2e7d43; }
+  .status--next { background: var(--accent-dim); color: var(--accent); }
+  .postit-wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(225px, 1fr)); gap: 18px; margin-top: 14px; }
+  .postit { background: var(--postit); color: var(--postit-text); font-family: var(--font-hand); font-size: 19px; line-height: 1.4; padding: 14px 18px 18px; box-shadow: 0 10px 18px rgba(60, 45, 0, 0.18); border-radius: 2px; transform: rotate(-1.2deg); min-height: 160px; }
+  .postit:nth-child(2n) { transform: rotate(1.3deg); }
+  .postit:nth-child(3n) { transform: rotate(-0.4deg); }
+  .postit b { display: block; font-size: 15px; margin-bottom: 6px; color: #6b5410; font-family: var(--font-mono); letter-spacing: 0.5px; text-transform: uppercase; }
+  .postit code { font-family: var(--font-mono); font-size: 12.5px; background: rgba(60, 45, 0, 0.08); padding: 0 4px; border-radius: 3px; }
+  @media (max-width: 700px) { body { padding: 20px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">PayFlow Track &middot; Spring Boot &middot; Units 1&ndash;8</div>
+    <h1>The Spring Boot track</h1>
+    <p class="subtitle">One unit per session's concept block. Every example comes from the accounts service you are reading.</p>
+  </header>
+
+  <div class="section unit">
+    <span class="status status--done">DELIVERED</span>
+    <div class="sec-label">Unit 1 &middot; The container & dependency injection</div>
+    <p><code class="i">@SpringBootApplication</code> scans your packages for stereotype annotations (<code class="i">@RestController</code>, <code class="i">@Service</code>, <code class="i">@Repository</code>), instantiates each class as a <strong>bean</strong> — one singleton instance — and injects them into each other's constructors. You never write <code class="i">new</code> for a dependency again; the container builds the object graph at startup.</p>
+    <pre class="code"><span class="cm">// from YOUR code — the controller never constructs its service:</span>
+<span class="kw">public</span> AccountController(AccountService accountService) {
+    <span class="kw">this</span>.accountService = accountService;   <span class="cm">// injected by the container</span>
+}</pre>
+  </div>
+
+  <div class="section unit">
+    <span class="status status--next">NEXT</span>
+    <div class="sec-label">Unit 2 &middot; The request lifecycle</div>
+    <p>Every request walks the same corridor. You captured this in your debugger stack trace:</p>
+    <pre class="code">HTTP request
+ &rarr; Filter chain            <span class="cm">(logging; later: security — Stage S)</span>
+ &rarr; DispatcherServlet        <span class="cm">(the traffic cop)</span>
+ &rarr; handler mapping          <span class="cm">(finds your @PostMapping("/api/accounts"))</span>
+ &rarr; Jackson parses JSON      <span class="cm">(string &rarr; CreateAccountRequest object)</span>
+ &rarr; @Valid runs              <span class="cm">(rejects bad input BEFORE your method)</span>
+ &rarr; your controller method   <span class="cm">(called via reflection)</span>
+ &rarr; return value &rarr; JSON   <span class="cm">(Jackson again)</span>
+ &rarr; 201 response
+ anything thrown anywhere &rarr; @RestControllerAdvice</pre>
+  </div>
+
+  <div class="section unit">
+    <div class="sec-label">Unit 3 &middot; Spring Data JPA & Hibernate</div>
+    <p>You wrote an interface with no implementation — Spring generates one at runtime. <strong>Derived queries</strong>: the method name <em>is</em> the query.</p>
+    <pre class="code"><span class="kw">boolean</span> existsByEmail(String email);
+<span class="cm">// becomes: SELECT 1 FROM accounts WHERE email = ? LIMIT 1</span>
+
+accountRepository.save(account);   <span class="cm">// INSERT (or UPDATE if it has an id)</span></pre>
+    <p>Coming attractions: lazy loading and the N+1 query problem (one query for the list, then one more per item — the classic production killer we will hunt with logs).</p>
+  </div>
+
+  <div class="section unit">
+    <div class="sec-label">Unit 4 &middot; Validation & binding</div>
+    <p>The DTO is the contract; annotations declare its rules; <code class="i">@Valid</code> enforces them at the door:</p>
+    <pre class="code"><span class="cm">// on the DTO (the contract):</span>
+@NotBlank String customerName,  @Email String email
+
+<span class="cm">// on the controller (enforcement):</span>
+<span class="kw">public</span> ResponseEntity<Account> create(@Valid @RequestBody CreateAccountRequest req)
+
+<span class="cm">// on failure: MethodArgumentNotValidException &rarr; your handler &rarr; clean 400 JSON</span></pre>
+  </div>
+
+  <div class="section unit">
+    <div class="sec-label">Unit 5 &middot; Configuration & profiles</div>
+    <p><code class="i">application.yml</code> is layered: defaults &rarr; profile file (<code class="i">application-dev.yml</code>) &rarr; environment variables (<code class="i">SPRING_DATASOURCE_PASSWORD</code>) &rarr; command line. The environment always wins &mdash; that's how the same jar runs on your Mac and in AWS with different databases, no code change:</p>
+    <pre class="code">spring:
+  config:
+    activate:
+      on-profile: dev     <span class="cm"># only loads when profile "dev" is active</span>
+  datasource:
+    url: jdbc:postgresql://localhost:5432/payflow_accounts</pre>
+  </div>
+
+  <div class="section unit">
+    <div class="sec-label">Unit 6 &middot; Transactions</div>
+    <p><code class="i">@Transactional</code> on a service method = everything inside is one ACID unit: all writes commit together or none do. This is where your race gets fixed for real — the database itself becomes the referee:</p>
+    <pre class="code">@Transactional
+<span class="kw">public</span> Account create(CreateAccountRequest req) { ... }
+<span class="cm">// method exits normally &rarr; COMMIT. Exception &rarr; ROLLBACK.</span></pre>
+  </div>
+
+  <div class="section unit">
+    <div class="sec-label">Unit 7 &middot; Testing</div>
+    <p>Three depths: <strong>unit tests</strong> (JUnit + Mockito, milliseconds, mock the dependencies you learned to inject in Unit 1), <strong>slice tests</strong> (<code class="i">@WebMvcTest</code> boots only the web layer), and <strong>integration tests</strong> (Testcontainers starts a real Postgres in Docker for the test, throws it away after):</p>
+    <pre class="code">@Test
+<span class="kw">void</span> rejectsDuplicateEmail() {
+    <span class="kw">when</span>(repo.existsByEmail(<span class="cm">"a@b.c"</span>)).thenReturn(<span class="kw">true</span>);
+    assertThatThrownBy(() -> service.create(req))
+        .isInstanceOf(DuplicateAccountException.class);
+}</pre>
+  </div>
+
+  <div class="section unit">
+    <div class="sec-label">Unit 8 &middot; The rest, on schedule</div>
+    <p>Security filter chain (Stage S &mdash; OAuth2 lands between the filters of Unit 2's corridor), Kafka listeners (Stage 2 &mdash; a method invoked by a message instead of a request), Micrometer metrics (Stage 3). Each gets its concept block when the stage arrives &mdash; taught in context, not in the abstract.</p>
+  </div>
+
+  <div class="section" style="background:var(--surface2)">
+    <div class="sec-label">Post-it wall &mdash; copy these onto real sticky notes</div>
+    <div class="postit-wall">
+      <div class="postit"><b>Beans</b>@Service / @RestController / @Repository &rarr; one instance each, built at startup, injected via constructor. Never <code>new</code> a service.</div>
+      <div class="postit"><b>Request path</b>filter &rarr; DispatcherServlet &rarr; Jackson + @Valid &rarr; your method &rarr; JSON back out.</div>
+      <div class="postit"><b>Repo = SQL</b><code>existsByEmail(email)</code> literally means <code>WHERE email=?</code>. Spring writes the query.</div>
+      <div class="postit"><b>@Transactional</b>One method = one commit. All rows or no rows. Exit normal &rarr; COMMIT; throw &rarr; ROLLBACK.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

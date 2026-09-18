@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PayFlow Track — GitHub Actions (CI)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Fragment+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #f7f5f0; --surface: #ffffff; --surface2: #efece5;
+    --border: rgba(40, 30, 10, 0.1); --text: #28231b; --dim: #847a6c;
+    --accent: #b45309; --accent-dim: rgba(180, 83, 9, 0.08);
+    --code-bg: #20262f; --code-text: #dbe4f0;
+    --postit: #fff6a3; --postit-text: #3b321a;
+    --font-body: 'Bricolage Grotesque', system-ui, sans-serif;
+    --font-mono: 'Fragment Mono', 'SF Mono', Consolas, monospace;
+    --font-hand: 'Caveat', cursive;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); padding: 44px 40px; }
+  .wrap { max-width: 940px; margin: 0 auto; display: grid; gap: 24px; }
+  .eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
+  h1 { font-size: 34px; font-weight: 700; letter-spacing: -0.5px; margin: 6px 0 4px; }
+  .subtitle { color: var(--dim); font-size: 14px; margin-bottom: 6px; }
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; }
+  .sec-label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); margin-bottom: 14px; font-weight: 500; }
+  p { font-size: 14.5px; line-height: 1.7; margin-bottom: 10px; }
+  p:last-child { margin-bottom: 0; }
+  code.i { font-family: var(--font-mono); font-size: 12px; background: var(--accent-dim); color: var(--accent); padding: 1px 5px; border-radius: 3px; }
+  pre.code { font-family: var(--font-mono); font-size: 12px; line-height: 1.65; background: var(--code-bg); color: var(--code-text); border-radius: 8px; padding: 16px 18px; overflow-x: auto; white-space: pre; margin: 12px 0 4px; }
+  pre.code .cm { color: #7d8b9d; }
+  .unit { border-top: 3px solid var(--accent); }
+  .postit-wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(225px, 1fr)); gap: 18px; margin-top: 14px; }
+  .postit { background: var(--postit); color: var(--postit-text); font-family: var(--font-hand); font-size: 19px; line-height: 1.4; padding: 14px 18px 18px; box-shadow: 0 10px 18px rgba(60, 45, 0, 0.18); border-radius: 2px; transform: rotate(-1.2deg); min-height: 160px; }
+  .postit:nth-child(2n) { transform: rotate(1.3deg); }
+  .postit:nth-child(3n) { transform: rotate(-0.4deg); }
+  .postit b { display: block; font-size: 15px; margin-bottom: 6px; color: #6b5410; font-family: var(--font-mono); letter-spacing: 0.5px; text-transform: uppercase; }
+  .postit code { font-family: var(--font-mono); font-size: 12.5px; background: rgba(60, 45, 0, 0.08); padding: 0 4px; border-radius: 3px; }
+  @media (max-width: 700px) { body { padding: 20px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">PayFlow Track &middot; CI &middot; Stage 5 preview</div>
+    <h1>GitHub Actions</h1>
+    <p class="subtitle">The robot that builds and tests every push. Arrives in Stage 5 &mdash; the concepts now, the hands-on later.</p>
+  </header>
+
+  <div class="section unit">
+    <div class="sec-label">What & why</div>
+    <p>GitHub Actions is GitHub's built-in automation runner: any YAML file in <code class="i">.github/workflows/</code> becomes a robot that reacts to events (push, pull request, a schedule) by running commands on a fresh virtual machine. The discipline it enforces is called <strong>CI — continuous integration</strong>: every push gets built and tested on a clean machine, automatically, with no "works on my Mac" escapes. Red build = no merge. That's the entire religion.</p>
+  </div>
+
+  <div class="section unit">
+    <div class="sec-label">Anatomy — the workflow we will actually write</div>
+    <pre class="code">.github/workflows/accounts-ci.yml
+<span class="cm">----------------------------------------</span>
+name: accounts-ci            <span class="cm"># shows up in the Actions tab</span>
+
+on:                          <span class="cm"># WHEN to run</span>
+  push:
+    paths: [ "services/accounts/**" ]   <span class="cm"># only when this service changed</span>
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest    <span class="cm"># a fresh VM, every single run</span>
+    steps:
+      - uses: actions/checkout@v5          <span class="cm"># clone the repo</span>
+      - uses: actions/setup-java@v5        <span class="cm"># install a JDK</span>
+        with:
+          java-version: '25'
+          distribution: temurin
+      - run: mvn -B test -f services/accounts/pom.xml   <span class="cm"># the point of it all</span></pre>
+    <p>Vocabulary: <strong>trigger</strong> (the <code class="i">on:</code> block), <strong>runner</strong> (the throwaway VM), <strong>step</strong> (one thing to do), <code class="i">uses:</code> (run a pre-made action someone published) vs <code class="i">run:</code> (run this shell command).</p>
+  </div>
+
+  <div class="section unit">
+    <div class="sec-label">Three concepts that will matter later</div>
+    <p><strong>Secrets</strong> — credentials live in the repo's Settings &rarr; Secrets, referenced as <code class="i">${{ secrets.NAME }}</code>, never in the YAML file. Same rule as <code class="i">.env</code>: it's a leak if it's in the file. <strong>Caching</strong> — cache <code class="i">~/.m2</code> so the runner doesn't re-download the world every push (the basement, on the robot). <strong>arm64 builds</strong> — our Macs make arm64 images; the runner builds them natively rather than emulating, which is the difference between a 2-minute and 25-minute CI run. We will hit all three in Stage 5.</p>
+  </div>
+
+  <div class="section" style="background:var(--surface2)">
+    <div class="sec-label">Post-it wall &mdash; copy these onto real sticky notes</div>
+    <div class="postit-wall">
+      <div class="postit"><b>Workflow</b>YAML in <code>.github/workflows/</code>. <code>on: push/PR</code>. Runs on a fresh VM, every time.</div>
+      <div class="postit"><b>CI rule</b>Red build = no merge. Every push: build + test, on a clean machine.</div>
+      <div class="postit"><b>Secrets</b>Live in Settings &rarr; Secrets. Read as <code>${{ secrets.NAME }}</code>. Never in the file.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

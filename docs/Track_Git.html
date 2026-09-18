@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PayFlow Track — Git</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Fragment+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #f7f5f0; --surface: #ffffff; --surface2: #efece5;
+    --border: rgba(40, 30, 10, 0.1); --text: #28231b; --dim: #847a6c;
+    --accent: #b45309; --accent-dim: rgba(180, 83, 9, 0.08);
+    --code-bg: #20262f; --code-text: #dbe4f0;
+    --postit: #fff6a3; --postit-text: #3b321a;
+    --font-body: 'Bricolage Grotesque', system-ui, sans-serif;
+    --font-mono: 'Fragment Mono', 'SF Mono', Consolas, monospace;
+    --font-hand: 'Caveat', cursive;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); padding: 44px 40px; }
+  .wrap { max-width: 940px; margin: 0 auto; display: grid; gap: 24px; }
+  .eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
+  h1 { font-size: 34px; font-weight: 700; letter-spacing: -0.5px; margin: 6px 0 4px; }
+  .subtitle { color: var(--dim); font-size: 14px; margin-bottom: 6px; }
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; }
+  .sec-label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); margin-bottom: 14px; font-weight: 500; }
+  p { font-size: 14.5px; line-height: 1.7; margin-bottom: 10px; }
+  p:last-child { margin-bottom: 0; }
+  code.i { font-family: var(--font-mono); font-size: 12px; background: var(--accent-dim); color: var(--accent); padding: 1px 5px; border-radius: 3px; }
+  pre.code { font-family: var(--font-mono); font-size: 12px; line-height: 1.65; background: var(--code-bg); color: var(--code-text); border-radius: 8px; padding: 16px 18px; overflow-x: auto; white-space: pre; margin: 12px 0 4px; }
+  pre.code .cm { color: #7d8b9d; }
+  .unit { border-top: 3px solid var(--accent); }
+  .unit .status { font-family: var(--font-mono); font-size: 10px; float: right; padding: 1px 8px; border-radius: 20px; margin-top: -2px; }
+  .status--done { background: rgba(46, 125, 67, 0.12); color: #2e7d43; }
+  .status--next { background: var(--accent-dim); color: var(--accent); }
+  .trees { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 8px; align-items: center; margin: 14px 0; }
+  .tree { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-align: center; }
+  .tree h4 { font-size: 13px; margin-bottom: 4px; }
+  .tree p { font-size: 11px; color: var(--dim); margin: 0; }
+  .tree-arrow { color: var(--accent); font-family: var(--font-mono); font-size: 11px; text-align: center; line-height: 1.4; }
+  .postit-wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(225px, 1fr)); gap: 18px; margin-top: 14px; }
+  .postit { background: var(--postit); color: var(--postit-text); font-family: var(--font-hand); font-size: 19px; line-height: 1.4; padding: 14px 18px 18px; box-shadow: 0 10px 18px rgba(60, 45, 0, 0.18); border-radius: 2px; transform: rotate(-1.2deg); min-height: 160px; }
+  .postit:nth-child(2n) { transform: rotate(1.3deg); }
+  .postit:nth-child(3n) { transform: rotate(-0.4deg); }
+  .postit b { display: block; font-size: 15px; margin-bottom: 6px; color: #6b5410; font-family: var(--font-mono); letter-spacing: 0.5px; text-transform: uppercase; }
+  .postit code { font-family: var(--font-mono); font-size: 12.5px; background: rgba(60, 45, 0, 0.08); padding: 0 4px; border-radius: 3px; }
+  @media (max-width: 700px) { body { padding: 20px; } .trees { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">PayFlow Track &middot; Git &middot; Units 1&ndash;5</div>
+    <h1>The Git track</h1>
+    <p class="subtitle">From "commands I was told to run" to a mental model you can debug with.</p>
+  </header>
+
+  <div class="section unit">
+    <span class="status status--done">DELIVERED</span>
+    <div class="sec-label">Unit 1 &middot; The three trees</div>
+    <div class="trees">
+      <div class="tree"><h4>Working directory</h4><p>files as they are now</p></div>
+      <div class="tree-arrow">&rarr;<br><b>git add</b></div>
+      <div class="tree"><h4>Index (staging)</h4><p>the proposal</p></div>
+      <div class="tree-arrow">&rarr;<br><b>git commit</b></div>
+      <div class="tree"><h4>Repository</h4><p>sealed history</p></div>
+    </div>
+    <p>The inspection reflexes that go with it: <code class="i">git status</code> (what's changed, what's staged), <code class="i">git diff</code> (unstaged changes), <code class="i">git diff --staged</code> (the proposal), <code class="i">git log --oneline</code> (the story), <code class="i">git show</code> (the last commit, line by line).</p>
+  </div>
+
+  <div class="section unit">
+    <span class="status status--next">NEXT</span>
+    <div class="sec-label">Unit 2 &middot; Undoing things safely</div>
+    <pre class="code">git restore <file>           <span class="cm">/* discard uncommitted changes — GONE forever */</span>
+git restore --staged <file>  <span class="cm">/* unstage only; changes stay in the working dir */</span>
+git commit --amend            <span class="cm">/* edit the last commit (message or content)     */</span>
+                              <span class="cm">/* ONLY if you haven't pushed it yet!             */</span>
+git revert <sha>              <span class="cm">/* safe undo on shared branches: makes a NEW     */</span>
+                              <span class="cm">/* commit that cancels the old one               */</span>
+git reset --hard <sha>        <span class="cm">/* the grenade: rewires history, deletes work   */</span></pre>
+    <p>The rule that keeps you out of trouble: <strong>amend private, revert public.</strong> History you've pushed belongs to the team; history you haven't is still yours to rewrite.</p>
+  </div>
+
+  <div class="section unit">
+    <div class="sec-label">Unit 3 &middot; Branches & merge conflicts</div>
+    <p>A branch is just a movable label pointing at a commit — nothing more. A conflict happens when two branches changed the same lines: git refuses to guess and hands you the file:</p>
+    <pre class="code"><<<<<<< HEAD
+balance = 2500.0          <span class="cm">/* your side */</span>
+=======
+balance = BigDecimal(2500) <span class="cm">/* the other side */</span>
+>>>>>>> feature/big-money</pre>
+    <p>You edit the file to the correct union, delete the markers, <code class="i">git add</code>, <code class="i">git commit</code>. We will manufacture one of these on purpose in a session — so the first real one isn't traumatic.</p>
+  </div>
+
+  <div class="section unit">
+    <div class="sec-label">Unit 4 &middot; Reading diffs — the reviewer's eye</div>
+    <p><code class="i">git show</code> output is what a code reviewer reads. Anatomy: the hunk header <code class="i">@@ -10,7 +10,8 @@</code> means "old file from line 10, 7 lines; new file from line 10, 8 lines." Lines starting <code class="i">+</code> were added, <code class="i">-</code> removed, the rest are context. Review discipline: read every added line and ask "is this line safe, correct, and needed?" <code class="i">git blame <file></code> answers "who wrote this line, in which commit" — archaeology, not blame.</p>
+  </div>
+
+  <div class="section unit">
+    <div class="sec-label">Unit 5 &middot; Collaboration (Stage 5)</div>
+    <p><code class="i">fetch</code> downloads the remote's history without touching yours; <code class="i">pull</code> = fetch + merge. <strong>Rebase</strong> replays your commits on top of the latest remote state, keeping history linear. The golden rule: <strong>never rebase a branch anyone else has seen</strong> — rewriting shared history strands your teammates' work. Then the PR workflow: feature branch &rarr; push &rarr; pull request &rarr; review &rarr; merge. We adopt this for real in Stage 5; I stop reviewing your commits and start reviewing your PRs.</p>
+  </div>
+
+  <div class="section" style="background:var(--surface2)">
+    <div class="sec-label">Post-it wall &mdash; copy these onto real sticky notes</div>
+    <div class="postit-wall">
+      <div class="postit"><b>3 trees</b>working &rarr; (add) &rarr; index &rarr; (commit) &rarr; history &rarr; (push) &rarr; GitHub</div>
+      <div class="postit"><b>Pre-commit</b><code>git status</code> + <code>git diff --staged</code> — know exactly what you're sealing in.</div>
+      <div class="postit"><b>Undo ladder</b>restore = discard &middot; amend = fix unpushed &middot; revert = undo pushed &middot; reset --hard = grenade</div>
+      <div class="postit"><b>Rebase rule</b>fetch downloads, pull = fetch + merge. Never rebase a branch others have seen.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

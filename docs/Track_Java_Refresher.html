@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PayFlow Track — Java Refresher</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Fragment+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #f7f5f0; --surface: #ffffff; --surface2: #efece5;
+    --border: rgba(40, 30, 10, 0.1); --text: #28231b; --dim: #847a6c;
+    --accent: #b45309; --accent-dim: rgba(180, 83, 9, 0.08);
+    --code-bg: #20262f; --code-text: #dbe4f0;
+    --postit: #fff6a3; --postit-text: #3b321a;
+    --font-body: 'Bricolage Grotesque', system-ui, sans-serif;
+    --font-mono: 'Fragment Mono', 'SF Mono', Consolas, monospace;
+    --font-hand: 'Caveat', cursive;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); padding: 44px 40px; }
+  .wrap { max-width: 940px; margin: 0 auto; display: grid; gap: 24px; }
+  .eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
+  h1 { font-size: 34px; font-weight: 700; letter-spacing: -0.5px; margin: 6px 0 4px; }
+  .subtitle { color: var(--dim); font-size: 14px; margin-bottom: 6px; }
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; }
+  .sec-label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); margin-bottom: 14px; font-weight: 500; }
+  p { font-size: 14.5px; line-height: 1.7; margin-bottom: 10px; }
+  p:last-child { margin-bottom: 0; }
+  code.i { font-family: var(--font-mono); font-size: 12px; background: var(--accent-dim); color: var(--accent); padding: 1px 5px; border-radius: 3px; }
+  pre.code { font-family: var(--font-mono); font-size: 12px; line-height: 1.65; background: var(--code-bg); color: var(--code-text); border-radius: 8px; padding: 16px 18px; overflow-x: auto; white-space: pre; margin: 12px 0 4px; }
+  pre.code .cm { color: #7d8b9d; }
+  pre.code .kw { color: #8ecb8e; }
+  .unit { border-top: 3px solid var(--accent); }
+  .postit-wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(225px, 1fr)); gap: 18px; margin-top: 14px; }
+  .postit { background: var(--postit); color: var(--postit-text); font-family: var(--font-hand); font-size: 19px; line-height: 1.4; padding: 14px 18px 18px; box-shadow: 0 10px 18px rgba(60, 45, 0, 0.18); border-radius: 2px; transform: rotate(-1.2deg); min-height: 160px; position: relative; }
+  .postit:nth-child(2n) { transform: rotate(1.3deg); }
+  .postit:nth-child(3n) { transform: rotate(-0.4deg); }
+  .postit b { display: block; font-size: 15px; margin-bottom: 6px; color: #6b5410; font-family: var(--font-mono); letter-spacing: 0.5px; text-transform: uppercase; }
+  .postit code { font-family: var(--font-mono); font-size: 12.5px; background: rgba(60, 45, 0, 0.08); padding: 0 4px; border-radius: 3px; }
+  @media (max-width: 700px) { body { padding: 20px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">PayFlow Track &middot; Java</div>
+    <h1>Java 8 &rarr; 25: what you missed</h1>
+    <p class="subtitle">The language grew up while you were away. Here is the 20% you will use daily in PayFlow.</p>
+  </header>
+
+  <div class="section">
+    <div class="sec-label">The timeline</div>
+    <p><strong>Java 8 (2014)</strong> brought lambdas, streams, and <code class="i">Optional</code> &mdash; the biggest shift in the language's history. <strong>11, 17, 21 (LTS)</strong> added modules, records, sealed classes, pattern matching, and virtual threads. <strong>Java 25 (LTS, 2025)</strong> is your current LTS. PayFlow code is written in modern idiom, so this page is your bridge from the Java you remember.</p>
+  </div>
+
+  <div class="section unit">
+    <div class="sec-label">1 &middot; Lambdas & method references</div>
+    <p>A lambda is a function you can pass around like a value. This single change is why modern Java looks so different:</p>
+    <pre class="code"><span class="cm">// Java 7 — your era: an anonymous class just to compare two strings</span>
+Comparator<Account> byName = <span class="kw">new</span> Comparator<Account>() {
+    <span class="kw">public</span> <span class="kw">int</span> compare(Account a, Account b) {
+        <span class="kw">return</span> a.getCustomerName().compareTo(b.getCustomerName());
+    }
+};
+
+<span class="cm">// Java 25 — one line. Account::getCustomerName is a method reference:</span>
+<span class="cm">// "the getCustomerName method of Account" — behavior passed as data</span>
+Comparator<Account> byName = Comparator.comparing(Account::getCustomerName);</pre>
+    <p>You already used one in the walkthrough: <code class="i">.orElseThrow(() -> new AccountNotFoundException(id))</code> &mdash; that <code class="i">() -> ...</code> is a lambda: "a function taking nothing, producing this exception."</p>
+  </div>
+
+  <div class="section unit">
+    <div class="sec-label">2 &middot; Optional — the anti-null</div>
+    <p><code class="i">null</code> is Java's billion-dollar mistake: any reference might be null, and the compiler never warns you. <code class="i">Optional<T></code> is a box that either contains a value or is empty &mdash; the type system now carries "might be absent" so <code class="i">NullPointerException</code> stops being a lottery:</p>
+    <pre class="code"><span class="cm">// from YOUR accounts service:</span>
+<span class="kw">return</span> accountRepository.findById(id)      <span class="cm">// returns Optional<Account></span>
+        .orElseThrow(() -> <span class="kw">new</span> AccountNotFoundException(id));
+        <span class="cm">// "unwrap it, and if the box is empty, throw"</span></pre>
+    <p>Rule of thumb: methods that can fail to find something return <code class="i">Optional</code>; never return <code class="i">null</code>, never accept <code class="i">null</code>.</p>
+  </div>
+
+  <div class="section unit">
+    <div class="sec-label">3 &middot; Records — data classes in one line</div>
+    <p>You've already read one: <code class="i">CreateAccountRequest</code>. A record declares <em>data</em> and auto-generates the constructor, accessors, <code class="i">equals</code>, <code class="i">hashCode</code>, and <code class="i">toString</code>. Fields are final &mdash; records are immutable by design:</p>
+    <pre class="code"><span class="kw">public record</span> CreateAccountRequest(
+        @NotBlank String customerName,
+        @Email String email,
+        @PositiveOrZero Double openingBalance) { }
+
+<span class="cm">// plus a "compact constructor" if you need validation:</span>
+<span class="kw">public record</span> Money(BigDecimal amount, String currency) {
+    <span class="kw">public</span> Money {                                   <span class="cm">// runs before fields are set</span>
+        <span class="kw">if</span> (amount.signum() < 0)
+            <span class="kw">throw new</span> IllegalArgumentException(<span class="cm">"negative amount"</span>);
+    }
+}</pre>
+  </div>
+
+  <div class="section unit">
+    <div class="sec-label">4 &middot; Streams — assembly lines for collections</div>
+    <p>A stream describes <em>what</em> to do with data, not <em>how</em> to loop over it. Source &rarr; intermediate operations (lazy) &rarr; terminal operation (triggers work):</p>
+    <pre class="code">List<String> activeEmails = accounts.stream()          <span class="cm">// source</span>
+        .filter(a -> a.getStatus() == AccountStatus.ACTIVE)  <span class="cm">// keep some</span>
+        .map(Account::getEmail)                             <span class="cm">// transform</span>
+        .sorted()                                           <span class="cm">// order</span>
+        .toList();                                          <span class="cm">// collect result</span></pre>
+    <p>You will meet streams constantly in service-layer code; read them as a pipeline, left to right.</p>
+  </div>
+
+  <div class="section unit">
+    <div class="sec-label">5 &middot; Small conveniences you'll see everywhere</div>
+    <pre class="code"><span class="cm">// var — local type inference. Still statically typed; just less ceremony.</span>
+<span class="kw">var</span> account = accountService.getById(id);   <span class="cm">// compiler knows: Account</span>
+
+<span class="cm">// Text blocks — real multi-line strings (JSON, SQL):</span>
+String json = <span class="cm">"""
+        {"customerName": "Priya", "openingBalance": 2500.0}
+        """</span>;
+
+<span class="cm">// Switch expressions — switch that returns a value:</span>
+String label = <span class="kw">switch</span> (status) {
+    <span class="kw">case</span> ACTIVE -> <span class="cm">"open"</span>;
+    <span class="kw">case</span> FROZEN, CLOSED -> <span class="cm">"blocked"</span>;
+};</pre>
+  </div>
+
+  <div class="section unit">
+    <div class="sec-label">6 &middot; Virtual threads (teaser)</div>
+    <p>Since Java 21, threads can be "virtual" &mdash; so cheap you can spawn a million of them. Traditional threads are ~1MB of OS stack each; virtual threads live on the heap and are ideal for I/O-bound work (waiting on databases, HTTP calls). In Stage 2, PayFlow's payout batch will use them to run thousands of concurrent payouts without a thread-pool tuning exercise. One line at the config level &mdash; you'll see it when we get there.</p>
+  </div>
+
+  <div class="section" style="background:var(--surface2)">
+    <div class="sec-label">Post-it wall &mdash; copy these onto real sticky notes</div>
+    <div class="postit-wall">
+      <div class="postit"><b>record</b>A record replaces constructor + getters + equals + hashCode + toString. Immutable. <code>record Point(int x, int y) {}</code></div>
+      <div class="postit"><b>Optional</b><code>findById(id)</code> returns a box. Empty? <code>.orElseThrow()</code>. Never return null. Never.</div>
+      <div class="postit"><b>Streams</b><code>list.stream().filter(...).map(...).toList()</code> — say WHAT, not HOW. Read left to right.</div>
+      <div class="postit"><b>Method ref</b><code>Account::getEmail</code> = "the getEmail method of Account" — behavior passed like data.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

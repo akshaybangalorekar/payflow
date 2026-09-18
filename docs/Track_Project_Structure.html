@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PayFlow Track — Project Structure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Fragment+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #f7f5f0; --surface: #ffffff; --surface2: #efece5;
+    --border: rgba(40, 30, 10, 0.1); --text: #28231b; --dim: #847a6c;
+    --accent: #b45309; --accent-dim: rgba(180, 83, 9, 0.08);
+    --code-bg: #20262f; --code-text: #dbe4f0;
+    --postit: #fff6a3; --postit-text: #3b321a;
+    --font-body: 'Bricolage Grotesque', system-ui, sans-serif;
+    --font-mono: 'Fragment Mono', 'SF Mono', Consolas, monospace;
+    --font-hand: 'Caveat', cursive;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); padding: 44px 40px; }
+  .wrap { max-width: 940px; margin: 0 auto; display: grid; gap: 24px; }
+  .eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
+  h1 { font-size: 34px; font-weight: 700; letter-spacing: -0.5px; margin: 6px 0 4px; }
+  .subtitle { color: var(--dim); font-size: 14px; margin-bottom: 6px; }
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; }
+  .sec-label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); margin-bottom: 14px; font-weight: 500; }
+  p { font-size: 14.5px; line-height: 1.7; margin-bottom: 10px; }
+  p:last-child { margin-bottom: 0; }
+  code.i { font-family: var(--font-mono); font-size: 12px; background: var(--accent-dim); color: var(--accent); padding: 1px 5px; border-radius: 3px; }
+  pre.code { font-family: var(--font-mono); font-size: 12px; line-height: 1.65; background: var(--code-bg); color: var(--code-text); border-radius: 8px; padding: 16px 18px; overflow-x: auto; white-space: pre; margin: 12px 0 4px; }
+  pre.code .cm { color: #7d8b9d; }
+  pre.code .hl { color: #e0a458; }
+  .unit { border-top: 3px solid var(--accent); }
+  .scenario h3 { font-size: 15px; font-weight: 700; margin: 18px 0 8px; color: var(--text); }
+  .scenario h3 .n { font-family: var(--font-mono); font-size: 11px; color: var(--accent); margin-right: 8px; }
+  .postit-wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(225px, 1fr)); gap: 18px; margin-top: 14px; }
+  .postit { background: var(--postit); color: var(--postit-text); font-family: var(--font-hand); font-size: 19px; line-height: 1.4; padding: 14px 18px 18px; box-shadow: 0 10px 18px rgba(60, 45, 0, 0.18); border-radius: 2px; transform: rotate(-1.2deg); min-height: 160px; }
+  .postit:nth-child(2n) { transform: rotate(1.3deg); }
+  .postit:nth-child(3n) { transform: rotate(-0.4deg); }
+  .postit b { display: block; font-size: 15px; margin-bottom: 6px; color: #6b5410; font-family: var(--font-mono); letter-spacing: 0.5px; text-transform: uppercase; }
+  .postit code { font-family: var(--font-mono); font-size: 12.5px; background: rgba(60, 45, 0, 0.08); padding: 0 4px; border-radius: 3px; }
+  @media (max-width: 700px) { body { padding: 20px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">PayFlow Track &middot; Project Structure</div>
+    <h1>Where everything lives (and why)</h1>
+    <p class="subtitle">The monorepo map, the rules behind it, a template for new services, and five scenarios you'll actually hit.</p>
+  </header>
+
+  <div class="section unit">
+    <div class="sec-label">The map</div>
+    <pre class="code">payflow/                        <span class="cm">/* the monorepo: everything in one place */</span>
+├── services/                  <span class="cm">/* one folder per microservice */</span>
+│   ├── accounts/              <span class="cm">/* running today */</span>
+│   ├── transactions/          <span class="cm">/* Stage 1 */</span>
+│   └── ...
+├── docker/
+│   └── compose.yml            <span class="cm">/* the whole stack: DBs, Kafka, tools */</span>
+├── contracts/                 <span class="cm">/* shared API truth (Stage 2): openapi/, avro/ */</span>
+├── docs/adr/                  <span class="cm">/* architecture decision records */</span>
+├── notes/                     <span class="cm">/* your learning notes */</span>
+└── WALKTHROUGH.md</pre>
+    <p>Two organizing principles: <strong>one service per folder</strong>, and <strong>each service owns its database</strong> &mdash; only accounts' migrations ever create or change accounts tables. That ownership rule is the whole point of microservices: no other service reaches into accounts' tables, ever; they ask accounts' API instead.</p>
+  </div>
+
+  <div class="section unit">
+    <div class="sec-label">Inside one service — accounts</div>
+    <pre class="code">services/accounts/
+├── pom.xml                    <span class="cm">/* this service's dependencies ONLY */</span>
+└── src/
+    ├── main/
+    │   ├── java/com/payflow/accounts/
+    │   │   ├── AccountsApplication.java     <span class="cm">/* the 3-line boot class */</span>
+    │   │   ├── api/                         <span class="cm">/* HTTP layer: controllers + DTOs */</span>
+    │   │   │   ├── AccountController.java
+    │   │   │   ├── GlobalExceptionHandler.java
+    │   │   │   └── dto/CreateAccountRequest.java
+    │   │   ├── domain/                      <span class="cm">/* entities: what we persist */</span>
+    │   │   ├── repo/                        <span class="cm">/* Spring Data interfaces */</span>
+    │   │   └── service/                     <span class="cm">/* business rules + exceptions */</span>
+    │   └── resources/
+    │       ├── application.yml              <span class="cm">/* port, DB, config */</span>
+    │       └── db/migration/                <span class="cm">/* Flyway: V1, V2, V3... forward only */</span>
+    └── test/                                 <span class="cm">/* mirror of main/, for tests (Unit 7) */</span></pre>
+    <p>This is <strong>package-by-layer</strong> (api / domain / repo / service): clean at our size. Larger services often switch to package-by-feature (<code class="i">account/</code>, <code class="i">statement/</code> each holding its own vertical slice) &mdash; we'll revisit if any service outgrows this.</p>
+  </div>
+
+  <div class="section unit">
+    <div class="sec-label">The template — starting a new service</div>
+    <p>Yes, there's a standard way, and it's not copy-paste: <strong>Spring Initializr</strong> (start.spring.io) generates a skeleton with correct versions. Settings: Maven &middot; Java 25 &middot; packaging Jar &middot; dependencies: <code class="i">webmvc</code>, <code class="i">data-jpa</code>, <code class="i">validation</code>, <code class="i">flyway</code>, <code class="i">postgresql</code>. Then: drop the generated folder into <code class="i">services/<name></code>, give it the next free port (accounts=8081, transactions=8082&hellip;), and add its own Postgres + that port to <code class="i">docker/compose.yml</code>. One caution, learned the hard way: Initializr and older tutorials may still generate Boot-3-era names (<code class="i">starter-web</code>) &mdash; in Boot 4 it's <code class="i">starter-webmvc</code>. When in doubt, read the migration guide, not the memory.</p>
+  </div>
+
+  <div class="section unit scenario">
+    <div class="sec-label">Five scenarios — where does it go?</div>
+
+    <h3><span class="n">S1</span>"Add an endpoint: GET /api/accounts/{id}/status"</h3>
+    <p>A method in <code class="i">AccountController</code> (plus a service method if there's logic). No new files, no migration &mdash; the data already exists. The controller reads the account via the service and returns the status.</p>
+
+    <h3><span class="n">S2</span>"Store the customer's phone number"</h3>
+    <p>Touches four places, and <strong>never</strong> by editing V1: add the column via a new migration <code class="i">V2__add_phone.sql</code> (<code class="i">ALTER TABLE accounts ADD COLUMN phone VARCHAR(15)</code>), add the field to the <code class="i">Account</code> entity, to <code class="i">CreateAccountRequest</code> with <code class="i">@Pattern</code> validation, and to any response DTO. Flyway applies V2 at next startup. Flyway's history table means V1 is written in stone &mdash; migrations only move forward.</p>
+
+    <h3><span class="n">S3</span>"Build the notifications service"</h3>
+    <p>Generate via Initializr (template above) &rarr; <code class="i">services/notifications</code> &rarr; port 8085 &rarr; its own Postgres in compose &rarr; same package skeleton (api/domain/repo/service). In Stage 2 it becomes a Kafka consumer, which is why it owns its own DB for delivery-tracking state.</p>
+
+    <h3><span class="n">S4</span>"A stack trace says com.payflow.accounts.api.AccountController:29"</h3>
+    <p>Decode it mechanically: the dots are folder separators under <code class="i">src/main/java/</code> &rarr; <code class="i">src/main/java/com/payflow/accounts/api/AccountController.java</code>, line 29. Every stack trace in every service follows this map &mdash; which is one reason package structure is boring and predictable on purpose.</p>
+
+    <h3><span class="n">S5</span>"Where does the shared API contract go?"</h3>
+    <p>When two services need to agree on an API (payouts calling fraud-check, or a Kafka event schema), the contract lives in <code class="i">contracts/</code> at the repo root &mdash; OpenAPI YAML for REST, Avro schemas for Kafka events (Stage 2). Shared truth lives outside any single service; nobody's service owns a contract both depend on.</p>
+  </div>
+
+  <div class="section" style="background:var(--surface2)">
+    <div class="sec-label">Post-it wall &mdash; copy these onto real sticky notes</div>
+    <div class="postit-wall">
+      <div class="postit"><b>Map</b><code>services/<name></code> per service &middot; <code>docker/</code> infra &middot; <code>contracts/</code> shared API truth &middot; <code>docs/adr/</code> decisions</div>
+      <div class="postit"><b>Ownership</b>One table, one owner. Only its service's <code>db/migration</code> writes it. Others call the API.</div>
+      <div class="postit"><b>Schema change</b>New file: <code>V2__add_phone.sql</code>. V1 is stone. Forward only, never edit.</div>
+      <div class="postit"><b>Stack trace</b><code>com.payflow.a.b.C:29</code> = <code>src/main/java/com/payflow/a/b/C.java</code> line 29.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
