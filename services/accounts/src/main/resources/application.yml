@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: accounts
+  datasource:
+    url: jdbc:postgresql://localhost:5432/payflow_accounts
+    username: payflow
+    password: payflow
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+
+server:
+  port: 8081

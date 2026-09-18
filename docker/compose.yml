@@ -1,0 +1,15 @@
+services:
+  accounts-db:
+    image: postgres:17-alpine
+    container_name: payflow-accounts-db
+    environment:
+      POSTGRES_DB: payflow_accounts
+      POSTGRES_USER: payflow
+      POSTGRES_PASSWORD: payflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - accounts-db-data:/var/lib/postgresql/data
+
+volumes:
+  accounts-db-data:
