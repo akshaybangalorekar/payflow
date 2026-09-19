@@ -1,5 +1,6 @@
 package com.payflow.accounts.api;
 
+import com.payflow.accounts.api.dto.AccountResponse;
 import com.payflow.accounts.api.dto.CreateAccountRequest;
 import com.payflow.accounts.domain.Account;
 import com.payflow.accounts.service.AccountService;
@@ -25,13 +26,13 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<Account> create(@Valid @RequestBody CreateAccountRequest request) {
-        Account created = accountService.create(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    public ResponseEntity<AccountResponse> create(@Valid @RequestBody CreateAccountRequest request) {
+        Account createdAccount = accountService.create(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(AccountResponse.from(createdAccount));
     }
 
     @GetMapping("/{id}")
-    public Account get(@PathVariable UUID id) {
-        return accountService.getById(id);
+    public AccountResponse get(@PathVariable UUID id) {
+        return AccountResponse.from(accountService.getById(id));
     }
 }

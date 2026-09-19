@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PayFlow — Daily Command Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Fragment+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #f7f5f0; --surface: #ffffff; --surface2: #efece5;
+    --border: rgba(40, 30, 10, 0.1); --text: #28231b; --dim: #847a6c;
+    --accent: #b45309; --accent-dim: rgba(180, 83, 9, 0.08);
+    --code-bg: #20262f; --code-text: #dbe4f0;
+    --postit: #fff6a3; --postit-text: #3b321a;
+    --font-body: 'Bricolage Grotesque', system-ui, sans-serif;
+    --font-mono: 'Fragment Mono', 'SF Mono', Consolas, monospace;
+    --font-hand: 'Caveat', cursive;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); padding: 44px 40px; }
+  .wrap { max-width: 940px; margin: 0 auto; display: grid; gap: 24px; }
+  .eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
+  h1 { font-size: 34px; font-weight: 700; letter-spacing: -0.5px; margin: 6px 0 4px; }
+  .subtitle { color: var(--dim); font-size: 14px; margin-bottom: 6px; }
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; }
+  .sec-label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); margin-bottom: 14px; font-weight: 500; }
+  p { font-size: 14.5px; line-height: 1.7; margin-bottom: 10px; }
+  p:last-child { margin-bottom: 0; }
+  pre.code { font-family: var(--font-mono); font-size: 12px; line-height: 1.7; background: var(--code-bg); color: var(--code-text); border-radius: 8px; padding: 16px 18px; overflow-x: auto; white-space: pre; margin: 12px 0 4px; }
+  pre.code .cm { color: #7d8b9d; }
+  pre.code .cmd { color: #e0a458; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.55; }
+  td:first-child { font-family: var(--font-mono); font-size: 11.5px; color: var(--accent); white-space: nowrap; }
+  tr:nth-child(even) td { background: rgba(40, 30, 10, 0.025); }
+  .loop { border-left: 3px solid var(--accent); }
+  .postit-wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(225px, 1fr)); gap: 18px; margin-top: 14px; }
+  .postit { background: var(--postit); color: var(--postit-text); font-family: var(--font-hand); font-size: 19px; line-height: 1.4; padding: 14px 18px 18px; box-shadow: 0 10px 18px rgba(60, 45, 0, 0.18); border-radius: 2px; transform: rotate(-1.2deg); min-height: 150px; }
+  .postit:nth-child(2n) { transform: rotate(1.3deg); }
+  .postit:nth-child(3n) { transform: rotate(-0.4deg); }
+  .postit b { display: block; font-size: 15px; margin-bottom: 6px; color: #6b5410; font-family: var(--font-mono); letter-spacing: 0.5px; text-transform: uppercase; }
+  .postit code { font-family: var(--font-mono); font-size: 12.5px; background: rgba(60, 45, 0, 0.08); padding: 0 4px; border-radius: 3px; }
+  @media (max-width: 700px) { body { padding: 20px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">PayFlow &middot; Command Reference</div>
+    <h1>The daily commands</h1>
+    <p class="subtitle">Everything we've actually used so far, one line of "why" each. Updated as we go &mdash; new tools appear here the session we meet them.</p>
+  </header>
+
+  <div class="section loop">
+    <div class="sec-label">The daily loop — running PayFlow</div>
+    <pre class="code"><span class="cmd">cd ~/workspace/payflow</span>                              <span class="cm"># repo root first</span>
+<span class="cmd">docker compose -f docker/compose.yml up -d</span>           <span class="cm"># start the database, in the background</span>
+<span class="cmd">docker ps</span>                                            <span class="cm"># is payflow-accounts-db running? (sanity check)</span>
+<span class="cmd">cd services/accounts && mvn spring-boot:run</span>         <span class="cm"># boot the service; "Tomcat started on 8081" = ready</span>
+<span class="cmd">curl http://localhost:8081/api/accounts/<uuid></span>         <span class="cm"># hit the API</span>
+<span class="cmd">Control+C</span>                                            <span class="cm"># stop the service (in its terminal)</span></pre>
+  </div>
+
+  <div class="section">
+    <div class="sec-label">Terminal survival (macOS / zsh)</div>
+    <table>
+      <tr><td>Control+C</td><td>stop whatever is running. Your universal "make it stop" key</td></tr>
+      <tr><td>Control+D</td><td>end-of-file: exit a program waiting for input (cat, python shell)</td></tr>
+      <tr><td>pwd</td><td>where am I? (print working directory)</td></tr>
+      <tr><td>ls -la</td><td>list ALL files (dotfiles too) with details — your default look at a folder</td></tr>
+      <tr><td>cat file</td><td>print a file to the terminal</td></tr>
+      <tr><td>cd ~ / cd ..</td><td>go home / go up one folder</td></tr>
+      <tr><td>lsof -i :8081</td><td>what process is holding port 8081? (find the zombie, note its PID)</td></tr>
+      <tr><td>kill <pid></td><td>kill that process</td></tr>
+      <tr><td>head / tail file</td><td>first / last 10 lines of a file (tail -f file = follow a growing log)</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="sec-label">Git — the daily cycle</div>
+    <table>
+      <tr><td>git status</td><td>the pre-flight check: changed? staged? clean?</td></tr>
+      <tr><td>git diff</td><td>unstaged changes, line by line</td></tr>
+      <tr><td>git diff --staged</td><td>the proposal — what the next commit will contain</td></tr>
+      <tr><td>git add <paths></td><td>move changes into the proposal (staging area)</td></tr>
+      <tr><td>git commit -m "Add ..."</td><td>seal it. Imperative message, <50 chars, what+why</td></tr>
+      <tr><td>git push</td><td>ship to GitHub (branch already tracks its upstream)</td></tr>
+      <tr><td>git log --oneline -5</td><td>the last 5 commits — the story so far</td></tr>
+      <tr><td>git show</td><td>the full diff of the last commit — what a reviewer sees</td></tr>
+      <tr><td>git branch / git checkout -b name</td><td>list branches / create and switch to a new one</td></tr>
+      <tr><td>git pull</td><td>fetch + merge the remote's changes down to you</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="sec-label">Maven</div>
+    <table>
+      <tr><td>mvn -version</td><td>sanity: which Maven, which Java</td></tr>
+      <tr><td>mvn spring-boot:run</td><td>compile and boot the app in the foreground</td></tr>
+      <tr><td>mvn compile</td><td>quick "does it build?" — output lands in target/</td></tr>
+      <tr><td>mvn test</td><td>compile + run all tests (the CI gate)</td></tr>
+      <tr><td>mvn clean ...</td><td>delete target/ first — the "turn it off and on again"</td></tr>
+      <tr><td>~/.m2/repository</td><td>where downloaded dependencies live — the basement</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="sec-label">Docker</div>
+    <table>
+      <tr><td>docker compose -f docker/compose.yml up -d</td><td>start the stack, detached (background)</td></tr>
+      <tr><td>docker compose -f docker/compose.yml down</td><td>stop and remove the containers (data volume survives)</td></tr>
+      <tr><td>docker ps</td><td>running containers — with names and statuses</td></tr>
+      <tr><td>docker ps -a</td><td>ALL containers, including dead ones</td></tr>
+      <tr><td>docker logs payflow-accounts-db</td><td>the database's own log (add -f to follow)</td></tr>
+      <tr><td>docker exec -it <container> sh</td><td>open a shell INSIDE a container</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="sec-label">HTTP & database — curl + psql</div>
+    <table>
+      <tr><td>curl url</td><td>GET request — plain, no flags needed</td></tr>
+      <tr><td>curl -X POST url -H "Content-Type: application/json" -d '{...}'</td><td>send JSON: verb, header, body</td></tr>
+      <tr><td>... &</td><td>run the command in the background (how we fire two curls at once; then: wait)</td></tr>
+      <tr><td>docker exec -it payflow-accounts-db psql -U payflow -d payflow_accounts -c "SELECT ..."</td><td>run SQL directly in the database, from outside</td></tr>
+    </table>
+    <p style="margin-top:12px">Interactive psql too: <span style="font-family:var(--font-mono);font-size:12px;color:var(--accent)">docker exec -it payflow-accounts-db psql -U payflow -d payflow_accounts</span> — then you're in a SQL shell (\dt lists tables, \q quits). Worth a visit: look at <span style="font-family:var(--font-mono);font-size:12px;color:var(--accent)">flyway_schema_history</span>.</p>
+  </div>
+
+  <div class="section">
+    <div class="sec-label">VS Code</div>
+    <table>
+      <tr><td>code <folder></td><td>open a folder in VS Code</td></tr>
+      <tr><td>Cmd+Shift+X</td><td>extensions panel (where Extension Pack for Java lives)</td></tr>
+      <tr><td>F5</td><td>start debugging (with breakpoints set)</td></tr>
+      <tr><td>F10 / F11 / F5 (in debug)</td><td>step over / step into / continue</td></tr>
+      <tr><td>Cmd+P</td><td>go to file by name — the fastest way around a codebase</td></tr>
+      <tr><td>Cmd+Shift+F</td><td>search across the whole project</td></tr>
+    </table>
+  </div>
+
+  <div class="section" style="background:var(--surface2)">
+    <div class="sec-label">Post-it wall — the reflexes worth hard-copying</div>
+    <div class="postit-wall">
+      <div class="postit"><b>When stuck</b>Control+C first. Terminal frozen? Ctrl+C, then Ctrl+D, then close the window.</div>
+      <div class="postit"><b>Before every commit</b><code>git status</code> &rarr; <code>git add</code> &rarr; <code>git diff --staged</code> &rarr; commit. Never blind-add.</div>
+      <div class="postit"><b>Won't start</b>Port taken? <code>lsof -i :8081</code> &rarr; kill the PID. DB down? <code>docker ps</code> &rarr; compose up.</div>
+      <div class="postit"><b>Truth lives in</b>logs (top error first), <code>git show</code> (last change), and the DB itself. Not in guesses.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
