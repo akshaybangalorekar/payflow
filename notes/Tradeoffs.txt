@@ -1,0 +1,28 @@
+4. [Observation, no action needed.] Your balances now serialize as 2500.0000 — four trailing decimals, straight from the column scale. Correct, and a known trade-off; if a client ever complains, the fix is a Jackson serialization format, and we'll do it in the config unit. Not today's problem.
+
+Finding 4 — the trailing zeros (2500.0000). The balances are correct — the question is purely how they serialize to JSON. The lever is Jackson, per-field, on the record component:
+
+java
+
+
+public record AccountResponse(
+        UUID id,
+        String customerName,
+        String email,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "0.00")
+        BigDecimal balance
+) { ... }
+with import com.fasterxml.jackson.annotation.JsonFormat;. That makes the GET return "balance": "2500.00" — two decimals, as a string.
+
+And that string part is not a compromise — it's a deliberate industry pattern worth understanding, because it's the same flaw you just fixed, appearing on the client side. If your API returns 2500.00 as a JSON number, some client somewhere will parse it into a double — recreating the binary-rounding bug in JavaScript or another app that never read your careful schema. This is why real payment APIs do exactly this: Stripe returns every amount as an integer in minor units (₹2500.50 → 250050), and plenty of others return money as strings. The pattern says: I control the precision; the client's float habits are not my problem to enable.
+
+Trade-off to be aware of: string money means clients must parse it as a decimal type, and some front-end developers grumble. Two decimals fixed also loses your four-decimal headroom in the API view (fine for balances; would matter for exchange rates).
+
+My honest recommendation, as your reviewer: do finding 2 as practice, do finding 1 because it's required, and skip finding 4 for now — note it in your notes/ as a known trade-off we'll revisit deliberately in the configuration track unit, where Jackson customization gets its proper treatment. Knowing when not to change working code is also a reviewer skill.
+
+So the order: handler (required) → race test proof → optional V4 rename → commit → push → git log --oneline to me. Then we close the stage.
+
+
+
+
+

@@ -5,6 +5,8 @@ import com.payflow.accounts.service.exception.DuplicateAccountException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -24,6 +26,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateAccountException.class)
     ResponseEntity<ApiError> handleDuplicate(DuplicateAccountException ex) {
         return respond(HttpStatus.CONFLICT, "DUPLICATE_ACCOUNT", ex.getMessage());
+    }
+
+    @ExceptionHandler (DataIntegrityViolationException.class)
+    ResponseEntity<ApiError> handleDataIntegrity(DataIntegrityViolationException ex) {
+        return respond(HttpStatus.CONFLICT, "DATA_INTEGRITY_VIOLATION", ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
