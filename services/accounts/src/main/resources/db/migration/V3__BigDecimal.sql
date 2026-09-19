@@ -1,0 +1,2 @@
+ALTER TABLE accounts
+ALTER COLUMN balance TYPE NUMERIC(19, 4);

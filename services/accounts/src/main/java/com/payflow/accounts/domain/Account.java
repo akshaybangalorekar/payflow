@@ -7,6 +7,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -22,7 +24,7 @@ public class Account {
 
     private String email;
 
-    private double balance;
+    private BigDecimal balance;
 
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
@@ -35,7 +37,7 @@ public class Account {
     protected Account() {
     }
 
-    public Account(String customerName, String email, double openingBalance) {
+    public Account(String customerName, String email, BigDecimal openingBalance) {
         this.customerName = customerName;
         this.email = email;
         this.balance = openingBalance;
@@ -46,7 +48,7 @@ public class Account {
     public UUID getId() { return id; }
     public String getCustomerName() { return customerName; }
     public String getEmail() { return email; }
-    public double getBalance() { return balance; }
+    public BigDecimal getBalance() { return balance; }
     public AccountStatus getStatus() { return status; }
     public String getInternalNotes() { return internalNotes; }
     public Instant getCreatedAt() { return createdAt; }

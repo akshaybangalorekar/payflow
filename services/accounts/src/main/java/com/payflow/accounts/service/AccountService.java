@@ -24,7 +24,8 @@ public class AccountService {
         Account account = new Account(
                 request.customerName(),
                 request.email(),
-                request.openingBalance() == null ? 0.0d : request.openingBalance());
+                request.openingBalance()
+        );
         return accountRepository.save(account);
     }   
 
