@@ -30,7 +30,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler (DataIntegrityViolationException.class)
     ResponseEntity<ApiError> handleDataIntegrity(DataIntegrityViolationException ex) {
-        return respond(HttpStatus.CONFLICT, "DATA_INTEGRITY_VIOLATION", ex.getMessage());
+        return respond(HttpStatus.CONFLICT, "DUPLICATE_ACCOUNT", 
+        "an account with this email already exists");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
