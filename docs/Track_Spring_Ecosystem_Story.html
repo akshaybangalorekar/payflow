@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PayFlow Track — The Spring Universe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Fragment+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #f7f5f0; --surface: #ffffff; --surface2: #efece5;
+    --border: rgba(40, 30, 10, 0.1); --text: #28231b; --dim: #847a6c;
+    --accent: #b45309; --accent-dim: rgba(180, 83, 9, 0.08);
+    --code-bg: #20262f; --code-text: #dbe4f0;
+    --postit: #fff6a3; --postit-text: #3b321a;
+    --font-body: 'Bricolage Grotesque', system-ui, sans-serif;
+    --font-mono: 'Fragment Mono', 'SF Mono', Consolas, monospace;
+    --font-hand: 'Caveat', cursive;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); padding: 44px 40px; }
+  .wrap { max-width: 940px; margin: 0 auto; display: grid; gap: 24px; }
+  .eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
+  h1 { font-size: 34px; font-weight: 700; letter-spacing: -0.5px; margin: 6px 0 4px; }
+  .subtitle { color: var(--dim); font-size: 14px; margin-bottom: 6px; }
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; }
+  .sec-label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); margin-bottom: 14px; font-weight: 500; }
+  p { font-size: 14.5px; line-height: 1.7; margin-bottom: 10px; }
+  p:last-child { margin-bottom: 0; }
+  code.i { font-family: var(--font-mono); font-size: 12px; background: var(--accent-dim); color: var(--accent); padding: 1px 5px; border-radius: 3px; }
+  pre.code { font-family: var(--font-mono); font-size: 12px; line-height: 1.65; background: var(--code-bg); color: var(--code-text); border-radius: 8px; padding: 16px 18px; overflow-x: auto; white-space: pre; margin: 12px 0 4px; }
+  pre.code .cm { color: #7d8b9d; }
+  .beat { border-left: 3px solid var(--accent); }
+  .beat .time { font-family: var(--font-mono); font-size: 11px; color: var(--accent); display: block; margin-bottom: 6px; letter-spacing: 1px; }
+  .beat h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .beat .project { font-family: var(--font-mono); font-size: 10.5px; float: right; background: var(--accent-dim); color: var(--accent); padding: 2px 8px; border-radius: 20px; margin-top: -4px; }
+  .payflow { font-family: var(--font-mono); font-size: 11px; color: #2e7d43; background: rgba(46, 125, 67, 0.1); padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+  .ladder { counter-reset: rung; list-style: none; }
+  .ladder li { padding: 8px 0 8px 34px; position: relative; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .ladder li:last-child { border-bottom: none; }
+  .ladder li::before { counter-increment: rung; content: counter(rung); position: absolute; left: 0; top: 8px; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font-family: var(--font-mono); font-size: 11px; display: flex; align-items: center; justify-content: center; }
+  .postit-wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(225px, 1fr)); gap: 18px; margin-top: 14px; }
+  .postit { background: var(--postit); color: var(--postit-text); font-family: var(--font-hand); font-size: 19px; line-height: 1.4; padding: 14px 18px 18px; box-shadow: 0 10px 18px rgba(60, 45, 0, 0.18); border-radius: 2px; transform: rotate(-1.2deg); min-height: 160px; }
+  .postit:nth-child(2n) { transform: rotate(1.3deg); }
+  .postit:nth-child(3n) { transform: rotate(-0.4deg); }
+  .postit:nth-child(4n) { transform: rotate(0.8deg); }
+  .postit b { display: block; font-size: 15px; margin-bottom: 6px; color: #6b5410; font-family: var(--font-mono); letter-spacing: 0.5px; text-transform: uppercase; }
+  .postit code { font-family: var(--font-mono); font-size: 12.5px; background: rgba(60, 45, 0, 0.08); padding: 0 4px; border-radius: 3px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .sec-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+  .sec-card h3 { font-size: 14px; margin-bottom: 8px; }
+  .sec-card p { font-size: 13px; }
+  @media (max-width: 700px) { body { padding: 20px; } .grid2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">PayFlow Track &middot; The Spring Universe</div>
+    <h1>One payment's journey through Spring</h1>
+    <p class="subtitle">Every Spring project that matters, told as the story of one ₹5,000 payment &mdash; because you already live in this story: it's PayFlow.</p>
+  </header>
+
+  <div class="section">
+    <div class="sec-label">Why "Spring" feels like a maze</div>
+    <p>Spring is not one thing. It's a <strong>small core</strong> (the Spring Framework: the IoC container you already know) plus <strong>dozens of satellite projects</strong> built on that core, each solving one production problem. The confusion evaporates once you see them as departments of one building &mdash; so here's the tour. Priya taps "Pay" in her banking app at <strong>7:04 PM</strong>, sending ₹5,000 to a merchant. Watch who does what.</p>
+  </div>
+
+  <div class="section beat">
+    <span class="time">THE FOUNDATION &mdash; BEFORE 7:04 PM</span>
+    <span class="project">Spring Framework (core)</span>
+    <h3>The ground the building stands on</h3>
+    <p>None of the tour happens without this: the <strong>IoC container</strong> that scans, builds, and wires beans, injecting dependencies through constructors. You learned it in Unit 1 with your own <code class="i">AccountController</code>. Every satellite project below is "just beans": Spring Security is a chain of filter beans, Spring Data manufactures repository beans, Kafka support is listener beans. <strong>Learn the container once and every Spring project becomes vocabulary, not mystery.</strong></p>
+    <svg viewBox="0 0 940 190" style="width:100%;height:auto;display:block;margin-top:8px" role="img" aria-label="IoC container wiring beans">
+      <rect x="120" y="12" width="700" height="135" rx="14" fill="rgba(180,83,9,0.06)" stroke="#b45309" stroke-width="2"/>
+      <text x="142" y="36" style="font:bold 11px 'Fragment Mono',monospace" fill="#b45309">SPRING IOC CONTAINER</text>
+      <rect x="160" y="65" width="150" height="50" rx="8" fill="#fff" stroke="#b45309" stroke-width="2"/>
+      <text x="235" y="95" text-anchor="middle" style="font:bold 12px 'Bricolage Grotesque',sans-serif" fill="#28231b">Controller</text>
+      <rect x="395" y="65" width="150" height="50" rx="8" fill="#fff" stroke="#b45309" stroke-width="2"/>
+      <text x="470" y="95" text-anchor="middle" style="font:bold 12px 'Bricolage Grotesque',sans-serif" fill="#28231b">Service</text>
+      <rect x="630" y="65" width="160" height="50" rx="8" fill="#fff" stroke="#b45309" stroke-width="2"/>
+      <text x="710" y="95" text-anchor="middle" style="font:bold 12px 'Bricolage Grotesque',sans-serif" fill="#28231b">Repository</text>
+      <line x1="310" y1="90" x2="390" y2="90" stroke="#847a6c" stroke-width="2"/>
+      <line x1="545" y1="90" x2="625" y2="90" stroke="#847a6c" stroke-width="2"/>
+      <text x="350" y="82" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">injects</text>
+      <text x="585" y="82" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">injects</text>
+      <text x="470" y="178" text-anchor="middle" style="font:10px 'Fragment Mono',monospace" fill="#847a6c">you write the classes + constructors &mdash; the container builds, wires, and owns the objects (bottom-up: repository first)</text>
+    </svg>
+  </div>
+
+  <div class="section beat">
+    <span class="time">THE CAST &mdash; WHO WORKS IN THIS BUILDING</span>
+    <span class="project">basic building blocks</span>
+    <h3>Before the story: meet the staff</h3>
+    <p><strong>The bean</strong> is the permanent staff. Hired once at startup, one per role (a <em>singleton</em>), employed for the life of the app: <code class="i">AccountService</code>, <code class="i">AccountController</code>, the repository proxy &mdash; each is exactly one object serving every request on every thread. Careful what you leave on their desks: shared staff means <em>no per-request state on beans</em> &mdash; your race-condition lesson, restated as office policy.</p>
+    <p><strong>The object</strong> is the paperwork. Priya's payment, the parsed request, the response being assembled &mdash; created per request, thousands a minute, short-lived, unmanaged by the container. Staff (beans) process paperwork (objects); paperwork never becomes staff &mdash; you'd never mark a DTO with <code class="i">@Component</code>, because one shared request-object for the whole app would be nonsense.</p>
+    <p><strong>The stereotype annotation</strong> is the job ad that gets you hired: <code class="i">@Component</code> (general staff), <code class="i">@Service</code> (business rules), <code class="i">@Repository</code> (data access), <code class="i">@RestController</code> (front desk). To the container they're identical &mdash; a badge saying "employ me at startup" &mdash; the specific badge documents the job for human readers.</p>
+    <p><strong>Dependency injection</strong> is day-one orientation: the container hands each new hire their colleagues by calling their constructor. Nobody recruits their own team &mdash; you never write <code class="i">new AccountService(...)</code>; you declare "I need one" and the container supplies it. That's what makes testing possible: hand the same constructor a mock instead of a real colleague.</p>
+    <p><strong>The proxy</strong> is the body double: for staff with special duties, the container hires a stand-in that wraps the real one. You talk to the double; it does the extra chore around each call (opens and closes a transaction, checks a cache), then relays to the real employee. The repository proxy you met in Unit 3 is exactly this; <code class="i">@Transactional</code> will work the same way.</p>
+    <p><strong>Configuration</strong> (<code class="i">application.yml</code>) is the notice board in reception: port, database location, feature switches. Same staff, different boards per environment &mdash; that's what profiles change &mdash; and environment variables pin extra notices on top, which is how one jar runs on your Mac and in AWS unchanged.</p>
+    <p>Every department in the tour below is staffed by exactly these players. Watch for them as you read.</p>
+  </div>
+
+  <div class="section">
+    <div class="sec-label">The cast, at rush hour &mdash; one picture</div>
+    <p style="margin-bottom:6px"><strong>How to read this picture:</strong> it's rush hour in one department. The three horizontal lanes are <strong>threads</strong> &mdash; Tomcat hands every incoming request its own courier thread. The tall boxes are <strong>beans</strong> &mdash; permanent staff, exactly one of each, hired at startup; every courier passes through the same boxes. The yellow notes are <strong>objects</strong> &mdash; paperwork born fresh for each request, carried by its own courier, discarded afterwards. The dashed box around the repository is the <strong>proxy</strong>, the body double. And the dashed green arrow along the bottom is <strong>Thread-1's return trip</strong>: the same courier (green = Thread-1) walking back out with different paperwork &mdash; the <code class="i">AccountResponse</code> the controller built. Solid arrow in with the request, dashed arrow out with the response; one thread, one round trip. It's routed along the bottom only for readability &mdash; physically the response passes back through the controller on its way to the door. The numbered circles match the three cards below the picture.</p>
+    <svg viewBox="0 0 940 495" style="width:100%;height:auto;display:block" role="img" aria-label="Diagram: three request threads passing through shared singleton beans toward the database, with per-request objects as paperwork">
+      <defs>
+        <marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#847a6c"/></marker>
+      </defs>
+
+      <!-- top instruction -->
+      <text x="470" y="34" text-anchor="middle" style="font:11px 'Fragment Mono',monospace" fill="#847a6c">each HTTP request arrives on its own thread &mdash; the courier who walks one piece of paperwork through the department</text>
+
+      <!-- thread lanes -->
+      <line x1="100" y1="120" x2="740" y2="120" stroke="#2e7d43" stroke-width="3" opacity="0.5" marker-end="url(#ah)"/>
+      <line x1="100" y1="220" x2="740" y2="220" stroke="#2563eb" stroke-width="3" opacity="0.5" marker-end="url(#ah)"/>
+      <line x1="100" y1="320" x2="740" y2="320" stroke="#b45309" stroke-width="3" opacity="0.5" marker-end="url(#ah)"/>
+      <text x="14" y="124" style="font:11px 'Fragment Mono',monospace" fill="#2e7d43">Thread-1</text>
+      <text x="14" y="224" style="font:11px 'Fragment Mono',monospace" fill="#2563eb">Thread-2</text>
+      <text x="14" y="324" style="font:11px 'Fragment Mono',monospace" fill="#b45309">Thread-3</text>
+
+      <!-- staff: AccountController -->
+      <rect x="170" y="70" width="100" height="310" rx="10" fill="#ffffff" stroke="#b45309" stroke-width="2"/>
+      <text x="220" y="205" text-anchor="middle" style="font:bold 13px 'Bricolage Grotesque',sans-serif" fill="#28231b">Account</text>
+      <text x="220" y="223" text-anchor="middle" style="font:bold 13px 'Bricolage Grotesque',sans-serif" fill="#28231b">Controller</text>
+      <rect x="187" y="238" width="66" height="18" rx="9" fill="rgba(180,83,9,0.1)"/>
+      <text x="220" y="251" text-anchor="middle" style="font:10px 'Fragment Mono',monospace" fill="#b45309">ONE &times;1</text>
+      <text x="220" y="292" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">staff: hired at</text>
+      <text x="220" y="304" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">startup, serves</text>
+      <text x="220" y="316" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">ALL threads</text>
+
+      <!-- staff: AccountService -->
+      <rect x="350" y="70" width="100" height="310" rx="10" fill="#ffffff" stroke="#b45309" stroke-width="2"/>
+      <text x="400" y="205" text-anchor="middle" style="font:bold 13px 'Bricolage Grotesque',sans-serif" fill="#28231b">Account</text>
+      <text x="400" y="223" text-anchor="middle" style="font:bold 13px 'Bricolage Grotesque',sans-serif" fill="#28231b">Service</text>
+      <rect x="367" y="238" width="66" height="18" rx="9" fill="rgba(180,83,9,0.1)"/>
+      <text x="400" y="251" text-anchor="middle" style="font:10px 'Fragment Mono',monospace" fill="#b45309">ONE &times;1</text>
+      <circle cx="444" cy="86" r="11" fill="#b45309"/>
+      <text x="444" y="90" text-anchor="middle" style="font:bold 11px 'Fragment Mono',monospace" fill="#fff">2</text>
+
+      <!-- proxy wrapper -->
+      <rect x="510" y="55" width="180" height="360" rx="12" fill="rgba(180,83,9,0.05)" stroke="#b45309" stroke-width="2" stroke-dasharray="6 4"/>
+      <circle cx="522" cy="68" r="11" fill="#b45309"/>
+      <text x="522" y="72" text-anchor="middle" style="font:bold 11px 'Fragment Mono',monospace" fill="#fff">1</text>
+      <text x="620" y="74" text-anchor="middle" style="font:bold 10px 'Fragment Mono',monospace" fill="#b45309">PROXY &mdash; the body double</text>
+      <rect x="535" y="150" width="130" height="150" rx="8" fill="#ffffff" stroke="#847a6c" stroke-width="1.5"/>
+      <text x="600" y="215" text-anchor="middle" style="font:bold 11px 'Bricolage Grotesque',sans-serif" fill="#28231b">SimpleJpa</text>
+      <text x="600" y="230" text-anchor="middle" style="font:bold 11px 'Bricolage Grotesque',sans-serif" fill="#28231b">Repository</text>
+      <text x="600" y="252" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">the real</text>
+      <text x="600" y="264" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">employee</text>
+      <text x="600" y="380" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">does the extra chores</text>
+      <text x="600" y="392" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">around each call, then</text>
+      <text x="600" y="404" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">relays the work inside</text>
+
+      <!-- database -->
+      <rect x="740" y="150" width="140" height="160" rx="8" fill="#20262f"/>
+      <ellipse cx="810" cy="150" rx="70" ry="14" fill="#20262f"/>
+      <ellipse cx="810" cy="150" rx="70" ry="14" fill="none" stroke="#dbe4f0" stroke-width="1.5"/>
+      <text x="810" y="235" text-anchor="middle" style="font:bold 12px 'Fragment Mono',monospace" fill="#dbe4f0">PostgreSQL</text>
+
+      <!-- paperwork: request DTO on thread-1 -->
+      <g transform="rotate(-4 130 120)">
+        <rect x="105" y="100" width="50" height="40" rx="2" fill="#fff6a3" stroke="#d9c34a"/>
+        <text x="130" y="116" text-anchor="middle" style="font:8px 'Fragment Mono',monospace" fill="#3b321a">Create</text>
+        <text x="130" y="126" text-anchor="middle" style="font:8px 'Fragment Mono',monospace" fill="#3b321a">Account</text>
+        <text x="130" y="136" text-anchor="middle" style="font:8px 'Fragment Mono',monospace" fill="#3b321a">Request</text>
+      </g>
+      <text x="127" y="158" text-anchor="middle" style="font:8px 'Fragment Mono',monospace" fill="#847a6c">born per request</text>
+      <circle cx="152" cy="98" r="11" fill="#b45309"/>
+      <text x="152" y="102" text-anchor="middle" style="font:bold 11px 'Fragment Mono',monospace" fill="#fff">3</text>
+
+      <!-- paperwork: entity on thread-2 -->
+      <g transform="rotate(3 480 220)">
+        <rect x="455" y="200" width="50" height="40" rx="2" fill="#fff6a3" stroke="#d9c34a"/>
+        <text x="480" y="217" text-anchor="middle" style="font:8px 'Fragment Mono',monospace" fill="#3b321a">Account</text>
+        <text x="480" y="227" text-anchor="middle" style="font:8px 'Fragment Mono',monospace" fill="#3b321a">entity</text>
+      </g>
+
+      <!-- response going home, routed below the boxes -->
+      <line x1="420" y1="430" x2="150" y2="430" stroke="#2e7d43" stroke-width="2" stroke-dasharray="5 4" opacity="0.7"/>
+      <text x="285" y="422" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#2e7d43">&larr; AccountResponse &mdash; the paperwork walks back out to Priya</text>
+
+      <!-- legend -->
+      <rect x="100" y="462" width="14" height="14" rx="3" fill="#ffffff" stroke="#b45309" stroke-width="2"/>
+      <text x="122" y="474" style="font:10px 'Fragment Mono',monospace" fill="#847a6c">staff = beans (one each)</text>
+      <rect x="300" y="462" width="14" height="14" rx="3" fill="rgba(180,83,9,0.05)" stroke="#b45309" stroke-dasharray="3 2"/>
+      <text x="322" y="474" style="font:10px 'Fragment Mono',monospace" fill="#847a6c">proxy = body double</text>
+      <rect x="470" y="462" width="14" height="14" rx="2" fill="#fff6a3" stroke="#d9c34a"/>
+      <text x="492" y="474" style="font:10px 'Fragment Mono',monospace" fill="#847a6c">paperwork = per-request objects</text>
+      <line x1="712" y1="469" x2="738" y2="469" stroke="#2e7d43" stroke-width="3" opacity="0.5"/>
+      <text x="744" y="474" style="font:10px 'Fragment Mono',monospace" fill="#847a6c">lanes = threads</text>
+    </svg>
+    <div class="grid2" style="margin-top:16px">
+      <div class="sec-card sec-card--amber">
+        <h3>1 &middot; The proxy &mdash; why a body double?</h3>
+        <p>Your code calls <code class="i">existsByEmail()</code> &mdash; but you're not talking to a real repository. You're talking to a <strong>stand-in the container built</strong> around the real one (SimpleJpaRepository, inside the dashed box). Why bother? Because the stand-in can do <strong>extra chores around every single call</strong> without the real employee &mdash; or your code &mdash; knowing: open a transaction before, commit/roll it back after (that's how <code class="i">@Transactional</code> will work), check a cache, add timing metrics. You call a method; the double intercepts, does its chores, relays the work inside. You never notice the swap &mdash; that's the entire point.</p>
+      </div>
+      <div class="sec-card sec-card--amber">
+        <h3>2 &middot; Threads &mdash; one desk, many couriers</h3>
+        <p>Tomcat hands <strong>each incoming request its own thread</strong> &mdash; think of the thread as the courier who walks one piece of paperwork through the department. The picture's key fact: <strong>all couriers pass through the SAME staff</strong>. One AccountService box, three simultaneous couriers. Now imagine the service desk had a drawer (a mutable field) where a courier could leave papers: courier B opens the drawer and finds courier A's papers. That is <em>exactly</em> the race you proved with two rows &mdash; two threads interleaving inside one shared bean. Staff rule: <strong>the desk stays empty; all state rides in the paperwork</strong> the courier carries.</p>
+      </div>
+      <div class="sec-card sec-card--amber">
+        <h3>3 &middot; Why a DTO is never staff</h3>
+        <p>Mark <code class="i">CreateAccountRequest</code> with <code class="i">@Component</code> and the container does what it always does with staff: hires <strong>ONE, at startup, shared by all threads, forever</strong>. Now Priya, Rahul and Sneha all scribble on the same single form &mdash; your email ends up in my payment, the race again but worse. Paperwork must be born fresh per request (Jackson births it each time it parses a request body), do its job, and be discarded. Staff = few and permanent; paperwork = many and disposable. The two lists never mix.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section beat">
+    <span class="time">7:00 PM &mdash; THE BUILDING ITSELF</span>
+    <span class="project">Spring Boot</span>
+    <h3>The pre-wired building</h3>
+    <p>Spring Framework alone is raw plumbing; Boot is the building with electricity, doors, and staff pre-installed. Three superpowers: <strong>starters</strong> (one dependency pulls in a whole coherent stack &mdash; <code class="i">spring-boot-starter-webmvc</code> brought Spring MVC + Jackson + Tomcat into your jar), <strong>auto-configuration</strong> (it saw JPA + Postgres on your classpath and built the datasource without you asking), and the <strong>embedded server</strong>. About that embedded server &mdash; it's not a rival of Tomcat; <strong>Tomcat IS the embedded server</strong>. Old-world Spring apps were packaged as .war files that you dropped into a separately installed Tomcat living on a server somewhere; Boot flipped the relationship &mdash; Tomcat ships as a library that starts <em>inside your own JVM</em>. That's why <code class="i">java -jar app.jar</code> just&hellip; serves HTTP: your app is not deployed <em>to</em> a server, it <em>is</em> the server. (Alternatives exist &mdash; Jetty, Undertow &mdash; swappable by swapping the starter; teams rarely bother.) Profiles (<code class="i">application-dev.yml</code> vs prod) mean the same jar behaves differently per environment.</p>
+    <svg viewBox="0 0 940 205" style="width:100%;height:auto;display:block;margin-top:8px" role="img" aria-label="Fat jar containing embedded Tomcat and the web stack">
+      <rect x="440" y="6" width="60" height="14" rx="4" fill="#b45309"/>
+      <rect x="240" y="18" width="460" height="125" rx="16" fill="#fff" stroke="#b45309" stroke-width="2.5"/>
+      <text x="470" y="42" text-anchor="middle" style="font:bold 12px 'Fragment Mono',monospace" fill="#b45309">app.jar &mdash; one file</text>
+      <rect x="270" y="56" width="200" height="32" rx="6" fill="#fff6a3" stroke="#d9c34a"/>
+      <text x="370" y="76" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#3b321a">Tomcat &mdash; embedded server</text>
+      <rect x="490" y="56" width="185" height="32" rx="6" fill="#fff" stroke="#b45309"/>
+      <text x="582" y="76" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#28231b">Spring MVC</text>
+      <rect x="270" y="98" width="200" height="32" rx="6" fill="#fff" stroke="#b45309"/>
+      <text x="370" y="118" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#28231b">Jackson</text>
+      <rect x="490" y="98" width="185" height="32" rx="6" fill="#fff" stroke="#b45309"/>
+      <text x="582" y="118" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#28231b">JPA + DataSource</text>
+      <rect x="200" y="160" width="540" height="28" rx="7" fill="#20262f"/>
+      <text x="470" y="178" text-anchor="middle" style="font:10px 'Fragment Mono',monospace" fill="#dbe4f0">java -jar app.jar  &rarr;  HTTP served from inside your own JVM</text>
+    </svg>
+  </div>
+
+  <div class="section beat">
+    <span class="time">7:04:00 &mdash; RECEPTION</span>
+    <span class="project">Spring MVC</span>
+    <h3>The request walks in</h3>
+    <p>Priya's payment hits <code class="i">POST /api/transactions</code>. <strong>Spring MVC's use:</strong> it's the translation layer between HTTP and Java. URL routes map to controller methods (<code class="i">@PostMapping</code>), path variables become method arguments (<code class="i">@PathVariable</code>), and whatever your method returns becomes the HTTP response. Without it, you'd be hand-parsing raw HTTP requests for a living. The <strong>DispatcherServlet</strong> (the traffic cop) routes each request to the right method &mdash; your unit-2 corridor: filter &rarr; dispatcher &rarr; Jackson parses JSON &rarr; <code class="i">@Valid</code> &rarr; controller method &rarr; response serialized.</p>
+    <p><strong>And Jackson?</strong> A separate JSON library, not part of Spring &mdash; Spring MVC just hires it as the translator on both ends of the desk. HTTP carries text; Java speaks objects. Incoming: Jackson turns the JSON string of Priya's payment into a <code class="i">CreateTransactionRequest</code> object before your method ever runs. Outgoing: it turns your returned object back into JSON text after your method returns. When you watched <code class="i">internalNotes</code> vanish from your API responses, that was Jackson faithfully serializing every getter of whatever object the controller returned &mdash; which is exactly why flaw 2 was fixed by handing it a smaller object, not by teaching Jackson to hide things. This whole department is the one you know best: it's your accounts service, and the transactions service you're about to build.</p>
+    <svg viewBox="0 0 940 165" style="width:100%;height:auto;display:block;margin-top:8px" role="img" aria-label="Request flowing through Jackson, DispatcherServlet and controller">
+      <rect x="15" y="40" width="120" height="50" rx="8" fill="#fff" stroke="#847a6c" stroke-width="1.5"/>
+      <text x="75" y="69" text-anchor="middle" style="font:bold 11px 'Bricolage Grotesque',sans-serif" fill="#28231b">Priya's app</text>
+      <rect x="165" y="35" width="150" height="60" rx="2" fill="#fff6a3" stroke="#d9c34a"/>
+      <text x="240" y="58" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#3b321a">{"amount": 5000,</text>
+      <text x="240" y="72" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#3b321a">"currency":"INR"}</text>
+      <text x="240" y="112" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">HTTP body = plain text</text>
+      <line x1="315" y1="65" x2="370" y2="65" stroke="#847a6c" stroke-width="2"/>
+      <rect x="370" y="40" width="170" height="50" rx="8" fill="#fff" stroke="#b45309" stroke-width="2"/>
+      <text x="455" y="69" text-anchor="middle" style="font:bold 11px 'Bricolage Grotesque',sans-serif" fill="#28231b">DispatcherServlet</text>
+      <line x1="540" y1="65" x2="600" y2="65" stroke="#847a6c" stroke-width="2"/>
+      <text x="570" y="30" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#b45309">Jackson: text &rarr; object</text>
+      <rect x="600" y="40" width="180" height="50" rx="8" fill="#fff" stroke="#b45309" stroke-width="2"/>
+      <text x="690" y="62" text-anchor="middle" style="font:bold 11px 'Bricolage Grotesque',sans-serif" fill="#28231b">Controller method</text>
+      <text x="690" y="78" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">receives an object, not text</text>
+      <line x1="690" y1="90" x2="690" y2="125" stroke="#2e7d43" stroke-width="2" stroke-dasharray="5 4"/>
+      <line x1="690" y1="125" x2="75" y2="125" stroke="#2e7d43" stroke-width="2" stroke-dasharray="5 4"/>
+      <line x1="75" y1="125" x2="75" y2="90" stroke="#2e7d43" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="382" y="140" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#2e7d43">response: Jackson turns the returned object back into JSON text &mdash; same trip in reverse</text>
+    </svg>
+  </div>
+
+  <div class="section beat">
+    <span class="time">7:04:01 &mdash; THE GUARD</span>
+    <span class="project">Spring Security</span>
+    <h3>ID check, before the front desk</h3>
+    <p>Before any controller runs, the request passes a <strong>chain of security filters</strong>: who are you (JWT token / OAuth2 login), what may you do (roles)? This is why your accounts API is currently "open to anyone" &mdash; no security filter chain exists yet. When we bolt one on (Stage S), the guard stands <em>in front of</em> reception, rejecting forged requests before your code ever sees them. In your Q2 language: the controller sees only authenticated calls, the way the customer view DTO sees only allowed fields &mdash; <strong>enforced by a layer, not by hope</strong>.</p>
+    <svg viewBox="0 0 940 195" style="width:100%;height:auto;display:block;margin-top:8px" role="img" aria-label="Security filter chain accepting valid tokens and rejecting forged ones">
+      <rect x="300" y="55" width="200" height="75" rx="10" fill="#fff" stroke="#b45309" stroke-width="2.5"/>
+      <text x="400" y="86" text-anchor="middle" style="font:bold 11px 'Fragment Mono',monospace" fill="#b45309">SECURITY</text>
+      <text x="400" y="101" text-anchor="middle" style="font:bold 11px 'Fragment Mono',monospace" fill="#b45309">FILTER CHAIN</text>
+      <text x="400" y="118" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">"who are you?" &mdash; checks the JWT</text>
+      <rect x="610" y="55" width="270" height="75" rx="10" fill="#fff" stroke="#b45309" stroke-width="2"/>
+      <text x="745" y="86" text-anchor="middle" style="font:bold 11px 'Bricolage Grotesque',sans-serif" fill="#28231b">DispatcherServlet + controller</text>
+      <text x="745" y="105" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">your code &mdash; only ever sees</text>
+      <text x="745" y="117" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">authenticated requests</text>
+      <line x1="60" y1="80" x2="295" y2="80" stroke="#2e7d43" stroke-width="3"/>
+      <text x="165" y="72" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#2e7d43">valid token &rarr; passes through</text>
+      <line x1="500" y1="80" x2="605" y2="80" stroke="#2e7d43" stroke-width="3"/>
+      <line x1="60" y1="160" x2="290" y2="160" stroke="#c0392b" stroke-width="3"/>
+      <text x="175" y="152" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#c0392b">forged / missing token</text>
+      <text x="440" y="152" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#c0392b">401 &mdash; bounced BEFORE your code runs</text>
+      <line x1="290" y1="160" x2="290" y2="132" stroke="#c0392b" stroke-width="3"/>
+      <text x="470" y="185" text-anchor="middle" style="font:10px 'Fragment Mono',monospace" fill="#847a6c">the guard stands in front of reception &mdash; a chain of filter beans the request must survive first</text>
+    </svg>
+  </div>
+
+  <div class="section beat">
+    <span class="time">7:04:02 &mdash; THE LEDGER CLERK</span>
+    <span class="project">Spring Data JPA</span>
+    <h3>Money in, money written, exactly once</h3>
+    <p>The transaction service loads Priya's account and the merchant's account (proxies, derived queries &mdash; Unit 3), debits one, credits the other, saves. The clerk's iron rule is <code class="i">@Transactional</code>: both legs commit together or neither does &mdash; money never evaporates mid-journal-entry. That's where you're headed next: optimistic locking on balances so two simultaneous payments can't both read "balance: 5000" and both spend it. Your race-condition scar, at money scale.</p>
+    <svg viewBox="0 0 940 185" style="width:100%;height:auto;display:block;margin-top:8px" role="img" aria-label="Transactional method performing two updates atomically">
+      <rect x="25" y="50" width="235" height="75" rx="10" fill="#fff" stroke="#b45309" stroke-width="2.5"/>
+      <text x="142" y="80" text-anchor="middle" style="font:bold 10px 'Fragment Mono',monospace" fill="#b45309">@Transactional</text>
+      <text x="142" y="97" text-anchor="middle" style="font:bold 11px 'Bricolage Grotesque',sans-serif" fill="#28231b">service method</text>
+      <text x="142" y="113" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">one payment = one method call</text>
+      <line x1="260" y1="87" x2="315" y2="87" stroke="#847a6c" stroke-width="2"/>
+      <rect x="315" y="20" width="440" height="135" rx="12" fill="rgba(180,83,9,0.05)" stroke="#b45309" stroke-width="2" stroke-dasharray="7 5"/>
+      <text x="535" y="42" text-anchor="middle" style="font:bold 10px 'Fragment Mono',monospace" fill="#b45309">ONE TRANSACTION &mdash; commit together or roll back together</text>
+      <text x="535" y="72" text-anchor="middle" style="font:9.5px 'Fragment Mono',monospace" fill="#3b321a">UPDATE accounts SET balance = balance - 5000  (Priya)</text>
+      <text x="535" y="94" text-anchor="middle" style="font:9.5px 'Fragment Mono',monospace" fill="#3b321a">UPDATE accounts SET balance = balance + 5000  (merchant)</text>
+      <text x="535" y="122" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">the proxy opens it before your code,</text>
+      <text x="535" y="136" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">closes it after &mdash; money never evaporates mid-entry</text>
+      <line x1="755" y1="87" x2="800" y2="87" stroke="#847a6c" stroke-width="2"/>
+      <rect x="800" y="52" width="120" height="70" rx="8" fill="#20262f"/>
+      <text x="860" y="92" text-anchor="middle" style="font:bold 11px 'Fragment Mono',monospace" fill="#dbe4f0">PostgreSQL</text>
+    </svg>
+  </div>
+
+  <div class="section beat">
+    <span class="time">7:04:03 &mdash; THE MESSENGER</span>
+    <span class="project">Spring for Kafka</span>
+    <h3>Departments that don't wait for each other</h3>
+    <p>The moment the ledger entry commits, the transactions service publishes <code class="i">txn.created</code> to Kafka &mdash; a note on a conveyor belt &mdash; and immediately returns "processing" to Priya. Downstream, asynchronously: notifications sends the SMS, analytics updates dashboards, the fraud service scores it. Nobody blocks anybody. In Stage 2 you'll write both ends: <code class="i">@KafkaListener</code> methods &mdash; beans invoked by a message instead of a request. The contract between departments is a <strong>schema (Avro)</strong> in a schema registry, not a Java interface.</p>
+    <svg viewBox="0 0 940 215" style="width:100%;height:auto;display:block;margin-top:8px" role="img" aria-label="Publishing an event to a Kafka topic consumed by three services">
+      <rect x="30" y="35" width="190" height="60" rx="10" fill="#fff" stroke="#b45309" stroke-width="2.5"/>
+      <text x="125" y="60" text-anchor="middle" style="font:bold 11px 'Bricolage Grotesque',sans-serif" fill="#28231b">Transactions service</text>
+      <text x="125" y="78" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">publishes txn.created</text>
+      <line x1="220" y1="62" x2="270" y2="62" stroke="#847a6c" stroke-width="2"/>
+      <rect x="270" y="42" width="400" height="44" rx="22" fill="#fff" stroke="#847a6c" stroke-width="2"/>
+      <text x="285" y="68" text-anchor="start" style="font:bold 10px 'Fragment Mono',monospace" fill="#28231b">Kafka topic: txn.created</text>
+      <rect x="470" y="55" width="20" height="18" rx="2" fill="#fff6a3" stroke="#d9c34a"/>
+      <rect x="545" y="55" width="20" height="18" rx="2" fill="#fff6a3" stroke="#d9c34a"/>
+      <rect x="620" y="55" width="20" height="18" rx="2" fill="#fff6a3" stroke="#d9c34a"/>
+      <line x1="470" y1="42" x2="470" y2="18" stroke="#2e7d43" stroke-width="2" stroke-dasharray="5 4"/>
+      <line x1="470" y1="18" x2="125" y2="18" stroke="#2e7d43" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="297" y="14" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#2e7d43">returns 202 immediately &mdash; publish and move on</text>
+      <line x1="330" y1="86" x2="330" y2="125" stroke="#847a6c" stroke-width="2"/>
+      <line x1="470" y1="86" x2="470" y2="125" stroke="#847a6c" stroke-width="2"/>
+      <line x1="610" y1="86" x2="610" y2="125" stroke="#847a6c" stroke-width="2"/>
+      <rect x="265" y="125" width="130" height="50" rx="8" fill="#fff" stroke="#b45309" stroke-width="2"/>
+      <text x="330" y="155" text-anchor="middle" style="font:bold 11px 'Bricolage Grotesque',sans-serif" fill="#28231b">notifications</text>
+      <rect x="405" y="125" width="130" height="50" rx="8" fill="#fff" stroke="#b45309" stroke-width="2"/>
+      <text x="470" y="155" text-anchor="middle" style="font:bold 11px 'Bricolage Grotesque',sans-serif" fill="#28231b">fraud-check</text>
+      <rect x="545" y="125" width="130" height="50" rx="8" fill="#fff" stroke="#b45309" stroke-width="2"/>
+      <text x="610" y="155" text-anchor="middle" style="font:bold 11px 'Bricolage Grotesque',sans-serif" fill="#28231b">analytics</text>
+      <text x="470" y="200" text-anchor="middle" style="font:10px 'Fragment Mono',monospace" fill="#847a6c">each consumer reads at its own pace &mdash; nobody blocks anybody; the parcels wait on the belt</text>
+    </svg>
+  </div>
+
+  <div class="section beat">
+    <span class="time">7:04:04 &mdash; FRAUD DEPT IS AT LUNCH</span>
+    <span class="project">Spring Cloud + Resilience4j</span>
+    <h3>Don't wait for a dead department</h3>
+    <p>What if the fraud service is down? Without protection, every payment hangs on it. The circuit-breaker pattern (Resilience4j, wired in through Spring Cloud): call with a <strong>timeout</strong>, on repeated failure <strong>open the circuit</strong> and use a <strong>fallback</strong> (queue for manual review) instead of queueing doomed calls &mdash; then probe to close it again. Spring Cloud's wider job is the multi-office building: an <strong>API Gateway</strong> as the single public door, <strong>service discovery</strong> (the building directory: "where does 'fraud' live this second?"), and a <strong>config server</strong> so thirty services read one source of truth. PayFlow grows into this in Stage 3.</p>
+    <svg viewBox="0 0 940 210" style="width:100%;height:auto;display:block;margin-top:8px" role="img" aria-label="Circuit breaker routing to fallback when fraud service is down">
+      <rect x="30" y="85" width="160" height="60" rx="10" fill="#fff" stroke="#b45309" stroke-width="2.5"/>
+      <text x="110" y="112" text-anchor="middle" style="font:bold 11px 'Bricolage Grotesque',sans-serif" fill="#28231b">Payment flow</text>
+      <text x="110" y="128" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">needs a fraud verdict</text>
+      <rect x="300" y="85" width="170" height="60" rx="10" fill="#fff" stroke="#b45309" stroke-width="2.5"/>
+      <text x="385" y="110" text-anchor="middle" style="font:bold 10px 'Fragment Mono',monospace" fill="#b45309">CIRCUIT</text>
+      <text x="385" y="124" text-anchor="middle" style="font:bold 10px 'Fragment Mono',monospace" fill="#b45309">BREAKER</text>
+      <rect x="620" y="85" width="200" height="60" rx="10" fill="#fff" stroke="#847a6c" stroke-width="2"/>
+      <text x="720" y="112" text-anchor="middle" style="font:bold 11px 'Bricolage Grotesque',sans-serif" fill="#28231b">Fraud service</text>
+      <text x="720" y="128" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">(healthy)</text>
+      <line x1="190" y1="100" x2="295" y2="100" stroke="#2e7d43" stroke-width="3"/>
+      <line x1="470" y1="100" x2="615" y2="100" stroke="#2e7d43" stroke-width="3"/>
+      <text x="542" y="92" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#2e7d43">CLOSED: calls flow</text>
+      <line x1="110" y1="130" x2="110" y2="178" stroke="#c0392b" stroke-width="2.5"/>
+      <line x1="110" y1="178" x2="295" y2="178" stroke="#c0392b" stroke-width="2.5"/>
+      <text x="200" y="172" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#c0392b">OPEN: fails fast</text>
+      <rect x="300" y="160" width="310" height="36" rx="8" fill="#fff6a3" stroke="#d9c34a"/>
+      <text x="455" y="183" text-anchor="middle" style="font:10px 'Fragment Mono',monospace" fill="#3b321a">fallback: queue for manual review</text>
+      <text x="700" y="172" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">after repeated failures,</text>
+      <text x="700" y="184" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">stop calling the dead &mdash;</text>
+      <text x="700" y="196" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">probe with one test call (half-open)</text>
+    </svg>
+  </div>
+
+  <div class="section beat">
+    <span class="time">7:04:05 &mdash; RECEIPT</span>
+    <span class="project">(you built this already)</span>
+    <h3>"202 Accepted, payment processing"</h3>
+    <p>Priya gets her receipt in 300 milliseconds because the heavy lifting went to the conveyor belt. That 202-vs-201 distinction &mdash; accepted vs completed &mdash; is the difference between a synchronous world and an event-driven one, and it's the biggest architectural step in our whole project.</p>
+    <svg viewBox="0 0 940 215" style="width:100%;height:auto;display:block;margin-top:8px" role="img" aria-label="Comparing 201 Created synchronous response with 202 Accepted async response">
+      <rect x="30" y="15" width="430" height="165" rx="12" fill="#f2f9f3" stroke="#2e7d43" stroke-width="2"/>
+      <text x="245" y="42" text-anchor="middle" style="font:bold 12px 'Fragment Mono',monospace" fill="#2e7d43">201 CREATED &mdash; synchronous</text>
+      <rect x="60" y="60" width="110" height="44" rx="8" fill="#fff" stroke="#847a6c"/>
+      <text x="115" y="86" text-anchor="middle" style="font:9.5px 'Bricolage Grotesque',sans-serif" fill="#28231b">request</text>
+      <line x1="170" y1="82" x2="210" y2="82" stroke="#847a6c" stroke-width="2"/>
+      <rect x="210" y="60" width="130" height="44" rx="8" fill="#fff" stroke="#b45309" stroke-width="2"/>
+      <text x="275" y="79" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#28231b">work happens</text>
+      <text x="275" y="92" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#28231b">in THIS trip</text>
+      <line x1="340" y1="82" x2="380" y2="82" stroke="#847a6c" stroke-width="2"/>
+      <rect x="380" y="60" width="60" height="44" rx="8" fill="#20262f"/>
+      <text x="410" y="86" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#dbe4f0">DB</text>
+      <text x="245" y="130" text-anchor="middle" style="font:9.5px 'Fragment Mono',monospace" fill="#28231b">response = the finished account JSON</text>
+      <text x="245" y="148" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">"done &mdash; here is what you asked for"</text>
+      <text x="245" y="166" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">(your accounts service today)</text>
+      <rect x="480" y="15" width="430" height="165" rx="12" fill="#fff9f2" stroke="#b45309" stroke-width="2"/>
+      <text x="695" y="42" text-anchor="middle" style="font:bold 12px 'Fragment Mono',monospace" fill="#b45309">202 ACCEPTED &mdash; asynchronous</text>
+      <rect x="510" y="60" width="110" height="44" rx="8" fill="#fff" stroke="#847a6c"/>
+      <text x="565" y="86" text-anchor="middle" style="font:9.5px 'Bricolage Grotesque',sans-serif" fill="#28231b">request</text>
+      <line x1="620" y1="82" x2="660" y2="82" stroke="#847a6c" stroke-width="2"/>
+      <rect x="660" y="60" width="130" height="44" rx="8" fill="#fff" stroke="#b45309" stroke-width="2"/>
+      <text x="725" y="79" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#28231b">work STARTED,</text>
+      <text x="725" y="92" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#28231b">not finished</text>
+      <text x="695" y="130" text-anchor="middle" style="font:9.5px 'Fragment Mono',monospace" fill="#28231b">response = "processing" &mdash; immediately</text>
+      <text x="695" y="148" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">the finished result arrives later:</text>
+      <text x="695" y="162" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">SMS / push from the conveyor belt (Kafka)</text>
+    </svg>
+  </div>
+
+  <div class="section beat">
+    <span class="time">11:00 PM &mdash; NIGHT SHIFT</span>
+    <span class="project">Spring Batch</span>
+    <h3>The accountant who works while you sleep</h3>
+    <p>End of day: millions of transactions to reconcile, statements to generate, interest to post. Spring Batch runs <strong>chunked, restartable jobs</strong> &mdash; read 1,000 records, process, write, checkpoint, repeat; die at 2 AM, resume from the checkpoint, never reprocess. It's the classic banking workhorse, and where PayFlow's statement endpoints will eventually get their data from.</p>
+    <svg viewBox="0 0 940 180" style="width:100%;height:auto;display:block;margin-top:8px" role="img" aria-label="Batch job processing chunks with checkpoints and restart">
+      <rect x="35" y="35" width="250" height="65" rx="8" fill="#fff" stroke="#b45309" stroke-width="2"/>
+      <text x="160" y="58" text-anchor="middle" style="font:bold 10px 'Fragment Mono',monospace" fill="#b45309">CHUNK 1</text>
+      <text x="160" y="74" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#28231b">read 1,000 &rarr; process &rarr; write</text>
+      <text x="160" y="90" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#2e7d43">checkpoint &#10003;</text>
+      <line x1="285" y1="67" x2="325" y2="67" stroke="#847a6c" stroke-width="2"/>
+      <rect x="325" y="35" width="250" height="65" rx="8" fill="#fff" stroke="#b45309" stroke-width="2"/>
+      <text x="450" y="58" text-anchor="middle" style="font:bold 10px 'Fragment Mono',monospace" fill="#b45309">CHUNK 2</text>
+      <text x="450" y="74" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#28231b">read 1,000 &rarr; process &rarr; write</text>
+      <text x="450" y="90" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#2e7d43">checkpoint &#10003;</text>
+      <line x1="575" y1="67" x2="615" y2="67" stroke="#847a6c" stroke-width="2"/>
+      <rect x="615" y="35" width="250" height="65" rx="8" fill="#fff" stroke="#c0392b" stroke-width="2"/>
+      <text x="740" y="58" text-anchor="middle" style="font:bold 10px 'Fragment Mono',monospace" fill="#c0392b">CHUNK 3 &mdash; 2 AM CRASH &#10007;</text>
+      <text x="740" y="74" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#28231b">read 1,000 &rarr; process &rarr; ...</text>
+      <text x="740" y="90" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#c0392b">interrupted</text>
+      <line x1="740" y1="100" x2="740" y2="140" stroke="#847a6c" stroke-width="2" stroke-dasharray="5 4"/>
+      <line x1="740" y1="140" x2="160" y2="140" stroke="#847a6c" stroke-width="2" stroke-dasharray="5 4"/>
+      <line x1="160" y1="140" x2="160" y2="100" stroke="#847a6c" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="450" y="158" text-anchor="middle" style="font:9.5px 'Fragment Mono',monospace" fill="#847a6c">restart: resume from the last checkpoint &mdash; chunks 1-2 are never reprocessed</text>
+    </svg>
+  </div>
+
+  <div class="section beat">
+    <span class="time">NEXT MORNING &mdash; "WHERE'S MY MONEY?"</span>
+    <span class="project">Spring AI</span>
+    <h3>The support agent who read every manual</h3>
+    <p>Priya asks the in-app assistant. Spring AI standardizes talking to LLMs the way Spring Data standardizes databases: one API, many providers &mdash; OpenAI-compatible hosted APIs or a <strong>local model via Ollama on your Mac</strong> (our Stage 4: zero cost, full control). The killer pattern is <strong>RAG</strong>: retrieve her actual transaction, stuff it into the prompt as context, and let the model answer about <em>her</em> payment, not payments in general. The chatbot bean is just another bean.</p>
+    <svg viewBox="0 0 940 220" style="width:100%;height:auto;display:block;margin-top:8px" role="img" aria-label="RAG flow: retrieve transaction and docs, build prompt, ask the LLM">
+      <rect x="20" y="75" width="130" height="50" rx="8" fill="#fff" stroke="#847a6c" stroke-width="1.5"/>
+      <text x="85" y="104" text-anchor="middle" style="font:bold 10px 'Bricolage Grotesque',sans-serif" fill="#28231b">Priya's app</text>
+      <rect x="220" y="15" width="170" height="42" rx="7" fill="#20262f"/>
+      <text x="305" y="34" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#dbe4f0">her transaction</text>
+      <text x="305" y="46" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">(retrieve)</text>
+      <rect x="220" y="145" width="170" height="42" rx="7" fill="#fff" stroke="#847a6c"/>
+      <text x="305" y="164" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#28231b">support docs</text>
+      <text x="305" y="176" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">(retrieve)</text>
+      <rect x="220" y="75" width="170" height="50" rx="10" fill="#fff" stroke="#b45309" stroke-width="2.5"/>
+      <text x="305" y="96" text-anchor="middle" style="font:bold 10.5px 'Bricolage Grotesque',sans-serif" fill="#28231b">Assistant service</text>
+      <text x="305" y="112" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">builds the prompt</text>
+      <line x1="305" y1="57" x2="305" y2="75" stroke="#847a6c" stroke-width="2"/>
+      <line x1="305" y1="125" x2="305" y2="145" stroke="#847a6c" stroke-width="2"/>
+      <line x1="390" y1="100" x2="500" y2="100" stroke="#847a6c" stroke-width="2"/>
+      <text x="445" y="92" text-anchor="middle" style="font:8.5px 'Fragment Mono',monospace" fill="#847a6c">prompt = question</text>
+      <text x="445" y="114" text-anchor="middle" style="font:8.5px 'Fragment Mono',monospace" fill="#847a6c">+ her txn + docs</text>
+      <rect x="500" y="75" width="190" height="50" rx="10" fill="#20262f"/>
+      <text x="595" y="95" text-anchor="middle" style="font:bold 10px 'Fragment Mono',monospace" fill="#dbe4f0">LLM &mdash; Ollama</text>
+      <text x="595" y="110" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">on your Mac, or a cloud API</text>
+      <line x1="595" y1="125" x2="595" y2="200" stroke="#2e7d43" stroke-width="2" stroke-dasharray="5 4"/>
+      <line x1="595" y1="200" x2="85" y2="200" stroke="#2e7d43" stroke-width="2" stroke-dasharray="5 4"/>
+      <line x1="85" y1="200" x2="85" y2="125" stroke="#2e7d43" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="340" y="216" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#2e7d43">"settled at 7:04 PM" &mdash; grounded in HER data (RAG)</text>
+    </svg>
+  </div>
+
+  <div class="section beat">
+    <span class="time">THE WHOLE TIME &mdash; CCTV</span>
+    <span class="project">Actuator + Micrometer</span>
+    <h3>The building's nervous system</h3>
+    <p>Every department reports its vitals: Spring Actuator exposes <code class="i">/actuator/health</code>, <code class="i">/actuator/metrics</code>; Micrometer pipes numbers to Prometheus; Grafana draws the dashboards ops stares at. "Payments per second," "p99 latency," "circuit open?" When something breaks at scale, <strong>this is how you find out before customers tell you</strong> &mdash; Stage 3. You've already met the baby version: the actuator prompt you declined in week one.</p>
+    <svg viewBox="0 0 940 190" style="width:100%;height:auto;display:block;margin-top:8px" role="img" aria-label="Metrics flowing from services through Micrometer and Prometheus to Grafana">
+      <rect x="30" y="18" width="175" height="42" rx="8" fill="#fff" stroke="#b45309" stroke-width="2"/>
+      <text x="117" y="43" text-anchor="middle" style="font:bold 10.5px 'Bricolage Grotesque',sans-serif" fill="#28231b">accounts service</text>
+      <rect x="30" y="74" width="175" height="42" rx="8" fill="#fff" stroke="#b45309" stroke-width="2"/>
+      <text x="117" y="99" text-anchor="middle" style="font:bold 10.5px 'Bricolage Grotesque',sans-serif" fill="#28231b">transactions service</text>
+      <rect x="30" y="130" width="175" height="42" rx="8" fill="#fff" stroke="#b45309" stroke-width="2"/>
+      <text x="117" y="155" text-anchor="middle" style="font:bold 10.5px 'Bricolage Grotesque',sans-serif" fill="#28231b">fraud service</text>
+      <line x1="205" y1="39" x2="290" y2="85" stroke="#847a6c" stroke-width="2"/>
+      <line x1="205" y1="95" x2="290" y2="95" stroke="#847a6c" stroke-width="2"/>
+      <line x1="205" y1="151" x2="290" y2="105" stroke="#847a6c" stroke-width="2"/>
+      <text x="247" y="32" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">/actuator</text>
+      <text x="247" y="47" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">/metrics</text>
+      <rect x="290" y="70" width="150" height="50" rx="8" fill="#fff" stroke="#b45309" stroke-width="2"/>
+      <text x="365" y="90" text-anchor="middle" style="font:bold 10.5px 'Bricolage Grotesque',sans-serif" fill="#28231b">Micrometer</text>
+      <text x="365" y="106" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">measures + labels</text>
+      <line x1="440" y1="95" x2="500" y2="95" stroke="#847a6c" stroke-width="2"/>
+      <rect x="500" y="70" width="160" height="50" rx="8" fill="#20262f"/>
+      <text x="580" y="90" text-anchor="middle" style="font:bold 10.5px 'Fragment Mono',monospace" fill="#dbe4f0">Prometheus</text>
+      <text x="580" y="106" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">stores the numbers</text>
+      <line x1="660" y1="95" x2="720" y2="95" stroke="#847a6c" stroke-width="2"/>
+      <rect x="720" y="55" width="195" height="85" rx="10" fill="#fff" stroke="#b45309" stroke-width="2.5"/>
+      <text x="817" y="76" text-anchor="middle" style="font:bold 11px 'Bricolage Grotesque',sans-serif" fill="#28231b">Grafana</text>
+      <polyline points="735,120 760,108 785,112 810,96 835,100 860,84 895,88" fill="none" stroke="#b45309" stroke-width="2.5"/>
+      <text x="470" y="180" text-anchor="middle" style="font:9.5px 'Fragment Mono',monospace" fill="#847a6c">dashboards + alerts &mdash; how you find out before customers tell you</text>
+    </svg>
+  </div>
+
+  <div class="section">
+    <div class="sec-label">The performance wing &mdash; when 10,000 payments/second arrive</div>
+    <p>Three rungs on the performance ladder, in the order real teams climb them. <strong>One: measure first</strong> (Micrometer + load tests &mdash; most "slow" services are one bad N+1 query, which you now know how to hunt). <strong>Two: cache</strong> (Spring Cache: <code class="i">@Cacheable</code> on that expensive call) and pool connections properly. <strong>Three: change the threading model</strong> &mdash; and here Java itself split into two philosophies. <strong>Virtual threads</strong> (Java 21+): ordinary blocking code, but each request gets a thread so cheap you can have a million &mdash; the modern default, and PayFlow's payout batch will use them. <strong>Spring WebFlux</strong> (reactive): a fully non-blocking pipeline where nothing ever waits, at the cost of a much harder mental model (monads all the way down). Teams use WebFlux when they must, not for prestige &mdash; and with virtual threads, they must less and less. Our path: blocking code + virtual threads, reactive only if we ever prove we need it.</p>
+  </div>
+
+  <div class="section">
+    <div class="sec-label">The must-learn ladder &mdash; and where PayFlow walks it</div>
+    <ul class="ladder">
+      <li><strong>Spring core: container, beans, DI</strong> &mdash; <span class="payflow">done, Stage 0</span></li>
+      <li><strong>Spring Boot: starters, auto-config, profiles, migrations</strong> &mdash; <span class="payflow">done, Stage 0</span></li>
+      <li><strong>Spring MVC + validation + error handling</strong> &mdash; <span class="payflow">done, accounts service</span></li>
+      <li><strong>Spring Data + transactions + concurrency</strong> &mdash; <span class="payflow">Stage 1, next</span></li>
+      <li><strong>Testing: JUnit, Mockito, Testcontainers</strong> &mdash; <span class="payflow">Stage 1&ndash;2</span></li>
+      <li><strong>Kafka events + schemas</strong> &mdash; <span class="payflow">Stage 2</span></li>
+      <li><strong>Observability: Actuator, Micrometer, Grafana</strong> &mdash; <span class="payflow">Stage 3</span></li>
+      <li><strong>Spring AI + Ollama</strong> &mdash; <span class="payflow">Stage 4</span></li>
+      <li><strong>Spring Security (OAuth2, JWT, mTLS)</strong> &mdash; <span class="payflow">Stage S</span></li>
+      <li><strong>Spring Cloud, Batch, performance at scale</strong> &mdash; <span class="payflow">later stages</span></li>
+    </ul>
+    <p style="margin-top:12px">Notice what that ladder says: <strong>this is not luck &mdash; PayFlow's roadmap deliberately follows the industry-standard learning order.</strong> Every department in the story gets staffed by you, in sequence, with real code.</p>
+  </div>
+
+  <div class="section">
+    <div class="sec-label">The annotations you'll actually type</div>
+    <p>An annotation is a metadata label &mdash; <code class="i">@Something</code> before a class, method, or field &mdash; that tells a framework "do something with this." You already use most of these. Grouped by where they live, one small sample each:</p>
+
+    <pre class="code"><span class="cm">/* 1 &mdash; HIRING STAFF: make the container employ a class */</span>
+<span class="kw">@Service</span>                          <span class="cm">/* business rules. Siblings: @Component (generic),</span>
+<span class="kw">public class</span> AccountService {}    <span class="cm">   @Repository (data), @RestController (web) */</span>
+
+<span class="cm">/* ...and hiring things the scanner can't see: */</span>
+<span class="kw">@Configuration</span>
+<span class="kw">public class</span> PayflowConfig {
+    <span class="kw">@Bean</span>                          <span class="cm">/* this method's return value becomes a bean */</span>
+    Clock systemClock() { <span class="kw">return</span> Clock.systemUTC(); }
+}</pre>
+
+    <pre class="code"><span class="cm">/* 2 &mdash; THE WEB DESK: mapping HTTP onto methods */</span>
+<span class="kw">@RestController</span>
+<span class="kw">@RequestMapping</span>(<span class="cm">"/api/accounts"</span>)          <span class="cm">/* shared URL prefix */</span>
+<span class="kw">public class</span> AccountController {
+
+    <span class="kw">@PostMapping</span>                            <span class="cm">/* POST /api/accounts */</span>
+    ResponseEntity<AccountResponse> create(
+            <span class="kw">@Valid</span> <span class="kw">@RequestBody</span> CreateAccountRequest request) { ... }
+            <span class="cm">/* @Valid = run the checks    @RequestBody = Jackson parses JSON into this */</span>
+
+    <span class="kw">@GetMapping</span>(<span class="cm">"/{id}"</span>)                    <span class="cm">/* GET /api/accounts/abc-123 */</span>
+    AccountResponse get(<span class="kw">@PathVariable</span> UUID id) { ... }
+            <span class="cm">/* @PathVariable = that {id} piece of the path, as a UUID */</span>
+}</pre>
+
+    <pre class="code"><span class="cm">/* 3 &mdash; THE CONTRACT RULES: on the DTO, enforced at the door by @Valid */</span>
+<span class="kw">public record</span> CreateAccountRequest(
+        <span class="kw">@NotBlank</span> String customerName,              <span class="cm">/* not null, not whitespace */</span>
+        <span class="kw">@Email</span> String email,                        <span class="cm">/* must look like an address */</span>
+        <span class="kw">@NotNull</span> <span class="kw">@PositiveOrZero</span> BigDecimal openingBalance) {}  <span class="cm">/* >= 0 */</span></pre>
+
+    <pre class="code"><span class="cm">/* 4 &mdash; THE DATA LAYER: this class mirrors a table */</span>
+<span class="kw">@Entity</span> <span class="kw">@Table</span>(name = <span class="cm">"accounts"</span>)
+<span class="kw">public class</span> Account {
+    <span class="kw">@Id</span> <span class="kw">@GeneratedValue</span>(strategy = GenerationType.UUID)
+    <span class="kw">private</span> UUID id;                    <span class="cm">/* primary key, DB generates it */</span>
+
+    <span class="kw">@Enumerated</span>(EnumType.STRING)
+    <span class="kw">private</span> AccountStatus status;   <span class="cm">/* store ACTIVE, not a magic number */</span>
+}</pre>
+
+    <pre class="code"><span class="cm">/* 5 &mdash; THE WORKHORSES: the two you'll type most in services */</span>
+<span class="kw">@Transactional</span>                    <span class="cm">/* one method = one transaction: all writes commit, or none do */</span>
+<span class="kw">public</span> Account create(...) { ... }
+
+<span class="kw">@Value</span>(<span class="cm">"${accounts.retry.max:3}"</span>)   <span class="cm">/* read from application.yml, default 3 if absent */</span>
+<span class="kw">private int</span> maxRetries;</pre>
+
+    <p>Two footnotes. <code class="i">@Autowired</code>: you'll see it in older code on fields, but with a single constructor it's implicit &mdash; constructor injection without the label is the modern style we use. Coming later, when their stages arrive: <code class="i">@KafkaListener</code> (a method invoked by a message), <code class="i">@Cacheable</code> (skip the work if we did it recently), <code class="i">@Scheduled</code> (run me at 2 AM), <code class="i">@PreAuthorize</code> (only role X may call this).</p>
+  </div>
+
+  <div class="section" style="background:var(--surface2)">
+    <div class="sec-label">Post-it wall &mdash; copy these onto real sticky notes</div>
+    <div class="postit-wall">
+      <div class="postit"><b>One core</b>All of Spring = the IoC container + satellites. Every project is "just beans." Learn the core once.</div>
+      <div class="postit"><b>Bean vs object</b>Bean = staff the container hired (one, forever). Object = paperwork per request (many, brief).</div>
+      <div class="postit"><b>Thread = courier</b>Each request rides its own thread through the SAME staff. State rides in the paperwork, never on the desk.</div>
+      <div class="postit"><b>Boot = building</b>Starters + auto-config + embedded server. A jar that runs itself: <code>java -jar</code>.</div>
+      <div class="postit"><b>Security = filter</b>The guard stands BEFORE your controller. Auth is a chain of filter beans.</div>
+      <div class="postit"><b>Data = SQL</b>Repository proxy turns method names into SQL. <code>@Transactional</code>: both legs or neither.</div>
+      <div class="postit"><b>Kafka = conveyor</b>Publish, return 202, don't wait. Contract is a schema, not an interface.</div>
+      <div class="postit"><b>Perf ladder</b>Measure &rarr; cache &rarr; virtual threads &rarr; reactive only if proven. Never skip to prestige.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
