@@ -1,11 +1,13 @@
 package com.payflow.accounts.api;
 
+import java.util.UUID;
+
 import com.payflow.accounts.api.dto.AccountResponse;
+import com.payflow.accounts.api.dto.AmountRequest;
 import com.payflow.accounts.api.dto.CreateAccountRequest;
 import com.payflow.accounts.domain.Account;
 import com.payflow.accounts.service.AccountService;
 import jakarta.validation.Valid;
-import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,5 +36,15 @@ public class AccountController {
     @GetMapping("/{id}")
     public AccountResponse get(@PathVariable UUID id) {
         return AccountResponse.from(accountService.getById(id));
+    }
+
+    @PostMapping("/{id}/debit")
+    public AccountResponse debit(@PathVariable UUID id, @Valid @RequestBody AmountRequest request) {
+        return AccountResponse.from(accountService.debit(id, request.amount()));
+    }
+
+    @PostMapping("/{id}/credit")
+    public AccountResponse credit(@PathVariable UUID id, @Valid @RequestBody AmountRequest request) {
+        return AccountResponse.from(accountService.credit(id, request.amount()));
     }
 }

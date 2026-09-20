@@ -45,6 +45,14 @@ public class Account {
         this.createdAt = Instant.now();
     }
 
+    public void debit(BigDecimal amount) {
+        this.balance = this.balance.subtract(amount);
+    }
+
+    public void credit(BigDecimal amount) {
+        this.balance = this.balance.add(amount);
+    }
+
     public UUID getId() { return id; }
     public String getCustomerName() { return customerName; }
     public String getEmail() { return email; }
