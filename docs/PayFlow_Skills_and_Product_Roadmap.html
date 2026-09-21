@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PayFlow — Skills & Product Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+    --font-display: 'Instrument Serif', Georgia, serif;
+    --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+
+    /* Paper / ink — warm cream, terracotta + sage */
+    --bg: #faf7f5;
+    --surface: #ffffff;
+    --surface2: #f4efe9;
+    --surface-elevated: #fdfaf6;
+    --border: rgba(60, 40, 20, 0.09);
+    --border-bright: rgba(60, 40, 20, 0.2);
+    --text: #2c231b;
+    --text-dim: #8a7e72;
+    --terra: #c2410c;
+    --terra-dim: rgba(194, 65, 12, 0.08);
+    --sage: #65a30d;
+    --sage-dim: rgba(101, 163, 13, 0.09);
+    --ink: #44403c;
+    --ink-dim: rgba(68, 64, 60, 0.08);
+    --blue: #0369a1;
+    --blue-dim: rgba(3, 105, 161, 0.08);
+    --rose: #be123c;
+    --rose-dim: rgba(190, 18, 60, 0.08);
+    --amber: #b45309;
+    --amber-dim: rgba(180, 83, 9, 0.09);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1512;
+      --surface: #241e19;
+      --surface2: #2c251f;
+      --surface-elevated: #2e2620;
+      --border: rgba(255, 240, 220, 0.08);
+      --border-bright: rgba(255, 240, 220, 0.2);
+      --text: #ede5dd;
+      --text-dim: #a69889;
+      --terra: #fb923c;
+      --terra-dim: rgba(251, 146, 60, 0.12);
+      --sage: #bef264;
+      --sage-dim: rgba(190, 242, 100, 0.1);
+      --ink: #d6cec6;
+      --ink-dim: rgba(214, 206, 198, 0.1);
+      --blue: #7dd3fc;
+      --blue-dim: rgba(125, 211, 252, 0.1);
+      --rose: #fda4af;
+      --rose-dim: rgba(253, 164, 175, 0.1);
+      --amber: #fbbf24;
+      --amber-dim: rgba(251, 191, 36, 0.1);
+    }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse at 12% 0%, var(--terra-dim) 0%, transparent 42%),
+      radial-gradient(ellipse at 88% 100%, var(--sage-dim) 0%, transparent 38%);
+    color: var(--text);
+    font-family: var(--font-body);
+    padding: 48px 40px 64px;
+    min-height: 100vh;
+  }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .section, .tl-item { animation: fadeUp 0.45s ease-out both; animation-delay: calc(var(--i, 0) * 0.05s); }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+
+  h1 { font-family: var(--font-display); font-size: 44px; font-weight: 400; letter-spacing: -0.5px; margin-bottom: 8px; }
+  h1 em { color: var(--terra); }
+  .subtitle { color: var(--text-dim); font-size: 13px; font-family: var(--font-mono); margin-bottom: 44px; }
+
+  .wrap { max-width: 1060px; margin: 0 auto; display: grid; gap: 28px; }
+
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px 28px; }
+  .section--recessed { background: var(--surface2); box-shadow: inset 0 1px 3px rgba(60,40,20,0.05); }
+
+  .section-label { font-family: var(--font-mono); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+  .section-label .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .lbl--terra { color: var(--terra); } .lbl--terra .dot { background: var(--terra); }
+  .lbl--sage { color: var(--sage); } .lbl--sage .dot { background: var(--sage); }
+  .lbl--blue { color: var(--blue); } .lbl--blue .dot { background: var(--blue); }
+  .lbl--ink { color: var(--ink); } .lbl--ink .dot { background: var(--ink); }
+
+  .lead { font-size: 15.5px; line-height: 1.7; color: var(--text); max-width: 70ch; }
+  .lead strong { color: var(--terra); font-weight: 700; }
+
+  /* ============ SKILLS TABLE ============ */
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 1px; text-align: left; padding: 10px 12px; border-bottom: 2px solid var(--border-bright); color: var(--text-dim); }
+  td { padding: 11px 12px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.55; }
+  tr:nth-child(even) td { background: var(--ink-dim); }
+  tr:hover td { background: var(--terra-dim); }
+  td:first-child { font-weight: 600; white-space: nowrap; }
+  td code { font-family: var(--font-mono); font-size: 11px; background: var(--ink-dim); color: var(--terra); padding: 1px 5px; border-radius: 3px; }
+
+  .badge { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 0.5px; padding: 2px 9px; border-radius: 20px; white-space: nowrap; display: inline-block; }
+  .badge--adopt { background: var(--sage-dim); color: var(--sage); }
+  .badge--later { background: var(--amber-dim); color: var(--amber); }
+  .badge--skip { background: var(--rose-dim); color: var(--rose); }
+
+  /* ============ SECURITY GRID ============ */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .sec-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; border-top: 3px solid var(--border-bright); }
+  .sec-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .sec-card h3 .when { font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); font-weight: 400; white-space: nowrap; }
+  .sec-card p { font-size: 12.5px; color: var(--text-dim); line-height: 1.6; }
+  .sec-card code { font-family: var(--font-mono); font-size: 11px; background: var(--terra-dim); color: var(--terra); padding: 1px 5px; border-radius: 3px; }
+  .sec-card--terra { border-top-color: var(--terra); }
+  .sec-card--blue { border-top-color: var(--blue); }
+  .sec-card--sage { border-top-color: var(--sage); }
+  .sec-card--ink { border-top-color: var(--ink); }
+  .sec-card--amber { border-top-color: var(--amber); }
+
+  /* ============ TIMELINE ============ */
+  .timeline { position: relative; padding-left: 34px; }
+  .timeline::before { content: ''; position: absolute; left: 11px; top: 6px; bottom: 6px; width: 2px; background: linear-gradient(to bottom, var(--terra), var(--sage)); opacity: 0.35; }
+  .tl-item { position: relative; padding: 0 0 26px 0; }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-item::before { content: ''; position: absolute; left: -29px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--surface); border: 3px solid var(--terra); }
+  .tl-item--done::before { background: var(--sage); border-color: var(--sage); }
+  .tl-item--later::before { border-color: var(--border-bright); }
+  .tl-item--security::before { border-color: var(--blue); }
+  .tl-item--ai::before { border-color: var(--terra); }
+
+  .tl-weeks { font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; color: var(--terra); letter-spacing: 0.5px; margin-bottom: 3px; }
+  .tl-item--later .tl-weeks { color: var(--text-dim); }
+  .tl-title { font-size: 15.5px; font-weight: 700; margin-bottom: 6px; }
+  .tl-title .coach { font-family: var(--font-mono); font-size: 10px; font-weight: 500; color: var(--sage); border: 1px solid var(--sage-dim); background: var(--sage-dim); padding: 1px 8px; border-radius: 20px; margin-left: 8px; white-space: nowrap; }
+  .tl-desc { font-size: 12.5px; color: var(--text-dim); line-height: 1.65; max-width: 78ch; }
+  .tl-desc code { font-family: var(--font-mono); font-size: 11px; background: var(--ink-dim); color: var(--terra); padding: 1px 5px; border-radius: 3px; }
+  .tl-tags { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag { font-family: var(--font-mono); font-size: 10px; padding: 2px 8px; border-radius: 4px; background: var(--surface2); border: 1px solid var(--border); color: var(--text-dim); }
+  .tag--hot { background: var(--terra-dim); color: var(--terra); border-color: transparent; }
+
+  .callout { background: var(--surface2); border: 1px solid var(--border); border-left: 3px solid var(--terra); border-radius: 0 8px 8px 0; padding: 15px 20px; font-size: 13px; line-height: 1.65; color: var(--text-dim); }
+  .callout strong { color: var(--text); }
+  .callout code { font-family: var(--font-mono); font-size: 11px; background: var(--terra-dim); color: var(--terra); padding: 1px 5px; border-radius: 3px; }
+
+  @media (max-width: 800px) {
+    body { padding: 20px; }
+    .grid2 { grid-template-columns: 1fr; }
+    h1 { font-size: 34px; }
+    .tbl-scroll { overflow-x: auto; }
+    table { min-width: 640px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>PayFlow &mdash; skills to steal & the <em>road ahead</em></h1>
+<p class="subtitle">learning roadmap &middot; sized at ~8&ndash;10 focused hours/week &middot; adjust by stretching stages, never skipping them &middot; updated 18 Sep 2026</p>
+
+<div class="wrap">
+
+  <!-- ============ LEAD ============ -->
+  <p class="lead" style="--i:0">
+    The resume is an AI-solutions profile, and its transferable value is <strong>not the tools &mdash; it's the patterns</strong>:
+    productionizing AI with evaluation, human-in-the-loop controls, confidence-based routing, and PII/RBAC governance.
+    Those five patterns, plus the security stack you asked for (OAuth2, mTLS, secrets, IdP), slot into PayFlow's ai-support and
+    fraud services. Below: what to adopt, what to skip, how security lands, and the staged product roadmap.
+  </p>
+
+  <!-- ============ SKILLS AUDIT ============ -->
+  <div class="section" style="--i:1">
+    <div class="section-label lbl--terra"><span class="dot"></span> Resume Skills Audit — adopt the patterns, not the platforms</div>
+    <div class="tbl-scroll">
+    <table>
+      <thead>
+        <tr><th>Skill (from resume)</th><th>Verdict</th><th>How it lands in PayFlow</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Enterprise RAG</td>
+          <td><span class="badge badge--adopt">ADOPT</span></td>
+          <td>ai-support answers customer questions from policy docs: chunking, embeddings, <code>pgvector</code> retrieval, citation of source chunks. The single highest-value AI skill for a backend engineer.</td>
+        </tr>
+        <tr>
+          <td>Human-in-the-loop controls</td>
+          <td><span class="badge badge--adopt">ADOPT</span></td>
+          <td>Fraud triage agent: LLM drafts a risk verdict with rationale; humans approve/override above a confidence threshold, auto-approve below. State machine for draft &rarr; pending &rarr; decided.</td>
+        </tr>
+        <tr>
+          <td>Confidence-based routing</td>
+          <td><span class="badge badge--adopt">ADOPT</span></td>
+          <td>The same threshold mechanism routes support chats: low confidence &rarr; fallback response or human handoff; high &rarr; answer directly. Map to Resilience4j fallback thinking you already know.</td>
+        </tr>
+        <tr>
+          <td>AI evaluation & governance</td>
+          <td><span class="badge badge--adopt">ADOPT</span></td>
+          <td>Golden-question dataset + LLM-as-judge scoring in CI; refuse to deploy an ai-support change that regresses answer quality. Teams that skip this ship vibes, not products.</td>
+        </tr>
+        <tr>
+          <td>RBAC + PII / GDPR principles</td>
+          <td><span class="badge badge--adopt">ADOPT</span></td>
+          <td>A banking app is the best possible context: role-scoped AI endpoints, PII redaction pipeline before any LLM call, data-retention rules on chat logs.</td>
+        </tr>
+        <tr>
+          <td>Agentic workflows (multi-step)</td>
+          <td><span class="badge badge--adopt">ADOPT</span></td>
+          <td>Dispute-resolution agent that chains: fetch txn &rarr; check policy &rarr; draft outcome &rarr; request approval. Tool calling with Spring AI function-calling.</td>
+        </tr>
+        <tr>
+          <td>MCP (Model Context Protocol)</td>
+          <td><span class="badge badge--later">LATER</span></td>
+          <td>Expose PayFlow operations (balance lookup, dispute status) as an MCP tool server so coding agents / assistants can act on the platform. Genuinely modern &mdash; but only after the API surface is stable.</td>
+        </tr>
+        <tr>
+          <td>Deepgram / speech</td>
+          <td><span class="badge badge--later">LATER</span></td>
+          <td>Voice channel for support is a real product idea, off-roadmap until the text pipeline is boring.</td>
+        </tr>
+        <tr>
+          <td>Relevance AI, Copilot Studio, Snowflake, JD Edwards</td>
+          <td><span class="badge badge--skip">SKIP</span></td>
+          <td>Low-code platforms and BI stacks &mdash; useful in their world, orthogonal to yours. Learn the underlying patterns (above) in Java/Spring and they transfer anywhere.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- ============ SECURITY TRACK ============ -->
+  <div class="section" style="--i:2">
+    <div class="section-label lbl--blue"><span class="dot"></span> Your Security Track — IdP &middot; OAuth2 &middot; mTLS &middot; Secrets</div>
+    <div class="grid2">
+      <div class="sec-card sec-card--blue">
+        <h3>Identity Provider <span class="when">Stage S &middot; week 9</span></h3>
+        <p>Run <code>Keycloak</code> in compose as the IdP: one realm <code>payflow</code>, users, roles. Why not build our own? You should <em>consume</em> an IdP the way teams do &mdash; then, as a stretch exercise, re-implement parts with Spring Authorization Server to see inside the machine.</p>
+      </div>
+      <div class="sec-card sec-card--terra">
+        <h3>OAuth2 flows <span class="when">Stage S &middot; weeks 9&ndash;12</span></h3>
+        <p>Authorization Code + PKCE for the web dashboard, Client Credentials for service-to-service (payouts &rarr; fraud-check), JWT validation at the gateway with JWKS, refresh tokens, scope-based RBAC on endpoints. Add token exchange when it hurts.</p>
+      </div>
+      <div class="sec-card sec-card--ink">
+        <h3>mTLS <span class="when">Stage S &middot; week 11</span></h3>
+        <p>Private CA in compose; TLS certificates for gateway &rarr; services and Kafka clients. Boot 3 SSL bundles make this clean. Learn cert creation/rotation with <code>openssl</code> by hand first, then automate. This is also the on-ramp to service-mesh thinking.</p>
+      </div>
+      <div class="sec-card sec-card--sage">
+        <h3>Secrets management <span class="when">Stage S &middot; week 12</span></h3>
+        <p>Progression: hardcoded &rarr; .env (banned after first lecture) &rarr; Docker secrets &rarr; <code>HashiCorp Vault</code> with AppRole auth and dynamic Postgres credentials &rarr; AWS Secrets Manager when we deploy. Each step is a real migration you'll perform, not a lecture.</p>
+      </div>
+      <div class="sec-card sec-card--amber">
+        <h3>Tokenization (Visa-style) <span class="when">Stage S &middot; week 12</span></h3>
+        <p>Inspired by Visa Token Service: merchants' stored card/bank details are replaced by scope-limited tokens; only the payout flow can detokenize, inside an isolated token-vault service. AES-GCM encryption at rest, key rotation, full audit trail &mdash; and no raw PAN ever leaves the vault.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TEACHING TRACKS ============ -->
+  <div class="section" style="--i:3">
+    <div class="section-label lbl--terra"><span class="dot"></span> Teaching Tracks &mdash; one concept block per session, alongside project work</div>
+    <div class="grid2">
+      <div class="sec-card sec-card--terra">
+        <h3>Spring Boot track <span class="when">8 units</span></h3>
+        <ul class="node-list">
+          <li><span class="badge badge--adopt">DONE</span> 1 &middot; IoC & dependency injection (quiz pending)</li>
+          <li><span class="badge badge--later">NEXT</span> 2 &middot; Request lifecycle: filters, interceptors, handler chain</li>
+          <li>3 &middot; Spring Data JPA & Hibernate &mdash; interfaces &rarr; SQL, dirty checking, N+1</li>
+          <li>4 &middot; Validation & binding &mdash; @Valid, DTO contracts</li>
+          <li>5 &middot; Configuration & profiles &mdash; application.yml in depth</li>
+          <li>6 &middot; Transactions &mdash; @Transactional, isolation levels</li>
+          <li>7 &middot; Testing &mdash; JUnit 5, Mockito, Testcontainers</li>
+          <li>8 &middot; Security, Kafka, observability &mdash; land with Stages S/2/3</li>
+        </ul>
+      </div>
+      <div class="sec-card sec-card--blue">
+        <h3>Git track <span class="when">5 units</span></h3>
+        <ul class="node-list">
+          <li><span class="badge badge--adopt">DONE</span> 1 &middot; Three trees & inspection: status, diff, log, show</li>
+          <li><span class="badge badge--later">NEXT</span> 2 &middot; Undoing safely: restore, amend, revert vs reset</li>
+          <li>3 &middot; Branching & a deliberately-created merge conflict</li>
+          <li>4 &middot; Reading diffs &mdash; how code review actually works</li>
+          <li>5 &middot; Collaboration: fetch/pull, rebase, PR workflow (Stage 5)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ROADMAP TIMELINE ============ -->
+  <div class="section" style="--i:3">
+    <div class="section-label lbl--sage"><span class="dot"></span> Product Roadmap — stages, enhancements, timelines</div>
+    <div class="timeline">
+
+      <div class="tl-item tl-item--done" style="--i:4">
+        <div class="tl-weeks">WEEK 1 &mdash; COMPLETE ✓</div>
+        <div class="tl-title">Stage 0 &middot; Foundation <span class="coach">coaching phase 1</span></div>
+        <div class="tl-desc">Done: repo, develop branch, SSH auth, JDK 25 + Maven + Docker toolchain, accounts service booted against containerized Postgres, walkthrough Q1&ndash;Q5 answered. All three planted flaws found, understood, and fixed in your own commits: BigDecimal + NUMERIC(19,4) across all layers (V3), AccountResponse DTO replacing raw entity returns, unique email constraint (V2, renamed V4) + DataIntegrityViolationException mapped to 409. Race condition demonstrated, then defeated.</div>
+        <div class="tl-tags"><span class="tag">git</span><span class="tag">monorepo</span><span class="tag">flyway</span><span class="tag">first PR ✓</span></div>
+      </div>
+
+      <div class="tl-item" style="--i:5">
+        <div class="tl-weeks">WEEKS 2&ndash;4 &middot; IN PROGRESS &mdash; YOU ARE HERE</div>
+        <div class="tl-title">Stage 1 &middot; Ledger core <span class="coach">coaching phase 1</span></div>
+        <div class="tl-desc">Transactions service: double-entry ledger, optimistic locking on balances, idempotency keys, the race conditions that eat money. Enhancements: statement endpoints, pagination, N+1 hunts. First up: your two IoC quiz answers, then the starter code walkthrough.</div>
+        <div class="tl-tags"><span class="tag">JPA</span><span class="tag">concurrency</span><span class="tag">idempotency</span><span class="tag">debugger</span></div>
+      </div>
+
+      <div class="tl-item" style="--i:6">
+        <div class="tl-weeks">WEEKS 5&ndash;8</div>
+        <div class="tl-title">Stage 2 &middot; Payouts, events & resilience <span class="coach">coaching phase 1 &rarr; 2</span></div>
+        <div class="tl-desc">Payout orchestration with Resilience4j (timeouts, retries, circuit breakers), parallel batch payouts on a bounded executor, transactional outbox, Kafka + Avro + Schema Registry, AsyncAPI docs. Testing with Testcontainers.</div>
+        <div class="tl-tags"><span class="tag">Resilience4j</span><span class="tag--hot tag">outbox</span><span class="tag">Kafka</span><span class="tag">Avro</span><span class="tag">Testcontainers</span></div>
+      </div>
+
+      <div class="tl-item tl-item--security" style="--i:7">
+        <div class="tl-weeks">WEEKS 9&ndash;12</div>
+        <div class="tl-title">Stage S &middot; Security hardening <span class="coach">coaching phase 2</span></div>
+        <div class="tl-desc">Your requested track: Keycloak IdP, OAuth2 authorization-code + client-credentials flows, JWT at the gateway, endpoint RBAC (customer vs. support vs. auditor), mTLS between services and on Kafka, secrets via Vault, and a Visa-inspired token vault so payout instruments are stored as scoped tokens, never raw PANs. Break auth repeatedly until it bores you.</div>
+        <div class="tl-tags"><span class="tag--hot tag">Keycloak</span><span class="tag--hot tag">OAuth2 / OIDC</span><span class="tag--hot tag">mTLS</span><span class="tag--hot tag">Vault</span><span class="tag--hot tag">tokenization</span><span class="tag">JWT/JWKS</span></div>
+      </div>
+
+      <div class="tl-item" style="--i:8">
+        <div class="tl-weeks">WEEKS 13&ndash;15</div>
+        <div class="tl-title">Stage 3 &middot; Observability <span class="coach">coaching phase 2</span></div>
+        <div class="tl-desc">Actuator + Micrometer, Prometheus + Grafana in compose, structured JSON logging, correlation IDs across REST and Kafka headers, alerting on payout failure rate. SLO thinking: what does "healthy" mean numerically?</div>
+        <div class="tl-tags"><span class="tag">Micrometer</span><span class="tag">Prometheus</span><span class="tag">Grafana</span><span class="tag">correlation IDs</span></div>
+      </div>
+
+      <div class="tl-item tl-item--ai" style="--i:9">
+        <div class="tl-weeks">WEEKS 16&ndash;20</div>
+        <div class="tl-title">Stage 4 &middot; AI platform <span class="coach">coaching phase 2 &rarr; 3</span></div>
+        <div class="tl-desc">ai-support service on Ollama (Llama 3 / Qwen, arm64) behind Spring AI; swap to a hosted API via config. Then the resume patterns, in order: RAG over policy docs with pgvector &rarr; PII redaction before inference &rarr; RBAC-scoped answers &rarr; confidence routing with human fallback &rarr; fraud-triage agent with human-in-the-loop approval &rarr; evaluation harness in CI &rarr; MCP tool server if we're ahead.</div>
+        <div class="tl-tags"><span class="tag--hot tag">Spring AI</span><span class="tag--hot tag">Ollama</span><span class="tag--hot tag">RAG / pgvector</span><span class="tag">HITL</span><span class="tag">LLM evals</span><span class="tag">MCP</span></div>
+      </div>
+
+      <div class="tl-item" style="--i:10">
+        <div class="tl-weeks">WEEKS 21&ndash;23</div>
+        <div class="tl-title">Stage 5 &middot; CI/CD <span class="coach">coaching phase 3</span></div>
+        <div class="tl-desc">GitHub Actions: build &rarr; test (Testcontainers) &rarr; contract tests &rarr; multi-stage arm64 images &rarr; registry push. Branch protection, meaningful PR reviews &mdash; I stop reviewing your code and start reviewing your PRs.</div>
+        <div class="tl-tags"><span class="tag">GitHub Actions</span><span class="tag">contract tests</span><span class="tag">PR workflow</span></div>
+      </div>
+
+      <div class="tl-item tl-item--later" style="--i:11">
+        <div class="tl-weeks">WEEKS 24&ndash;28</div>
+        <div class="tl-title">Stage 6 &middot; Cloud & scale <span class="coach">coaching phase 4</span></div>
+        <div class="tl-desc">AWS: containers on ECS or EKS, RDS for Postgres, MSK for Kafka, Secrets Manager replacing Vault, IAM least-privilege, cost guardrails, zero-downtime deploys. Then chaos drills, schema evolution (Avro compatibility modes), performance tuning, and performance/load testing with Gatling.</div>
+        <div class="tl-tags"><span class="tag">AWS</span><span class="tag">IAM</span><span class="tag">zero-downtime</span><span class="tag">schema evolution</span><span class="tag">chaos</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ CALLOUT ============ -->
+  <div class="callout section section--recessed" style="--i:12">
+    <strong>Two honest notes.</strong> First, the AI stage deliberately comes <em>after</em> security &mdash; an LLM answering banking questions without OAuth2, PII redaction and RBAC in place is a data-breach feature, not a product. Second, the week numbers assume ~8&ndash;10 focused hours/week; if you can only do 4, stretch stages rather than skipping steps. Weak foundations in the ledger and security stages will make everything after Stage 3 feel like magic you can't debug &mdash; that's the failure mode this roadmap is designed to avoid.
+  </div>
+
+</div>
+
+</body>
+</html>

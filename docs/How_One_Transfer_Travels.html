@@ -1,0 +1,412 @@
+<title>How One Transfer Travels</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f6f7; --surface:#ffffff; --surface-2:#eceff1;
+    --line:#dde2e5; --line-strong:#c3ccd1;
+    --ink:#12181c; --ink-2:#5a666e; --ink-3:#85939c;
+    --accent:#0f6466; --accent-ink:#0b4f51; --accent-soft:rgba(15,100,102,.09);
+    --flag:#8f5400; --flag-soft:rgba(143,84,0,.10);
+    --good:#2c6b38; --good-soft:rgba(44,107,56,.10);
+    --f-display:'Bricolage Grotesque','Archivo',system-ui,sans-serif;
+    --f-body:'Archivo',system-ui,-apple-system,sans-serif;
+    --f-mono:'IBM Plex Mono','SF Mono',Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+    --bg:#0e1316; --surface:#161d21; --surface-2:#1d262b;
+    --line:#27333a; --line-strong:#3a4950;
+    --ink:#e7edf0; --ink-2:#9aa8b1; --ink-3:#74838d;
+    --accent:#57b6ae; --accent-ink:#8ad3cb; --accent-soft:rgba(87,182,174,.12);
+    --flag:#d9a03f; --flag-soft:rgba(217,160,63,.13);
+    --good:#6cbd7c; --good-soft:rgba(108,189,124,.13);
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0e1316; --surface:#161d21; --surface-2:#1d262b;
+    --line:#27333a; --line-strong:#3a4950;
+    --ink:#e7edf0; --ink-2:#9aa8b1; --ink-3:#74838d;
+    --accent:#57b6ae; --accent-ink:#8ad3cb; --accent-soft:rgba(87,182,174,.12);
+    --flag:#d9a03f; --flag-soft:rgba(217,160,63,.13);
+    --good:#6cbd7c; --good-soft:rgba(108,189,124,.13);
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15.5px;line-height:1.65;margin:0;}
+  .page{max-width:820px;margin:0 auto;padding-inline:20px;padding-block:44px 80px;}
+  .eyebrow{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 10px;}
+  h1{font-family:var(--f-display);font-weight:800;font-size:clamp(32px,6vw,48px);line-height:1.04;
+    letter-spacing:-.025em;margin:0 0 14px;text-wrap:balance;}
+  .standfirst{font-size:17px;color:var(--ink-2);margin:0 0 8px;}
+  .standfirst b{color:var(--ink);font-weight:600;}
+  h2{font-family:var(--f-display);font-weight:600;font-size:26px;letter-spacing:-.02em;
+    margin:52px 0 4px;text-wrap:balance;}
+  h2 .num{font-family:var(--f-mono);font-size:13px;font-weight:600;color:var(--accent);
+    display:block;letter-spacing:.12em;margin-bottom:6px;}
+  h3{font-family:var(--f-display);font-weight:600;font-size:18.5px;letter-spacing:-.012em;margin:30px 0 4px;}
+  p{margin:0 0 14px;max-width:68ch;}
+  b,strong{font-weight:600;}
+  ul,ol{margin:0 0 14px;padding-left:22px;max-width:68ch;}
+  li{margin-bottom:6px;}
+  code{font-family:var(--f-mono);font-size:.88em;background:var(--surface-2);
+    padding:1px 5px;border-radius:3px;color:var(--accent-ink);}
+  pre{font-family:var(--f-mono);font-size:12.5px;line-height:1.55;background:var(--surface);
+    border:1px solid var(--line);border-radius:5px;padding:18px 20px;overflow-x:auto;margin:0 0 18px;}
+  pre code{background:none;padding:0;color:inherit;font-size:inherit;}
+  .fig{background:var(--surface);border:1px solid var(--line);border-radius:5px;
+    padding:20px;overflow-x:auto;margin:0 0 8px;}
+  .fig pre{border:none;background:none;padding:0;margin:0;}
+  .cap{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);margin:0 0 24px;
+    letter-spacing:.04em;}
+  .note{border-left:3px solid var(--accent);background:var(--accent-soft);
+    padding:14px 18px;border-radius:0 5px 5px 0;margin:0 0 18px;}
+  .note p{margin:0;}
+  .warn{border-left:3px solid var(--flag);background:var(--flag-soft);
+    padding:14px 18px;border-radius:0 5px 5px 0;margin:0 0 18px;}
+  .warn p{margin:0;}
+  .takeaway{border:1px solid var(--line-strong);background:var(--surface);border-radius:5px;
+    padding:16px 20px;margin:22px 0;}
+  .takeaway .lbl{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-3);margin-bottom:6px;}
+  .takeaway p{margin:0;font-size:15px;}
+  .tw{overflow-x:auto;border:1px solid var(--line);border-radius:5px;background:var(--surface);margin:0 0 20px;}
+  table{border-collapse:collapse;width:100%;min-width:520px;}
+  th{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-3);text-align:left;padding:11px 15px;border-bottom:1px solid var(--line-strong);white-space:nowrap;}
+  td{padding:11px 15px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top;}
+  tbody tr:last-child td{border-bottom:none;}
+  .pill{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.07em;
+    text-transform:uppercase;padding:3px 8px;border-radius:3px;white-space:nowrap;}
+  .pill--cold{background:var(--good-soft);color:var(--good);}
+  .pill--rough{background:var(--accent-soft);color:var(--accent-ink);}
+  .pill--skip{background:var(--surface-2);color:var(--ink-3);}
+  .foot{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);
+    font-family:var(--f-mono);font-size:12px;color:var(--ink-3);}
+  @media (max-width:560px){ pre,.fig pre{font-size:11px;} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+
+<div class="page">
+
+<p class="eyebrow">PayFlow · must-know reference</p>
+<h1>How One Transfer Travels</h1>
+<p class="standfirst">
+  Alice sends Bob $250. Follow that one request all the way down and back, and you will
+  have met every container, every setting and every layer that matters — <b>in the order they
+  actually appear</b>, rather than as a list of tools to memorise.
+</p>
+
+<!-- ============================================================ -->
+<h2><span class="num">PART ONE</span>Why containers exist at all</h2>
+
+<p>
+  Before 1956, loading a ship meant dockworkers carrying barrels, sacks and crates aboard one at a
+  time. Every cargo was a different shape, so every ship, truck and warehouse handled it differently.
+  Loading a ship took days.
+</p>
+<p>
+  Then someone standardised the <b>box</b>. Not the cargo — the box. Suddenly it didn't matter
+  whether you were shipping coffee or car parts: the crane, the ship, the truck and the train all
+  handled one standard shape. Loading dropped from days to hours.
+</p>
+<p>
+  <b>Software had exactly this problem.</b> Your app needs Java 25, Maven, a particular Postgres
+  version and a pile of settings. Your laptop has one combination, a colleague's has another, the
+  build server a third, production a fourth. Most deployment failures were some version of
+  <i>"but it works on my machine."</i>
+</p>
+<p>
+  A container is the standard box. Your application <b>and everything it needs to run</b>, sealed
+  into one unit. The machine underneath doesn't need Java installed. It only needs to know how to
+  handle a box.
+</p>
+
+<div class="takeaway">
+  <div class="lbl">Say this out loud</div>
+  <p>"Containers standardise the unit of deployment. The host stops needing to know what's inside — it only needs a runtime that can start a box."</p>
+</div>
+
+<!-- ============================================================ -->
+<h2><span class="num">PART TWO</span>Image and container — one distinction</h2>
+
+<p>You already know this shape from Java:</p>
+
+<div class="fig"><pre><code>   DOCKER                          JAVA
+   ──────                          ────
+   IMAGE          is like          CLASS
+   a frozen filesystem             a template
+   sitting on disk, inert          sitting in a .class file, inert
+   built once                      compiled once
+        │                               │
+        ▼                               ▼
+   CONTAINER      is like          OBJECT
+   a running instance              a running instance
+   many from one image             many from one class</code></pre></div>
+<p class="cap">figure 1 — the only Docker vocabulary you must never mix up</p>
+
+<p>
+  An <b>image</b> is a frozen snapshot of a filesystem, plus a note saying what to run when it
+  starts: <i>"here is Linux with a JRE installed and a jar at /app/app.jar — run
+  <code>java -jar /app/app.jar</code>."</i>
+</p>
+<p>
+  A <b>container</b> is that image actually running. Start three containers from one image and you
+  get three separate processes with separate memory — exactly like three objects from one class.
+</p>
+<p><b>Images are built. Containers are run.</b> That's the whole vocabulary.</p>
+
+<!-- ============================================================ -->
+<h2><span class="num">PART THREE</span>Alice presses send</h2>
+
+<p>Here is the request you actually ran:</p>
+
+<pre><code>curl -X POST localhost:18082/api/transactions \
+  -d '{"fromAccountId":"alice","toAccountId":"bob","amount":250.00}'</code></pre>
+
+<p>Four containers are involved. Here is the whole board before anything moves:</p>
+
+<div class="fig"><pre><code>   YOUR MAC
+   ┌──────────────────────────────────────────────────────────────┐
+   │  curl ──► port 18082                                         │
+   │              │                                               │
+   │  ╔═══════════╪═══════ docker network: docker_default ══════╗ │
+   │  ║           ▼                                             ║ │
+   │  ║   ┌───────────────┐         ┌───────────────┐           ║ │
+   │  ║   │ transactions  │────────►│   accounts    │           ║ │
+   │  ║   │  :8082        │  http://│    :8081      │           ║ │
+   │  ║   └───────┬───────┘ accounts└───────┬───────┘           ║ │
+   │  ║           │           :8081         │                   ║ │
+   │  ║           ▼                         ▼                   ║ │
+   │  ║   ┌───────────────┐         ┌───────────────┐           ║ │
+   │  ║   │transactions-db│         │ accounts-db   │           ║ │
+   │  ║   │  :5432        │         │   :5432       │           ║ │
+   │  ║   └───────────────┘         └───────────────┘           ║ │
+   │  ╚═════════════════════════════════════════════════════════╝ │
+   └──────────────────────────────────────────────────────────────┘</code></pre></div>
+<p class="cap">figure 2 — four containers, two databases, one private network</p>
+
+<h3>Stop here. This is the bit that trips everyone.</h3>
+
+<p>
+  Notice that <code>transactions</code> reaches accounts at <code>http://accounts:8081</code> —
+  <b>not</b> <code>localhost:8081</code>. And it reaches its database at
+  <code>transactions-db:5432</code>, not <code>localhost:5433</code>.
+</p>
+
+<div class="warn"><p>
+  <b>Inside a container, <code>localhost</code> means that container itself.</b> Not your Mac, not
+  the other containers. A container is its own little machine with its own network identity.
+</p></div>
+
+<p>
+  Compose gives every service a name, and <b>that name works as a hostname</b> on the private
+  network it creates. So <code>accounts</code>, <code>accounts-db</code> and
+  <code>transactions-db</code> are all reachable by name, from any other container in that network.
+</p>
+<p>
+  The only reason <code>18082</code> exists at all is so <i>you</i>, standing outside, can get in.
+  That's what <code>ports: "18082:8082"</code> does — <b>host port on the left, container port on
+  the right.</b> Inside the network nobody uses 18082. They all use 8082.
+</p>
+
+<div class="takeaway">
+  <div class="lbl">Say this out loud</div>
+  <p>"Inside the compose network, services address each other by service name. Published ports only exist for traffic entering from outside."</p>
+</div>
+
+<!-- ============================================================ -->
+<h2><span class="num">PART FOUR</span>What the container knew before it started</h2>
+
+<p>
+  How did <code>transactions</code> know to look for <code>accounts</code> at that address? It
+  didn't — not when the code was written. It was <b>told at startup</b>.
+</p>
+
+<div class="fig"><pre><code>   compose.yml                        application.yml
+   ───────────                        ───────────────
+   environment:                       accounts:
+     ACCOUNTS_SERVICE_URL:              service:
+       http://accounts:8081    ──────►    base-url: ${ACCOUNTS_SERVICE_URL:http://localhost:8081}
+                                                      │                    │
+                                        "use this variable"      "…or this, if it isn't set"</code></pre></div>
+<p class="cap">figure 3 — the same jar, three different addresses, zero rebuilds</p>
+
+<p>Read <code>${NAME:fallback}</code> as: <b>"use the environment variable NAME; if it isn't set, use the value after the colon."</b> Which gives you:</p>
+
+<ul>
+  <li>On your Mac, nothing set → falls back to <code>localhost</code>. Works as it always did.</li>
+  <li>In compose, the variable is set → uses <code>accounts</code>.</li>
+  <li>In AWS later, point it at a load balancer. <b>Same jar. No rebuild.</b></li>
+</ul>
+
+<p>
+  This is the principle behind the phrase <b>"build once, deploy anywhere"</b>: one artifact,
+  configuration injected from outside. It is also why a database password should never sit in a file
+  you commit — because then it isn't configuration, it's cargo.
+</p>
+
+<!-- ============================================================ -->
+<h2><span class="num">PART FIVE</span>Inside the service — the layers Alice passes through</h2>
+
+<p>The request is now inside the <code>transactions</code> container. Here is what it passes through:</p>
+
+<div class="fig"><pre><code>   ┌─ TransactionController ────────── your code
+   │      handles HTTP, validates the JSON body
+   │
+   ├─ TransactionService ───────────── your code
+   │      the business logic
+   │
+   ├─ TransactionRepository ────────── Spring Data JPA
+   │      an interface you wrote; Spring writes the implementation
+   │
+   ├─ Hibernate ───────────────────── turns objects ⇄ SQL
+   │      ddl-auto lives here
+   │
+   ├─ HikariCP ────────────────────── the connection pool (10 connections)
+   │      open-in-view decides how long one is held
+   │
+   ├─ JDBC driver ─────────────────── the postgresql dependency in your pom
+   │
+   └─ PostgreSQL ──────────────────── the actual database, in its own container</code></pre></div>
+<p class="cap">figure 4 — the stack, top to bottom</p>
+
+<p>
+  Everything above <b>PostgreSQL</b> lives inside your container. PostgreSQL lives in a different
+  one. That boundary is why your transfer is two HTTP calls and four database writes with nothing
+  making them atomic — but that's a later lesson.
+</p>
+
+<h3>Where each setting you've seen actually lives</h3>
+
+<div class="tw"><table>
+  <thead><tr><th>Setting</th><th>Layer</th><th>What it decides</th></tr></thead>
+  <tbody>
+    <tr><td><code>spring.datasource.url</code></td><td>JDBC driver</td><td>Which database to connect to</td></tr>
+    <tr><td><code>ddl-auto: validate</code></td><td>Hibernate</td><td>Check the schema, never change it</td></tr>
+    <tr><td><code>open-in-view: false</code></td><td>Connection pool</td><td>Give the connection back early</td></tr>
+    <tr><td><code>flyway.enabled: true</code></td><td>Flyway</td><td>Run the <code>.sql</code> files at startup</td></tr>
+    <tr><td><code>server.port</code></td><td>Embedded Tomcat</td><td>Which port the app listens on</td></tr>
+    <tr><td><code>management.*</code></td><td>Actuator</td><td>Which <code>/actuator/*</code> endpoints exist</td></tr>
+  </tbody>
+</table></div>
+
+<!-- ============================================================ -->
+<h2><span class="num">PART SIX</span>Three settings worth understanding properly</h2>
+
+<h3>ddl-auto — who is allowed to change the database structure?</h3>
+
+<p>
+  <b>DDL</b> is Data Definition Language: the SQL that defines structure
+  (<code>CREATE TABLE</code>, <code>ALTER TABLE</code>), as opposed to the SQL that moves data around.
+  So <code>ddl-auto</code> asks: <i>how much may Hibernate change the schema on its own?</i>
+</p>
+
+<div class="tw"><table>
+  <thead><tr><th>Value</th><th>At startup, Hibernate…</th><th>Use it</th></tr></thead>
+  <tbody>
+    <tr><td><code>none</code></td><td>doesn't look</td><td>rarely</td></tr>
+    <tr><td><code>validate</code></td><td><b>compares every entity to the real tables and refuses to start on a mismatch</b></td><td><b>every environment</b></td></tr>
+    <tr><td><code>update</code></td><td>silently creates and alters tables to match your Java</td><td>never</td></tr>
+    <tr><td><code>create</code></td><td>drops everything and rebuilds</td><td>throwaway test fixtures</td></tr>
+  </tbody>
+</table></div>
+
+<p>
+  <b>Why <code>update</code> is dangerous:</b> the schema stops being something you wrote down and
+  reviewed, and becomes a side effect of whatever your Java classes happened to look like that day.
+  Your migration files and your real database drift apart, and nobody notices until a fresh
+  environment produces a schema no one recognises.
+</p>
+<p>
+  <b>One system owns the schema.</b> Here it's Flyway. Hibernate is only allowed to mark the homework.
+</p>
+
+<h3>open-in-view — how long do we hold a connection?</h3>
+
+<p>
+  Your app borrows database connections from a small pool — ten by default. Every request takes one
+  and gives it back.
+</p>
+
+<div class="fig"><pre><code>   request in
+     │
+     ├─ controller
+     ├─ service        ◄── the actual database work happens here
+     ├─ repository
+     │
+     ├─ Spring writes the JSON response
+     │
+   response out
+
+   open-in-view: TRUE    ├──────────────────────────────────┤   held all the way
+   open-in-view: FALSE   ├─────────────┤                        released early</code></pre></div>
+<p class="cap">figure 5 — the same request, two very different connection lifetimes</p>
+
+<p>
+  <code>true</code> is Spring Boot's default. It exists so that lazily-loaded relationships still
+  work if the JSON writer touches one. The cost is real: with ten connections, ten slow clients
+  and everything queues behind them — <b>while no database work is happening at all.</b>
+</p>
+
+<h3>Actuator — the health endpoint you didn't write</h3>
+
+<p>
+  Add <code>spring-boot-starter-actuator</code> and you get <code>/actuator/health</code> for free.
+  It isn't just "the process is alive" — Spring checks that the database answers and Flyway ran, so
+  <code>UP</code> means <b>genuinely ready to serve traffic</b>.
+</p>
+<p>
+  That's why compose can say <i>"don't start transactions until accounts is healthy"</i>. It's also
+  the same mechanism Kubernetes uses for liveness and readiness probes, which is the next place
+  you'll meet it.
+</p>
+
+<!-- ============================================================ -->
+<h2><span class="num">PART SEVEN</span>What an architect is expected to know</h2>
+
+<p>
+  You are not interviewing to operate this. You are interviewing to <b>reason about it</b> — to say
+  what a choice costs and what it buys. Here is the honest split.
+</p>
+
+<div class="tw"><table>
+  <thead><tr><th>Topic</th><th>Depth</th><th>What "enough" sounds like</th></tr></thead>
+  <tbody>
+    <tr><td>Image vs container</td><td><span class="pill pill--cold">Cold</span></td><td>Template versus running instance. Many containers from one image.</td></tr>
+    <tr><td>Why containers exist</td><td><span class="pill pill--cold">Cold</span></td><td>Standard unit of deployment; the host stops caring what's inside.</td></tr>
+    <tr><td>Multi-stage build</td><td><span class="pill pill--cold">Cold</span></td><td>Build with JDK and Maven, ship with a JRE and the jar. Smaller image, no compiler or source in production.</td></tr>
+    <tr><td>Config from environment</td><td><span class="pill pill--cold">Cold</span></td><td>One artifact promoted across environments; settings injected, never baked in.</td></tr>
+    <tr><td>Health checks &amp; startup order</td><td><span class="pill pill--cold">Cold</span></td><td>Readiness gates traffic; dependencies start in order; same idea as K8s probes.</td></tr>
+    <tr><td>Service discovery by name</td><td><span class="pill pill--cold">Cold</span></td><td>Inside the network, address by name, not IP or localhost.</td></tr>
+    <tr><td>Schema ownership</td><td><span class="pill pill--cold">Cold</span></td><td>Migrations own the schema; the ORM validates. Never <code>update</code>.</td></tr>
+    <tr><td>Connection pools</td><td><span class="pill pill--cold">Cold</span></td><td>Small and shared. Anything holding one longer than necessary is a scaling limit.</td></tr>
+    <tr><td>Layer caching</td><td><span class="pill pill--rough">Roughly</span></td><td>Copy slow-changing files before fast-changing ones so dependency layers stay cached.</td></tr>
+    <tr><td>Non-root containers</td><td><span class="pill pill--rough">Roughly</span></td><td>Default is root; drop to an unprivileged user. Baseline hardening.</td></tr>
+    <tr><td>Volumes &amp; persistence</td><td><span class="pill pill--rough">Roughly</span></td><td>Container filesystems are disposable; state needs a volume or an external store.</td></tr>
+    <tr><td>Exact Dockerfile syntax</td><td><span class="pill pill--skip">Look it up</span></td><td>Nobody is testing whether you remember <code>ENTRYPOINT</code> versus <code>CMD</code> under pressure.</td></tr>
+    <tr><td>Docker networking internals</td><td><span class="pill pill--skip">Look it up</span></td><td>Bridge drivers and iptables rules are an operator's problem.</td></tr>
+    <tr><td>Registry and image signing</td><td><span class="pill pill--skip">Look it up</span></td><td>Worth knowing it exists. Detail only if the role is platform engineering.</td></tr>
+  </tbody>
+</table></div>
+
+<div class="note"><p>
+  <b>The pattern worth noticing:</b> everything in the "cold" list is a <i>trade-off or a boundary</i>.
+  Everything in the "look it up" list is <i>syntax or internals</i>. That split is roughly what
+  separates an architecture interview from an engineering one.
+</p></div>
+
+<!-- ============================================================ -->
+<h2><span class="num">PART EIGHT</span>The whole thing in six sentences</h2>
+
+<ol>
+  <li>A container is a standard box holding an application and everything it needs, so the host doesn't have to care what's inside.</li>
+  <li>An image is the frozen template; a container is a running instance of it — class and object.</li>
+  <li>Inside a container, <code>localhost</code> means that container, so services address each other by service name and published ports exist only for outside traffic.</li>
+  <li>Configuration arrives from the environment at startup, so one image promotes unchanged from laptop to production.</li>
+  <li>Migrations own the database schema and the ORM only validates it, because a schema that changes as a side effect is a schema nobody controls.</li>
+  <li>Connections are a small shared pool, so anything that holds one longer than it needs is a limit on how many people you can serve.</li>
+</ol>
+
+<p class="foot">PayFlow · written 21 Sep 2026 · pair with the PayFlow Runbook for the commands</p>
+
+</div>

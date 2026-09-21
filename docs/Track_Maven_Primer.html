@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PayFlow Track — Maven, without the fear</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Fragment+Mono:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #f7f5f0; --surface: #ffffff; --surface2: #efece5;
+    --border: rgba(40, 30, 10, 0.1); --text: #28231b; --dim: #847a6c;
+    --accent: #b45309; --accent-dim: rgba(180, 83, 9, 0.08);
+    --code-bg: #20262f; --code-text: #dbe4f0;
+    --postit: #fff6a3; --postit-text: #3b321a;
+    --font-body: 'Bricolage Grotesque', system-ui, sans-serif;
+    --font-mono: 'Fragment Mono', 'SF Mono', Consolas, monospace;
+    --font-hand: 'Caveat', cursive;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); padding: 44px 40px; }
+  .wrap { max-width: 940px; margin: 0 auto; display: grid; gap: 24px; }
+  .eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); }
+  h1 { font-size: 34px; font-weight: 700; letter-spacing: -0.5px; margin: 6px 0 4px; }
+  .subtitle { color: var(--dim); font-size: 14px; }
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; }
+  .sec-label { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--accent); margin-bottom: 14px; font-weight: 500; }
+  p { font-size: 14.5px; line-height: 1.7; margin-bottom: 10px; }
+  p:last-child { margin-bottom: 0; }
+  code.i { font-family: var(--font-mono); font-size: 12px; background: var(--accent-dim); color: var(--accent); padding: 1px 5px; border-radius: 3px; }
+  pre.code { font-family: var(--font-mono); font-size: 12px; line-height: 1.65; background: var(--code-bg); color: var(--code-text); border-radius: 8px; padding: 16px 18px; overflow-x: auto; white-space: pre; margin: 12px 0 4px; }
+  pre.code .cm { color: #7d8b9d; }
+  pre.code .kw { color: #e8b464; }
+  .beat { border-left: 3px solid var(--accent); }
+  .beat .time { font-family: var(--font-mono); font-size: 11px; color: var(--accent); display: block; margin-bottom: 6px; letter-spacing: 1px; }
+  .beat h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+  th { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); text-align: left; padding: 8px 10px; border-bottom: 2px solid var(--accent); }
+  td { font-size: 13.5px; padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.55; }
+  td code { font-family: var(--font-mono); font-size: 12px; background: var(--accent-dim); color: var(--accent); padding: 1px 4px; border-radius: 3px; white-space: nowrap; }
+  tr:last-child td { border-bottom: none; }
+  .calm { background: var(--surface2); border-radius: 10px; padding: 14px 18px; font-size: 13.5px; line-height: 1.65; }
+  .calm b { color: var(--accent); }
+  .postit-wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(225px, 1fr)); gap: 18px; margin-top: 14px; }
+  .postit { background: var(--postit); color: var(--postit-text); font-family: var(--font-hand); font-size: 19px; line-height: 1.4; padding: 14px 18px 18px; box-shadow: 0 10px 18px rgba(60, 45, 0, 0.18); border-radius: 2px; transform: rotate(-1.2deg); min-height: 150px; }
+  .postit:nth-child(2n) { transform: rotate(1.3deg); }
+  .postit:nth-child(3n) { transform: rotate(-0.4deg); }
+  .postit:nth-child(4n) { transform: rotate(0.8deg); }
+  .postit b { display: block; font-size: 15px; margin-bottom: 6px; color: #6b5410; font-family: var(--font-mono); letter-spacing: 0.5px; text-transform: uppercase; }
+  .postit code { font-family: var(--font-mono); font-size: 12.5px; background: rgba(60, 45, 0, 0.08); padding: 0 4px; border-radius: 3px; }
+  @media (max-width: 700px) { body { padding: 20px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">PayFlow Track &middot; Build Tools</div>
+    <h1>Maven, without the fear</h1>
+    <p class="subtitle">For the engineer who suspects everyone else was born knowing this. Nobody was. It is a warehouse clerk with excellent memory, and you only need to talk to it in six sentences.</p>
+  </header>
+
+  <div class="section">
+    <div class="sec-label">First, the reassurance</div>
+    <p>Maven has a reputation for being scary because it is old, verbose, and its errors are written in a strange dialect. Underneath, it does exactly <strong>three jobs</strong>, and none of them is clever: (1) fetch the libraries your code needs, (2) repeat the same build steps in the same order every time, and (3) wrap the result into a runnable jar. That's it. You already use it daily &mdash; <code class="i">mvn spring-boot:run</code> &mdash; and you've already done the hardest Maven thing you'll do this year: matching the parent version in a pom. Everything below is just filling in the picture.</p>
+    <p class="calm"><b>If you remember nothing else from this page:</b> the daily commands are <code class="i">mvn compile</code>, <code class="i">mvn test</code>, <code class="i">mvn package</code>, <code class="i">mvn clean</code>, <code class="i">mvn spring-boot:run</code>, and <code class="i">mvn dependency:tree</code>. Six. When anything behaves strangely: <code class="i">mvn clean</code> first, ask questions later. That policy resolves most of what people call "Maven problems."</p>
+  </div>
+
+  <div class="section">
+    <div class="sec-label">The three jobs, as one story</div>
+    <p>Meet Maven, the <strong>floor manager of the PayFlow factory</strong>. You are the engineer; you write Java. Maven never writes code. It manages materials and procedure, so the same blueprint produces the same building on every machine, forever.</p>
+    <p><strong>Job one &mdash; it keeps the requisition list.</strong> Every project you own has a <code class="i">pom.xml</code>: a plain text file listing the project's name, its Java version, and every library it needs. When you say <em>"build it"</em>, Maven reads the list, walks to your Mac's private supply shelf (<code class="i">~/.m2/repository</code> &mdash; the <strong>local depot</strong>), grabs what's there, and for anything missing, orders it once from <strong>Maven Central</strong> &mdash; the giant public warehouse holding every version of every Java library ever published. It downloads into your depot and never orders that item again. That is the entire mystery of dependencies.</p>
+    <p><strong>Job two &mdash; it follows the standard procedure.</strong> Every Java project on earth builds in the same order: validate the list &rarr; compile the code &rarr; run the tests &rarr; package the jar. That fixed order is <em>the lifecycle</em>, and it's why a stranger can clone any Maven project on GitHub and build it with one command. The procedure comes with the factory; nobody invents their own.</p>
+    <p><strong>Job three &mdash; it stamps out the jar.</strong> The finished artifact lands in the <code class="i">target/</code> folder &mdash; compiled classes, tests, and the fat jar you already know: the one where <code class="i">java -jar app.jar</code> starts Tomcat. <code class="i">target/</code> is disposable output, like sawdust. It is rebuilt from scratch on demand. That is why <code class="i">.gitignore</code> has always been quietly keeping it out of your commits.</p>
+  </div>
+
+  <div class="section">
+    <div class="sec-label">The requisition list, annotated &mdash; it's your own pom</div>
+    <pre class="code"><span class="cm">/* services/transactions/pom.xml — the parts that matter, translated */</span>
+
+<span class="kw"><parent></span>                          <span class="cm">/* "inherit from the Spring Boot parent" — you learned this: */</span>
+    spring-boot-starter-parent    <span class="cm">/* one version = one tested set of ~300 libraries, */</span>
+    <version>4.x</version>         <span class="cm">/* which is why both services MUST use the same one */</span>
+<span class="kw"></parent></span>
+
+<span class="kw"><groupId></span>com.payflow<span class="kw"></groupId></span>       <span class="cm">/* your name-space: who made this project */</span>
+<span class="kw"><artifactId></span>payflow-transactions<span class="kw"></artifactId></span>  <span class="cm">/* the project's name */</span>
+<span class="kw"><version></span>0.0.1-SNAPSHOT<span class="kw"></version></span> <span class="cm">/* its version — see the SNAPSHOT note below */</span>
+
+<span class="kw"><properties></span>java.version 25<span class="kw"></properties></span>
+
+<span class="kw"><dependencies></span>                     <span class="cm">/* THE LIST: everything this project needs */</span>
+    spring-boot-starter-webmvc    <span class="cm">/* pulls in Tomcat + Spring MVC + Jackson (transitively) */</span>
+    spring-boot-starter-data-jpa  <span class="cm">/* pulls in Hibernate + JPA */</span>
+    postgresql (runtime)          <span class="cm">/* only needed when RUNNING, not compiling */</span>
+<span class="kw"></dependencies></span></pre>
+    <p>Notice what you <em>don't</em> see: version numbers on the dependencies. The parent's catalog answers "which version of Jackson works with which version of Spring" &mdash; that's the entire point of inheriting from <code class="i">spring-boot-starter-parent</code>, and the entire reason your version-sync yesterday mattered.</p>
+  </div>
+
+  <div class="section">
+    <div class="sec-label">From requisition to running app — one picture</div>
+    <svg viewBox="0 0 940 250" style="width:100%;height:auto;display:block" role="img" aria-label="Maven flow: pom to local depot to Maven Central to compiled classes to jar">
+      <rect x="30" y="95" width="150" height="70" rx="10" fill="#fff" stroke="#b45309" stroke-width="2.5"/>
+      <text x="105" y="124" text-anchor="middle" style="font:bold 12px 'Bricolage Grotesque',sans-serif" fill="#28231b">pom.xml</text>
+      <text x="105" y="141" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">the requisition list</text>
+
+      <line x1="180" y1="130" x2="235" y2="130" stroke="#847a6c" stroke-width="2"/>
+
+      <rect x="237" y="85" width="180" height="90" rx="10" fill="#fff" stroke="#b45309" stroke-width="2.5"/>
+      <text x="327" y="115" text-anchor="middle" style="font:bold 12px 'Bricolage Grotesque',sans-serif" fill="#28231b">~/.m2/repository</text>
+      <text x="327" y="132" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">your Mac's local depot</text>
+      <text x="327" y="146" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">keeps everything forever</text>
+
+      <rect x="237" y="8" width="180" height="52" rx="10" fill="#20262f"/>
+      <text x="327" y="30" text-anchor="middle" style="font:bold 11px 'Bricolage Grotesque',sans-serif" fill="#dbe4f0">Maven Central</text>
+      <text x="327" y="46" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">the public warehouse</text>
+      <line x1="327" y1="60" x2="327" y2="83" stroke="#847a6c" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="392" y="76" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">ordered once, kept</text>
+
+      <line x1="417" y1="130" x2="472" y2="130" stroke="#847a6c" stroke-width="2"/>
+
+      <rect x="474" y="95" width="170" height="70" rx="10" fill="#fff" stroke="#b45309" stroke-width="2"/>
+      <text x="559" y="120" text-anchor="middle" style="font:bold 12px 'Bricolage Grotesque',sans-serif" fill="#28231b">compile + test</text>
+      <text x="559" y="137" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">target/classes</text>
+
+      <line x1="644" y1="130" x2="699" y2="130" stroke="#847a6c" stroke-width="2"/>
+
+      <rect x="701" y="90" width="200" height="80" rx="10" fill="#fff6a3" stroke="#d9c34a" stroke-width="2"/>
+      <text x="801" y="118" text-anchor="middle" style="font:bold 12px 'Bricolage Grotesque',sans-serif" fill="#3b321a">target/*.jar</text>
+      <text x="801" y="135" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">java -jar app.jar</text>
+      <text x="801" y="149" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">and the app is the server</text>
+
+      <text x="470" y="225" text-anchor="middle" style="font:10px 'Fragment Mono',monospace" fill="#847a6c">every step above is what "mvn package" does — identical on your Mac, a teammate's Mac, and the CI server</text>
+    </svg>
+  </div>
+
+  <div class="section">
+    <div class="sec-label">The lifecycle staircase &mdash; the one idea that unlocks all commands</div>
+    <svg viewBox="0 0 940 270" style="width:100%;height:auto;display:block" role="img" aria-label="Lifecycle staircase: validate, compile, test, package, install — running a later step runs all earlier ones">
+      <rect x="30" y="205" width="150" height="44" rx="8" fill="#fff" stroke="#847a6c" stroke-width="2"/>
+      <text x="105" y="231" text-anchor="middle" style="font:bold 11px 'Fragment Mono',monospace" fill="#28231b">validate</text>
+      <text x="105" y="262" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">list makes sense?</text>
+
+      <rect x="215" y="155" width="150" height="44" rx="8" fill="#fff" stroke="#b45309" stroke-width="2"/>
+      <text x="290" y="181" text-anchor="middle" style="font:bold 11px 'Fragment Mono',monospace" fill="#28231b">compile</text>
+      <text x="290" y="212" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">source &rarr; .class files</text>
+
+      <rect x="400" y="105" width="150" height="44" rx="8" fill="#fff" stroke="#b45309" stroke-width="2"/>
+      <text x="475" y="131" text-anchor="middle" style="font:bold 11px 'Fragment Mono',monospace" fill="#28231b">test</text>
+      <text x="475" y="162" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">run all @Test methods</text>
+
+      <rect x="585" y="55" width="150" height="44" rx="8" fill="#fff" stroke="#b45309" stroke-width="2.5"/>
+      <text x="660" y="81" text-anchor="middle" style="font:bold 11px 'Fragment Mono',monospace" fill="#28231b">package</text>
+      <text x="660" y="112" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">jar into target/</text>
+
+      <rect x="770" y="5" width="140" height="44" rx="8" fill="#fff" stroke="#847a6c" stroke-width="2"/>
+      <text x="840" y="31" text-anchor="middle" style="font:bold 11px 'Fragment Mono',monospace" fill="#28231b">install</text>
+      <text x="840" y="62" text-anchor="middle" style="font:9px 'Fragment Mono',monospace" fill="#847a6c">copy jar to ~/.m2</text>
+
+      <line x1="180" y1="205" x2="213" y2="177" stroke="#847a6c" stroke-width="2"/>
+      <line x1="365" y1="155" x2="398" y2="127" stroke="#847a6c" stroke-width="2"/>
+      <line x1="550" y1="105" x2="583" y2="77" stroke="#847a6c" stroke-width="2"/>
+      <line x1="735" y1="55" x2="768" y2="27" stroke="#847a6c" stroke-width="2"/>
+
+      <text x="470" y="255" text-anchor="middle" style="font:10px 'Fragment Mono',monospace" fill="#847a6c">ask for any step and Maven climbs every step to its LEFT first — mvn package = validate + compile + test + package</text>
+    </svg>
+    <p>This staircase is why people say "just run <code class="i">mvn clean package</code>": you named the top of the stairs you care about, and Maven walked everything below it on the way up. You can never package untested code by accident &mdash; the path runs through <code class="i">test</code> whether you remembered it or not. (Failing tests stop the climb. That's a feature.)</p>
+  </div>
+
+  <div class="section">
+    <div class="sec-label">The six commands you actually need &mdash; and when you type them</div>
+    <table>
+      <tr><th style="width:210px">Command</th><th>What it does</th><th>When you type it</th></tr>
+      <tr><td><code>mvn compile</code></td><td>Reads the pom, fetches anything missing, compiles to <code>target/classes</code>. Does NOT run tests.</td><td>The quick "is my code valid" check. The cheapest feedback loop. After pulling teammate changes.</td></tr>
+      <tr><td><code>mvn test</code></td><td>Compiles + runs every test. Stops on first failure.</td><td>Before every commit that touches logic. (Soon: JUnit tests of your own.)</td></tr>
+      <tr><td><code>mvn package</code></td><td>Compile + test + build the jar in <code>target/</code>.</td><td>When you want the artifact itself &mdash; the thing CI builds and Docker puts in an image.</td></tr>
+      <tr><td><code>mvn clean</code></td><td>Deletes <code>target/</code> entirely. Builds nothing.</td><td>Almost always typed as <code>mvn clean package</code>. Whenever a build behaves inexplicably &mdash; nuke the sawdust, try again.</td></tr>
+      <tr><td><code>mvn spring-boot:run</code></td><td>Compile + boot the app via the Boot plugin (not a lifecycle step &mdash; a plugin goal).</td><td>Your daily driver. The command you already type ten times a day.</td></tr>
+      <tr><td><code>mvn dependency:tree</code></td><td>Prints the full resolved dependency tree: who pulled what, which version.</td><td>Investigating "class not found", version conflicts, or answering "where did this library come from?"</td></tr>
+    </table>
+    <p>Two honorable mentions: <code class="i">mvn install</code> (build, then copy the jar into your <code class="i">~/.m2</code> so <em>other local projects</em> can use it as a library &mdash; rare for services, common for shared libraries) and the <strong>wrapper</strong>: if your repo contains <code class="i">mvnw</code> files, that's Maven pinned to one version for the whole team &mdash; <code class="i">./mvnw package</code> runs exactly the Maven the project expects, no local install needed. Worth adopting when PayFlow grows a CI pipeline.</p>
+  </div>
+
+  <div class="section">
+    <div class="sec-label">Real days at the factory &mdash; scenarios you will live</div>
+
+    <div class="beat" style="margin-bottom:14px">
+      <span class="time">SCENARIO 1 &mdash; "IT WORKS ON MY MACHINE"</span>
+      <h3>Your teammate's build passes, yours fails</h3>
+      <p>Most of the time it's one of two things. <strong>Stale sawdust:</strong> something in <code class="i">target/</code> is from an older compile and confusing things &mdash; <code class="i">mvn clean package</code> fixes it. That command costs thirty seconds and resolves roughly half of all "Maven problems" in the wild. <strong>Missing material:</strong> a dependency they added is in their depot but not yours &mdash; except Maven auto-fetches from Central on first use, so this only bites when the network or a private repository is involved. The pattern to internalize: <em>clean first, read the first error second, ask questions third.</em></p>
+    </div>
+
+    <div class="beat" style="margin-bottom:14px">
+      <span class="time">SCENARIO 2 &mdash; THE MYSTERY LIBRARY</span>
+      <h3>"NoClassDefFoundError: something you never imported"</h3>
+      <p>Scary name, simple situation: a library your project uses <em>indirectly</em> (Tomcat pulled in by the starter, Jackson pulled in by webmvc) is missing or version-clashing. You never wrote its name &mdash; so where did it come from? <code class="i">mvn dependency:tree</code> prints the entire ancestry: every direct dependency, and under each, everything it pulled behind it. Search that output (grep) for the mystery class's library, and the tree tells you who invited it. This is also how you'd answer "why are we on Jackson 2.x when I asked for nothing?" &mdash; the parent catalog decided, on your behalf, for compatibility.</p>
+    </div>
+
+    <div class="beat" style="margin-bottom:14px">
+      <span class="time">SCENARIO 3 &mdash; THE 2 AM HOTFIX</span>
+      <h3>Production is broken, you need a jar NOW</h3>
+      <p>Branch off, fix, then: <code class="i">mvn clean package</code>. Tests run as part of the climb &mdash; that's not ceremony, that's the staircase refusing to hand you an untested artifact at 2 AM. If tests fail, the jar is not built, and you're glad. The jar lands in <code class="i">target/</code>; CI does exactly this on every push (the pipeline you'll build in the GitHub Actions track is, at its core, <code class="i">mvn clean package</code> plus <code class="i">docker build</code>). Same requisition, same staircase, same jar &mdash; on your Mac at 2 AM and in the cloud at noon. That repeatability is the entire reason build tools exist.</p>
+    </div>
+
+    <div class="beat">
+      <span class="time">SCENARIO 4 &mdash; 0.0.1-SNAPSHOT</span>
+      <h3>What that version suffix means</h3>
+      <p><code class="i">SNAPSHOT</code> is Maven's word for <strong>a work in progress</strong>: "this is what the project looked like sometime during development." Release versions (<code class="i">1.0.0</code>, no suffix) are immutable promises &mdash; published once, never re-published, depended on as-is. Snapshots can be rebuilt and re-fetched any time. For PayFlow today it's cosmetic; the day you publish libraries for other teams, the rule becomes: <strong>never make anything real depend on someone's SNAPSHOT</strong>, because the ground can shift under you.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-label">Best practices &mdash; the short list that matters</div>
+    <p><strong>Let the parent pick versions.</strong> Don't hand-pin library versions in your pom unless forced &mdash; the starter-parent exists so 300 versions agree with each other. A random pinned version is you overriding the compatibility testing with a guess. <strong>Dependencies travel with code:</strong> if a commit uses a new library, the pom change belongs in the same commit &mdash; otherwise the repo is broken between commits. <strong>Never commit <code class="i">target/</code></strong> &mdash; it's output, not source; your <code class="i">.gitignore</code> already guards this. <strong>When confused, clean.</strong> And <strong>read the first error only</strong> &mdash; the same discipline as your Spring debugging, because it's the same compiler-under-the-hood producing them.</p>
+    <p class="calm"><b>A closing word on the anxiety, because it deserves a direct answer:</b> build tools feel scary because their failures happen at the boundary of your understanding &mdash; you wrote no code wrong, yet something obscure fails. But Maven failures are the most <em>literal</em> in all of software: the error names the missing thing and the file it read to get there. Nothing here requires talent or years of background &mdash; it's a clerk following a list. You've already built, run, and version-synced a real microservice with it. The rest is repetition.</p>
+  </div>
+
+  <div class="section" style="background:var(--surface2)">
+    <div class="sec-label">Post-it wall &mdash; the whole topic in six notes</div>
+    <div class="postit-wall">
+      <div class="postit"><b>Three jobs</b>Fetch libraries. Repeat the same build steps. Wrap the jar. Maven is a clerk, not a wizard.</div>
+      <div class="postit"><b>pom = list</b>The requisition list. Parent = the tested catalog of versions you inherit from.</div>
+      <div class="postit"><b>Staircase</b>validate &rarr; compile &rarr; test &rarr; package. Ask for any step, Maven walks all steps to its left first.</div>
+      <div class="postit"><b>Depots</b><code>~/.m2</code> = your shelf, downloaded once. Maven Central = the public warehouse.</div>
+      <div class="postit"><b>Magic fix</b>Weird build? <code>mvn clean package</code>. Thirty seconds, fixes half of everything.</div>
+      <div class="postit"><b>Six commands</b>compile, test, package, clean, spring-boot:run, dependency:tree. Everything else is lookup.</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -2,14 +2,26 @@ spring:
   application:
     name: accounts
   datasource:
-    url: jdbc:postgresql://localhost:5432/payflow_accounts
-    username: payflow
-    password: payflow
+    url: ${ACCOUNTS_DB_URL:jdbc:postgresql://localhost:5432/payflow_accounts}
+    username: ${ACCOUNTS_DB_USER:payflow}
+    password: ${ACCOUNTS_DB_PASSWORD:payflow}
   jpa:
     hibernate:
       ddl-auto: validate
+    open-in-view: false
   flyway:
     enabled: true
 
 server:
   port: 8081
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: when-authorized

@@ -1,15 +1,76 @@
 services:
+
   accounts-db:
     image: postgres:17-alpine
     container_name: payflow-accounts-db
     environment:
       POSTGRES_DB: payflow_accounts
       POSTGRES_USER: payflow
-      POSTGRES_PASSWORD: payflow
+      POSTGRES_PASSWORD: ${ACCOUNTS_DB_PASSWORD:-payflow}
     ports:
       - "5432:5432"
     volumes:
       - accounts-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U payflow -d payflow_accounts"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  transactions-db:
+    image: postgres:17-alpine
+    container_name: payflow-transactions-db
+    environment:
+      POSTGRES_DB: payflow_transactions
+      POSTGRES_USER: payflow
+      POSTGRES_PASSWORD: ${TRANSACTIONS_DB_PASSWORD:-payflow}
+    ports:
+      - "5433:5432"
+    volumes:
+      - transactions_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U payflow -d payflow_transactions"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  accounts:
+    build:
+      context: ../services/accounts
+    container_name: payflow-accounts
+    environment:
+      ACCOUNTS_DB_URL: jdbc:postgresql://accounts-db:5432/payflow_accounts
+      ACCOUNTS_DB_USER: payflow
+      ACCOUNTS_DB_PASSWORD: ${ACCOUNTS_DB_PASSWORD:-payflow}
+    ports:
+      - "18081:8081"
+    depends_on:
+      accounts-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8081/actuator/health | grep -q UP"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+      start_period: 40s
+
+  transactions:
+    build:
+      context: ../services/transactions
+    container_name: payflow-transactions
+    environment:
+      TRANSACTIONS_DB_URL: jdbc:postgresql://transactions-db:5432/payflow_transactions
+      TRANSACTIONS_DB_USER: payflow
+      TRANSACTIONS_DB_PASSWORD: ${TRANSACTIONS_DB_PASSWORD:-payflow}
+      ACCOUNTS_SERVICE_URL: http://accounts:8081
+    ports:
+      - "18082:8082"
+    depends_on:
+      transactions-db:
+        condition: service_healthy
+      accounts:
+        condition: service_healthy
 
 volumes:
   accounts-db-data:
+  transactions_data:

@@ -1,0 +1,294 @@
+<title>PayFlow Runbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f6f7; --surface:#ffffff; --surface-2:#eceff1;
+    --line:#dde2e5; --line-strong:#c3ccd1;
+    --ink:#12181c; --ink-2:#5a666e; --ink-3:#85939c;
+    --accent:#0f6466; --accent-ink:#0b4f51; --accent-soft:rgba(15,100,102,.09);
+    --flag:#8f5400; --flag-soft:rgba(143,84,0,.10);
+    --f-display:'Bricolage Grotesque','Archivo',system-ui,sans-serif;
+    --f-body:'Archivo',system-ui,-apple-system,sans-serif;
+    --f-mono:'IBM Plex Mono','SF Mono',Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+    --bg:#0e1316; --surface:#161d21; --surface-2:#1d262b;
+    --line:#27333a; --line-strong:#3a4950;
+    --ink:#e7edf0; --ink-2:#9aa8b1; --ink-3:#74838d;
+    --accent:#57b6ae; --accent-ink:#8ad3cb; --accent-soft:rgba(87,182,174,.12);
+    --flag:#d9a03f; --flag-soft:rgba(217,160,63,.13);
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0e1316; --surface:#161d21; --surface-2:#1d262b;
+    --line:#27333a; --line-strong:#3a4950;
+    --ink:#e7edf0; --ink-2:#9aa8b1; --ink-3:#74838d;
+    --accent:#57b6ae; --accent-ink:#8ad3cb; --accent-soft:rgba(87,182,174,.12);
+    --flag:#d9a03f; --flag-soft:rgba(217,160,63,.13);
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6;margin:0;}
+  .page{max-width:880px;margin:0 auto;padding-inline:20px;padding-block:44px 80px;}
+  .eyebrow{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 10px;}
+  h1{font-family:var(--f-display);font-weight:800;font-size:clamp(32px,6vw,46px);line-height:1.04;
+    letter-spacing:-.025em;margin:0 0 14px;}
+  .standfirst{font-size:16.5px;color:var(--ink-2);max-width:66ch;margin:0 0 6px;}
+  .standfirst b{color:var(--ink);font-weight:600;}
+  h2{font-family:var(--f-display);font-weight:600;font-size:24px;letter-spacing:-.02em;margin:50px 0 6px;}
+  h2 .num{font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--accent);
+    display:block;letter-spacing:.12em;margin-bottom:5px;}
+  .lede{color:var(--ink-2);font-size:14.5px;margin:0 0 20px;max-width:66ch;}
+  p{margin:0 0 14px;max-width:68ch;}
+  code{font-family:var(--f-mono);font-size:.88em;background:var(--surface-2);
+    padding:1px 5px;border-radius:3px;color:var(--accent-ink);}
+  /* command blocks */
+  .cmds{display:flex;flex-direction:column;gap:1px;background:var(--line);
+    border:1px solid var(--line);border-radius:5px;overflow:hidden;margin:0 0 22px;}
+  .cmd{background:var(--surface);padding:14px 18px;}
+  .cmd pre{font-family:var(--f-mono);font-size:13px;line-height:1.5;margin:0 0 7px;
+    overflow-x:auto;color:var(--ink);white-space:pre;}
+  .cmd pre .tok{color:var(--accent);}
+  .cmd .what{margin:0;font-size:13.5px;color:var(--ink-2);}
+  .cmd .what b{color:var(--ink);font-weight:600;}
+  .cmd .when{display:block;margin-top:5px;font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);}
+  .warn{border-left:3px solid var(--flag);background:var(--flag-soft);
+    padding:13px 17px;border-radius:0 5px 5px 0;margin:0 0 20px;}
+  .warn p{margin:0;font-size:14px;}
+  .note{border-left:3px solid var(--accent);background:var(--accent-soft);
+    padding:13px 17px;border-radius:0 5px 5px 0;margin:0 0 20px;}
+  .note p{margin:0;font-size:14px;}
+  .tw{overflow-x:auto;border:1px solid var(--line);border-radius:5px;background:var(--surface);margin:0 0 22px;}
+  table{border-collapse:collapse;width:100%;min-width:500px;}
+  th{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-3);text-align:left;padding:11px 15px;border-bottom:1px solid var(--line-strong);white-space:nowrap;}
+  td{padding:10px 15px;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:top;}
+  tbody tr:last-child td{border-bottom:none;}
+  td code{font-size:12.5px;}
+  .foot{margin-top:54px;padding-top:20px;border-top:1px solid var(--line);
+    font-family:var(--f-mono);font-size:12px;color:var(--ink-3);}
+  @media (max-width:560px){ .cmd pre{font-size:11.5px;} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+
+<div class="page">
+
+<p class="eyebrow">PayFlow · operations</p>
+<h1>PayFlow Runbook</h1>
+<p class="standfirst">
+  A <b>runbook</b> is the operational reference for a system: the commands you actually run, what
+  each one does, and what to watch for. It's a real industry artefact — every production service
+  should have one, and being the person who wrote it is a good look.
+</p>
+
+<div class="note"><p>
+  <b>Where you are:</b> two services and two databases, running as four containers.
+  Accounts is published on your Mac at <b>18081</b>, transactions at <b>18082</b>.
+  Inside the container network they are still 8081 and 8082.
+</p></div>
+
+<!-- ============================================================ -->
+<h2><span class="num">SECTION 1</span>Running the stack</h2>
+<p class="lede">These four cover ninety percent of your day.</p>
+
+<div class="cmds">
+  <div class="cmd">
+    <pre>docker compose -f docker/compose.yml up --build</pre>
+    <p class="what"><b>Build the images and start everything.</b> <code>--build</code> forces a rebuild; without it Docker reuses whatever image it already has, which is the classic reason a code change appears to do nothing.
+    <span class="when">Run after any change to Java code, a pom, or a Dockerfile.</span></p>
+  </div>
+  <div class="cmd">
+    <pre>docker compose -f docker/compose.yml up -d</pre>
+    <p class="what"><b>Start in the background</b> ("detached") and give you your terminal back. Without <code>-d</code>, logs stream into the terminal and <kbd>Ctrl-C</kbd> stops everything.
+    <span class="when">When you want to work rather than watch.</span></p>
+  </div>
+  <div class="cmd">
+    <pre>docker compose -f docker/compose.yml down</pre>
+    <p class="what"><b>Stop and remove all four containers and the network.</b> Your data survives — it lives in named volumes, not in the containers.
+    <span class="when">End of session, or when something is wedged.</span></p>
+  </div>
+  <div class="cmd">
+    <pre>docker compose -f docker/compose.yml down -v</pre>
+    <p class="what"><b>The same, plus delete the volumes.</b> Both databases are wiped and Flyway re-runs from scratch on next start.
+    <span class="when">When you want a genuinely clean slate. <b>This destroys your data.</b></span></p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2><span class="num">SECTION 2</span>When something is wrong</h2>
+<p class="lede">In order. Don't skip to the bottom.</p>
+
+<div class="cmds">
+  <div class="cmd">
+    <pre>docker ps -a</pre>
+    <p class="what"><b>Every container and its state.</b> <code>-a</code> includes stopped ones — without it you only see what's running, which hides exactly the container you're debugging.
+    <span class="when">Always the first command. Read the STATUS column.</span></p>
+  </div>
+  <div class="cmd">
+    <pre>docker compose -f docker/compose.yml logs transactions</pre>
+    <p class="what"><b>Everything that service printed.</b> Add <code>-f</code> to follow live, <code>--tail=50</code> for just the end.
+    <span class="when">Whenever a container exits. Find the <b>first</b> "Caused by:" — not the last.</span></p>
+  </div>
+  <div class="cmd">
+    <pre>docker exec -it payflow-transactions sh</pre>
+    <p class="what"><b>Open a shell inside a running container.</b> <code>exec</code> runs a command in it, <code>-it</code> makes it interactive, <code>sh</code> is the shell. <code>exit</code> to leave.
+    <span class="when">To check what a container can see from where it stands — files, environment, network.</span></p>
+  </div>
+  <div class="cmd">
+    <pre>docker exec payflow-transactions env | sort</pre>
+    <p class="what"><b>Print the container's environment variables.</b> Settles arguments about whether a value actually arrived.
+    <span class="when">When config seems to be ignored.</span></p>
+  </div>
+  <div class="cmd">
+    <pre>docker exec payflow-transactions curl -s http://accounts:8081/actuator/health</pre>
+    <p class="what"><b>Test container-to-container reachability from inside.</b> If this works but your Mac can't reach it, the problem is a published port — not the network.
+    <span class="when">When one service can't talk to another.</span></p>
+  </div>
+  <div class="cmd">
+    <pre>lsof -nP -iTCP:8081 -sTCP:LISTEN</pre>
+    <p class="what"><b>What on your Mac is holding a port.</b> Built into macOS. A "bind: address already in use" error is <i>always</i> a host-side conflict, so this is always the right tool for it.
+    <span class="when">When a container won't start and the error mentions a port.</span></p>
+  </div>
+</div>
+
+<div class="warn"><p>
+  <b>Read the STATUS column properly.</b> <code>Up</code> means running · <code>Exited (1)</code>
+  means it started and crashed — go read the logs · <code>Created</code> means it never started at
+  all, which usually means a port clash or a bad mount, and the logs will be empty.
+</p></div>
+
+<!-- ============================================================ -->
+<h2><span class="num">SECTION 3</span>Using the API</h2>
+<p class="lede">Your actual endpoints, from your controllers.</p>
+
+<div class="cmds">
+  <div class="cmd">
+    <pre>curl -s localhost:18081/actuator/health
+curl -s localhost:18082/actuator/health</pre>
+    <p class="what"><b>Is each service genuinely ready?</b> <code>{"status":"UP"}</code> means the app started <i>and</i> its database answers.
+    <span class="when">First thing after any start.</span></p>
+  </div>
+  <div class="cmd">
+    <pre>curl -s -X POST localhost:18081/api/accounts \
+  -H 'Content-Type: application/json' \
+  -d '{"customerName":"Alice","email":"alice@example.com","openingBalance":1000.00}'</pre>
+    <p class="what"><b>Create an account.</b> Returns the account including its generated <code>id</code> — copy it.
+    <span class="when">Setting up test data. Emails are unique; reuse one and you'll get a 409.</span></p>
+  </div>
+  <div class="cmd">
+    <pre>curl -s localhost:18081/api/accounts/&lt;ID&gt;</pre>
+    <p class="what"><b>Read one account, including its balance.</b>
+    <span class="when">Before and after a transfer, to prove money moved.</span></p>
+  </div>
+  <div class="cmd">
+    <pre>curl -s -X POST localhost:18082/api/transactions \
+  -H 'Content-Type: application/json' \
+  -H 'Idempotency-Key: demo-001' \
+  -d '{"fromAccountId":"&lt;FROM&gt;","toAccountId":"&lt;TO&gt;","amount":250.00}'</pre>
+    <p class="what"><b>Move money.</b> This is the interesting one: it reaches across the container network to the accounts service, then writes a ledger entry to its own database.
+    <span class="when">Send it twice with the <b>same</b> Idempotency-Key — nobody should be charged twice.</span></p>
+  </div>
+  <div class="cmd">
+    <pre>curl -s -i localhost:18081/api/accounts/does-not-exist</pre>
+    <p class="what"><b><code>-i</code> shows the response headers</b>, including the status code. Without it you only see the body, and the status code is often the actual answer.
+    <span class="when">Any time you care whether it was a 404, a 400 or a 502.</span></p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2><span class="num">SECTION 4</span>Looking in the databases</h2>
+
+<div class="cmds">
+  <div class="cmd">
+    <pre>docker exec -it payflow-accounts-db psql -U payflow -d payflow_accounts</pre>
+    <p class="what"><b>Open a SQL prompt inside the database container.</b> No Postgres client needed on your Mac.
+    <span class="when">To see what's really stored, rather than what the API says.</span></p>
+  </div>
+  <div class="cmd">
+    <pre>docker exec -it payflow-transactions-db psql -U payflow -d payflow_transactions</pre>
+    <p class="what"><b>The same, for the transactions database.</b> Remember they are two separate databases — that separation is the whole reason a transfer isn't atomic.
+    <span class="when">To inspect <code>transactions</code> and <code>ledger_entries</code>.</span></p>
+  </div>
+</div>
+
+<div class="tw"><table>
+  <thead><tr><th>Inside psql</th><th>What it does</th></tr></thead>
+  <tbody>
+    <tr><td><code>\dt</code></td><td>List tables — a fast way to confirm Flyway ran</td></tr>
+    <tr><td><code>\d ledger_entries</code></td><td>Describe one table: columns, types, constraints</td></tr>
+    <tr><td><code>SELECT * FROM flyway_schema_history;</code></td><td><b>Which migrations ran, when, and whether they succeeded</b></td></tr>
+    <tr><td><code>SELECT * FROM ledger_entries;</code></td><td>Every ledger line. Debits and credits should sum to zero</td></tr>
+    <tr><td><code>\q</code></td><td>Quit</td></tr>
+  </tbody>
+</table></div>
+
+<!-- ============================================================ -->
+<h2><span class="num">SECTION 5</span>Housekeeping</h2>
+
+<div class="cmds">
+  <div class="cmd">
+    <pre>docker images</pre>
+    <p class="what"><b>Every image on disk, with its size.</b> Useful for seeing what multi-stage builds actually saved you.
+    <span class="when">Occasionally. Images accumulate.</span></p>
+  </div>
+  <div class="cmd">
+    <pre>docker system df</pre>
+    <p class="what"><b>How much disk Docker is using</b>, split by images, containers, volumes and build cache.
+    <span class="when">When your Mac is short on space. Usually the build cache.</span></p>
+  </div>
+  <div class="cmd">
+    <pre>docker system prune</pre>
+    <p class="what"><b>Delete stopped containers, unused networks and dangling images.</b> Add <code>-a</code> to also remove images not currently used by a container.
+    <span class="when">Reclaiming space. Volumes are <i>not</i> touched unless you add <code>--volumes</code>.</span></p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2><span class="num">SECTION 6</span>Git, as used here</h2>
+
+<div class="cmds">
+  <div class="cmd">
+    <pre>git status --short</pre>
+    <p class="what"><b>Which files differ.</b> <code>M</code> modified · <code>D</code> deleted · <code>??</code> untracked.
+    <span class="when">Before every commit, and any time someone tells you they changed something.</span></p>
+  </div>
+  <div class="cmd">
+    <pre>git diff</pre>
+    <p class="what"><b>Exactly what changed, line by line.</b> Lines starting <code>+</code> were added, <code>-</code> removed, and <b>lines with no prefix are unchanged context</b>.
+    <span class="when">Always. The diff is the truth; a description of a change is not.</span></p>
+  </div>
+  <div class="cmd">
+    <pre>git add -A
+git commit -m "message"
+git push</pre>
+    <p class="what"><b>Stage everything, record it, send it.</b> <code>-A</code> includes deletions, which <code>git add .</code> historically didn't.
+    <span class="when">After each meaningful unit of work — not once a week.</span></p>
+  </div>
+  <div class="cmd">
+    <pre>git log --oneline -10</pre>
+    <p class="what"><b>The last ten commits, one line each.</b>
+    <span class="when">Orienting yourself after time away.</span></p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2><span class="num">SECTION 7</span>The flags worth memorising</h2>
+
+<div class="tw"><table>
+  <thead><tr><th>Flag</th><th>Means</th><th>Seen in</th></tr></thead>
+  <tbody>
+    <tr><td><code>-d</code></td><td>detached — run in the background</td><td><code>compose up -d</code></td></tr>
+    <tr><td><code>-a</code></td><td>all — include stopped or unused things</td><td><code>docker ps -a</code></td></tr>
+    <tr><td><code>-it</code></td><td>interactive terminal — you can type into it</td><td><code>docker exec -it … sh</code></td></tr>
+    <tr><td><code>-f</code></td><td>follow (logs) <i>or</i> file (compose). Context decides</td><td><code>logs -f</code> · <code>compose -f</code></td></tr>
+    <tr><td><code>-v</code></td><td>volumes, when destroying</td><td><code>compose down -v</code></td></tr>
+    <tr><td><code>-s</code></td><td>silent — curl without the progress meter</td><td><code>curl -s</code></td></tr>
+    <tr><td><code>-i</code></td><td>include response headers</td><td><code>curl -i</code></td></tr>
+    <tr><td><code>-X</code></td><td>the HTTP method to use</td><td><code>curl -X POST</code></td></tr>
+  </tbody>
+</table></div>
+
+<p class="foot">PayFlow · written 21 Sep 2026 · pair with "How One Transfer Travels" for the concepts</p>
+
+</div>
