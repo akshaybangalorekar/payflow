@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AWS · contents</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f6f7; --surface:#ffffff; --surface-2:#eceff1;
+    --line:#dde2e5; --line-strong:#c3ccd1;
+    --ink:#12181c; --ink-2:#5a666e; --ink-3:#85939c;
+    --accent:#0f6466; --accent-ink:#0b4f51; --accent-soft:rgba(15,100,102,.09);
+    --flag:#8f5400; --flag-soft:rgba(143,84,0,.10);
+    --good:#2c6b38; --good-soft:rgba(44,107,56,.10);
+    --f-display:'Bricolage Grotesque','Archivo',system-ui,sans-serif;
+    --f-body:'Archivo',system-ui,-apple-system,sans-serif;
+    --f-mono:'IBM Plex Mono','SF Mono',Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+    --bg:#0e1316; --surface:#161d21; --surface-2:#1d262b;
+    --line:#27333a; --line-strong:#3a4950;
+    --ink:#e7edf0; --ink-2:#9aa8b1; --ink-3:#74838d;
+    --accent:#57b6ae; --accent-ink:#8ad3cb; --accent-soft:rgba(87,182,174,.12);
+    --flag:#d9a03f; --flag-soft:rgba(217,160,63,.13);
+    --good:#6cbd7c; --good-soft:rgba(108,189,124,.13);
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0e1316; --surface:#161d21; --surface-2:#1d262b;
+    --line:#27333a; --line-strong:#3a4950;
+    --ink:#e7edf0; --ink-2:#9aa8b1; --ink-3:#74838d;
+    --accent:#57b6ae; --accent-ink:#8ad3cb; --accent-soft:rgba(87,182,174,.12);
+    --flag:#d9a03f; --flag-soft:rgba(217,160,63,.13);
+    --good:#6cbd7c; --good-soft:rgba(108,189,124,.13);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15.5px;line-height:1.65;margin:0;}
+  .page{max-width:960px;margin:0 auto;padding-inline:20px;padding-block:20px 80px;}
+  a{color:var(--accent-ink);text-decoration-thickness:1px;text-underline-offset:2px;}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;}
+
+  /* ---- book nav ---- */
+  .bnav{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 30px;padding:9px 10px;
+    background:var(--surface);border:1px solid var(--line);border-radius:6px;
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.02em;}
+  .bnav a,.bnav span{padding:5px 9px;border-radius:4px;text-decoration:none;white-space:nowrap;}
+  .bnav a{color:var(--ink-2);}
+  .bnav a:hover{background:var(--accent-soft);color:var(--accent-ink);}
+  .bnav .on{background:var(--accent);color:#fff;font-weight:600;}
+  .bnav .soon{color:var(--ink-3);opacity:.55;}
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .bnav .on{color:#08211f;} }
+
+  .eyebrow{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 10px;}
+  h1{font-family:var(--f-display);font-weight:800;font-size:clamp(30px,5.2vw,46px);line-height:1.05;
+    letter-spacing:-.025em;margin:0 0 14px;text-wrap:balance;}
+  .standfirst{font-size:17px;color:var(--ink-2);margin:0 0 8px;max-width:70ch;}
+  .standfirst b{color:var(--ink);font-weight:600;}
+  h2{font-family:var(--f-display);font-weight:600;font-size:26px;letter-spacing:-.02em;
+    margin:54px 0 4px;text-wrap:balance;scroll-margin-top:16px;}
+  h2 .num{font-family:var(--f-mono);font-size:12.5px;font-weight:600;color:var(--accent);
+    display:block;letter-spacing:.12em;margin-bottom:6px;}
+  h3{font-family:var(--f-display);font-weight:600;font-size:19px;letter-spacing:-.012em;margin:32px 0 6px;}
+  h4{font-family:var(--f-display);font-weight:600;font-size:16.5px;margin:22px 0 4px;}
+  p{margin:0 0 14px;max-width:72ch;}
+  b,strong{font-weight:600;}
+  ul,ol{margin:0 0 14px;padding-left:22px;max-width:72ch;}
+  li{margin-bottom:7px;}
+  code{font-family:var(--f-mono);font-size:.88em;background:var(--surface-2);
+    padding:1px 5px;border-radius:3px;color:var(--accent-ink);}
+  pre{font-family:var(--f-mono);font-size:12.3px;line-height:1.55;background:var(--surface);
+    border:1px solid var(--line);border-radius:5px;padding:18px 20px;overflow-x:auto;margin:0 0 8px;}
+  pre code{background:none;padding:0;color:inherit;font-size:inherit;}
+  .cap{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);margin:0 0 26px;letter-spacing:.04em;}
+  .note{border-left:3px solid var(--accent);background:var(--accent-soft);
+    padding:14px 18px;border-radius:0 5px 5px 0;margin:0 0 18px;}
+  .warn{border-left:3px solid var(--flag);background:var(--flag-soft);
+    padding:14px 18px;border-radius:0 5px 5px 0;margin:0 0 18px;}
+  .note p,.warn p{margin:0;max-width:none;}
+  .note p + p,.warn p + p{margin-top:10px;}
+  .say{border-left:3px solid var(--good);background:var(--good-soft);
+    padding:13px 17px;border-radius:0 5px 5px 0;margin:16px 0 18px;}
+  .say p{margin:0;font-size:14.5px;max-width:none;}
+  .say p + p{margin-top:9px;}
+  .keyq{border:1px solid var(--line-strong);background:var(--surface);border-radius:5px;padding:16px 20px;margin:20px 0;}
+  .keyq .hd{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-3);margin:0 0 8px;}
+  .keyq p{margin:0 0 10px;font-size:15px;max-width:none;}
+  .keyq p:last-child{margin:0;}
+  .tw{overflow-x:auto;border:1px solid var(--line);border-radius:5px;background:var(--surface);margin:0 0 20px;}
+  table{border-collapse:collapse;width:100%;}
+  th{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-3);text-align:left;padding:11px 15px;border-bottom:1px solid var(--line-strong);}
+  td{padding:11px 15px;border-bottom:1px solid var(--line);font-size:13.6px;vertical-align:top;line-height:1.55;}
+  tbody tr:last-child td{border-bottom:none;}
+  td.sw{color:var(--ink-2);border-left:2px solid var(--accent-soft);}
+  td.sw b{color:var(--accent-ink);}
+  td.brief{font-size:13px;color:var(--ink-2);background:var(--surface-2);}
+  .toc{background:var(--surface);border:1px solid var(--line);border-radius:5px;padding:22px 24px;margin:30px 0 8px;}
+  .toc .hd{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-3);margin:0 0 16px;}
+  .toc ol{list-style:none;margin:0;padding:0;counter-reset:toc;display:flex;flex-direction:column;gap:13px;max-width:none;}
+  .toc li{counter-increment:toc;display:grid;grid-template-columns:30px 1fr;gap:10px;margin:0;}
+  .toc li::before{content:counter(toc,decimal-leading-zero);font-family:var(--f-mono);
+    font-size:11px;font-weight:600;color:var(--accent);padding-top:4px;}
+  .toc .t{grid-column:2;font-weight:600;font-size:15px;display:block;text-decoration:none;}
+  .toc .t:hover{text-decoration:underline;}
+  .toc .p{grid-column:2;color:var(--ink-2);font-size:13.5px;display:block;line-height:1.5;}
+  .top{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;margin:0 0 18px;}
+  .top a{color:var(--ink-3);text-decoration:none;}
+  .top a:hover{color:var(--accent);}
+  .xb{display:inline-block;font-family:var(--f-mono);font-size:11.5px;font-weight:600;
+    background:var(--accent-soft);color:var(--accent-ink);padding:2px 7px;border-radius:3px;
+    text-decoration:none;white-space:nowrap;}
+  .xb:hover{background:var(--accent);color:#fff;}
+  .gt{border-bottom:1px dotted var(--ink-3);text-decoration:none;cursor:help;}
+  .steps{margin:0 0 22px;}
+  .step{display:grid;grid-template-columns:30px 1fr;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);}
+  .step:last-child{border-bottom:none;}
+  .step .n{font-family:var(--f-mono);font-size:12px;font-weight:600;color:#fff;background:var(--accent);
+    width:23px;height:23px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-top:2px;}
+  .step .where{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:3px;}
+  .step p{margin:0;font-size:14px;max-width:none;}
+  .step .risk{color:var(--flag);font-size:13.4px;margin-top:5px;display:block;}
+  .ex{border:1px solid var(--line);border-left:3px solid var(--good);background:var(--surface);
+    border-radius:0 5px 5px 0;padding:16px 20px;margin:0 0 16px;}
+  .ex h4{margin:0 0 6px;font-size:16.5px;}
+  .ex .meta{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--good);margin-bottom:9px;}
+  .ex p{margin:0 0 9px;font-size:14px;max-width:none;}
+  .ex p:last-child{margin:0;}
+  .qa{border:1px solid var(--line-strong);border-radius:5px;background:var(--surface);
+    padding:16px 20px;margin:0 0 14px;}
+  .qa .q{font-family:var(--f-display);font-weight:600;font-size:16px;margin:0 0 9px;}
+  .qa p{font-size:14px;margin:0 0 9px;max-width:none;}
+  .qa p:last-child{margin:0;}
+  table.gl td:first-child{width:22%;color:var(--ink);}
+  table.svc{min-width:700px;table-layout:fixed;}
+  table.svc th:nth-child(1),table.svc td:nth-child(1){width:14%;}
+  table.svc th:nth-child(2),table.svc td:nth-child(2){width:33%;}
+  table.svc th:nth-child(3),table.svc td:nth-child(3){width:24%;}
+  table.svc th:nth-child(4),table.svc td:nth-child(4){width:29%;}
+  table.svc td{font-size:13px;line-height:1.55;}
+  table.to td:first-child{width:24%;white-space:nowrap;}
+  table.to td{font-size:13.5px;}
+  .q2{font-weight:400;color:var(--ink-3);font-size:11.5px;display:block;}
+  .step.ret .n{background:var(--good);}
+  table.gl tr:target td{background:var(--accent-soft);}
+  ul.refs{list-style:none;padding-left:0;}
+  ul.refs li{margin-bottom:10px;padding-left:16px;position:relative;font-size:14.5px;}
+  ul.refs li::before{content:"\2197";position:absolute;left:0;color:var(--ink-3);
+    font-family:var(--f-mono);font-size:12px;}
+  .rw{font-style:italic;color:var(--ink-2);}
+  .foot{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);
+    font-family:var(--f-mono);font-size:12px;color:var(--ink-3);}
+  /* ---- figures: hand-authored inline SVG, themed by these variables ---- */
+  figure.fig{margin:0 0 26px;background:var(--surface);border:1px solid var(--line);
+    border-radius:6px;padding:20px 20px 14px;overflow-x:auto;}
+  figure.fig svg{display:block;width:100%;height:auto;}
+  figure.fig figcaption{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);
+    margin-top:16px;letter-spacing:.04em;line-height:1.5;}
+  svg text{font-family:var(--f-body);}
+  svg .t-hd{font-family:var(--f-mono);font-size:9.5px;font-weight:600;letter-spacing:.11em;
+    text-transform:uppercase;fill:var(--ink-3);}
+  svg .t-lb{font-size:12.5px;font-weight:600;fill:var(--ink);}
+  svg .t-sm{font-size:11.5px;fill:var(--ink-2);}
+  svg .t-xs{font-size:10.5px;fill:var(--ink-3);}
+  svg .t-mn{font-family:var(--f-mono);font-size:10.5px;fill:var(--ink-2);}
+  svg .t-ac{font-size:11.5px;font-weight:600;fill:var(--accent);}
+  svg .t-fl{font-size:11.5px;font-weight:600;fill:var(--flag);}
+  svg .t-gd{font-size:11.5px;font-weight:600;fill:var(--good);}
+  svg .bx{fill:var(--surface);stroke:var(--line-strong);stroke-width:1.1;}
+  svg .bx2{fill:var(--surface-2);stroke:var(--line);stroke-width:1;}
+  svg .bx-ac{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.2;}
+  svg .bx-fl{fill:var(--flag-soft);stroke:var(--flag);stroke-width:1.2;}
+  svg .bx-gd{fill:var(--good-soft);stroke:var(--good);stroke-width:1.2;}
+  svg .lane{fill:none;stroke:var(--line);stroke-width:1;}
+  svg .zone{fill:none;stroke:var(--line-strong);stroke-width:1.2;stroke-dasharray:7 5;}
+  svg .ln{stroke:var(--line-strong);stroke-width:1.4;fill:none;}
+  svg .ln-ac{stroke:var(--accent);stroke-width:1.6;fill:none;}
+  svg .ln-fl{stroke:var(--flag);stroke-width:1.6;fill:none;}
+  svg .ln-gd{stroke:var(--good);stroke-width:1.6;fill:none;}
+  svg .ln-hair{stroke:var(--line);stroke-width:1;fill:none;}
+  svg .ln-d{stroke-dasharray:5 4;}
+  svg .mk{fill:var(--line-strong);} svg .mk-ac{fill:var(--accent);}
+  svg .mk-fl{fill:var(--flag);}    svg .mk-gd{fill:var(--good);}
+  svg .bdg{fill:var(--accent);stroke:none;}
+  svg .bdgt{font-family:var(--f-mono);font-size:9.5px;font-weight:600;fill:var(--bg);}
+  /* ---- calculation panel (figure 4) ---- */
+  .calc{background:var(--surface);border:1px solid var(--line);border-radius:6px;
+    padding:6px 22px 18px;margin:0 0 26px;}
+  .calc .blk{padding:16px 0;border-bottom:1px solid var(--line);}
+  .calc .blk:last-child{border-bottom:none;}
+  .calc .q{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 9px;}
+  .calc .m{font-family:var(--f-mono);font-size:12.5px;line-height:1.7;color:var(--ink);
+    margin:0 0 9px;white-space:pre-wrap;}
+  .calc .m .u{color:var(--ink-3);}
+  .calc .res{font-size:14px;font-weight:600;margin:0 0 8px;color:var(--ink);}
+  .calc .so{font-size:13.5px;color:var(--ink-2);margin:0;padding-left:16px;
+    border-left:2px solid var(--accent);}
+  .calc .so b{color:var(--accent-ink);}
+  @media (max-width:620px){ pre{font-size:10.6px;} .toc li{grid-template-columns:24px 1fr;} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+  @media print{ .bnav,.top{display:none;} body{background:#fff;} .page{max-width:none;} }
+</style>
+
+<div class="page">
+
+<nav class="bnav" aria-label="Book set">
+  <span class="on">AWS contents</span>
+  <a href="00-Start-Here.html">00 · Start here</a>
+  <a href="01-Service-Choices.html">01 · Service choices</a>
+  <a href="02-Landing-Zone.html">02 · Landing zone</a>
+  <span class="soon" title="not written yet">03 · Operate & prove</span>
+  <span class="soon" title="not written yet">90 · Say this</span>
+</nav>
+
+<p class="eyebrow">Akshay Bangalorekar · AWS</p>
+<h1>AWS &mdash; the working folder</h1>
+<p class="standfirst">
+  Everything AWS lives here and nowhere else. <b>Start with Book 00</b>; it is self-contained and it
+  is the fastest route to holding an AWS architecture conversation. The rest is depth underneath it.
+</p>
+
+<div class="note"><p>
+  <b>How files work in here.</b> Filenames are fixed and never change. When a book is updated it is
+  <b>overwritten in place</b> &mdash; there is never a second copy with a suffix, and never a date in
+  a filename. If you have a link or a bookmark, it keeps working.
+</p></div>
+
+<h2 id="books"><span class="num">THE BOOKS</span>What each one is for</h2>
+
+<div class="tw"><table>
+  <thead><tr><th>Book</th><th>What it is for</th><th>Time</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><a href="00-Start-Here.html"><b>00 · Start Here</b></a></td>
+      <td><b>Read this first, cover to cover.</b> Sixteen services grouped into six jobs · a real-time API built end to end with its latency budget and capacity arithmetic · event-driven architecture built twice, for events arriving from <i>outside</i> and from <i>inside</i> the organisation, with the security at every hop · ten trade-offs · landing zone in ten minutes · the job description line by line · every answer on one page.</td>
+      <td>3&ndash;4 hours</td>
+      <td><b>Written</b><br>not cold-tested</td>
+    </tr>
+    <tr>
+      <td><a href="01-Service-Choices.html"><b>01 · Service Choices</b></a></td>
+      <td>The depth under Book 00. Thirty services argued against their siblings, eight use-case stacks with an "if instead&hellip;" column on every row, twelve reusable trade-off patterns, MSK versus Confluent Cloud in full, and four worked designs with step-by-step walkthroughs.</td>
+      <td>3&ndash;4 hours</td>
+      <td><b>Written</b><br>not cold-tested</td>
+    </tr>
+    <tr>
+      <td><a href="02-Landing-Zone.html"><b>02 · Landing Zone</b></a></td>
+      <td>Accounts and organisational units, guardrails, VPC and subnet design, endpoints, Transit Gateway, Direct Connect, DNS, Control Tower. One worked bank design and ten interview questions with model answers.</td>
+      <td>2&ndash;3 hours</td>
+      <td><b>Written</b><br>not cold-tested</td>
+    </tr>
+    <tr>
+      <td><b>03 · Operate &amp; Prove</b></td>
+      <td>Infrastructure as code, disaster recovery designed rather than listed, security services and audit evidence, cost governance, observability, service quotas, and the Well-Architected Framework.</td>
+      <td>&mdash;</td>
+      <td>Not written yet</td>
+    </tr>
+    <tr>
+      <td><b>90 · Say This Out Loud</b></td>
+      <td>Every compressed answer from every book, on one page, grouped by topic. For the morning of an interview.</td>
+      <td>&mdash;</td>
+      <td>Not written yet</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h2 id="also"><span class="num">ALSO HERE</span>The certification plan</h2>
+
+<div class="tw"><table>
+  <thead><tr><th>File</th><th>What it is</th></tr></thead>
+  <tbody>
+    <tr><td><a href="Six_Weeks_To_The_Exam.html"><b>Six Weeks to the Exam</b></a></td><td>The SAA-C03 study plan. <b>Still keyed to the old exam date</b> &mdash; due for regeneration against 31 October.</td></tr>
+  </tbody>
+</table></div>
+
+<h2 id="elsewhere"><span class="num">NOT HERE</span>Other subjects get their own folders</h2>
+
+<p>
+  This folder is AWS only. Four subjects from the job descriptions are deliberately <b>not</b> in here,
+  because they are not AWS and mixing them in would make this folder useless as a revision set. Each
+  gets its own folder when it is written.
+</p>
+
+<div class="tw"><table>
+  <thead><tr><th>Subject</th><th>Will live in</th><th>Why it is not AWS</th></tr></thead>
+  <tbody>
+    <tr><td><b>Enterprise architecture</b> &mdash; governance, target-state and roadmaps, pre-sales and estimation, executive stakeholders, commercial models</td><td><code>docs/EnterpriseArchitecture/</code></td><td>Cloud-independent. Four areas with no current evidence, so it comes with drills rather than just reading.</td></tr>
+    <tr><td><b>Azure and multicloud</b></td><td><code>docs/Azure/</code></td><td>A different cloud. Every trade-off transfers; only the service names change.</td></tr>
+    <tr><td><b>Kubernetes, CI/CD and delivery</b></td><td><code>docs/Platform/</code></td><td>Runs on any cloud and on-premises.</td></tr>
+    <tr><td><b>Data and analytics platforms</b></td><td><code>docs/Data/</code></td><td>Mostly vendor platforms &mdash; Databricks, Snowflake &mdash; rather than AWS services.</td></tr>
+  </tbody>
+</table></div>
+
+<p>
+  Your own subjects &mdash; OAuth 2.0, Spring, Java &mdash; follow the same pattern:
+  <code>docs/&lt;Subject&gt;/</code> with an <code>index.html</code> in it, same layout, same rules.
+</p>
+
+<div class="keyq">
+  <p class="hd">How these are written</p>
+  <p>
+    One idea per sentence. Jargon defined where it appears or in that book's glossary. A worked
+    example after anything dense. A <b>"say this out loud"</b> line wherever there is an answer worth
+    rehearsing. <b>Length is allowed; density is not.</b>
+  </p>
+  <p>
+    <b>If a sentence is unclear, that is a defect in the writing, not in you.</b> Flag it and it gets
+    fixed &mdash; three have been already.
+  </p>
+</div>
+
+<p class="foot">docs/AWS · last updated Tue 22 Sep 2026 (Melbourne)</p>
+
+</div>
+</html>

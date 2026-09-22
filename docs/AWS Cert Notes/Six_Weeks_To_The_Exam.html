@@ -1,0 +1,700 @@
+<title>Six Weeks to the Exam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#f4f6f7;
+    --surface:#ffffff;
+    --surface-2:#eceff1;
+    --line:#dde2e5;
+    --line-strong:#c3ccd1;
+    --ink:#12181c;
+    --ink-2:#5a666e;
+    --ink-3:#85939c;
+    --accent:#0f6466;
+    --accent-ink:#0b4f51;
+    --accent-soft:rgba(15,100,102,.09);
+    --flag:#8f5400;
+    --flag-soft:rgba(143,84,0,.10);
+    --earned:#2c6b38;
+    --earned-soft:rgba(44,107,56,.10);
+    --design:#1f4f8f;
+    --design-soft:rgba(31,79,143,.10);
+
+    --f-display:'Bricolage Grotesque','Archivo',system-ui,sans-serif;
+    --f-body:'Archivo',system-ui,-apple-system,sans-serif;
+    --f-mono:'IBM Plex Mono','SF Mono',Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#0e1316;
+      --surface:#161d21;
+      --surface-2:#1d262b;
+      --line:#27333a;
+      --line-strong:#3a4950;
+      --ink:#e7edf0;
+      --ink-2:#9aa8b1;
+      --ink-3:#74838d;
+      --accent:#57b6ae;
+      --accent-ink:#8ad3cb;
+      --accent-soft:rgba(87,182,174,.12);
+      --flag:#d9a03f;
+      --flag-soft:rgba(217,160,63,.13);
+      --earned:#6cbd7c;
+      --earned-soft:rgba(108,189,124,.13);
+      --design:#7fb0e8;
+      --design-soft:rgba(127,176,232,.13);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0e1316;
+    --surface:#161d21;
+    --surface-2:#1d262b;
+    --line:#27333a;
+    --line-strong:#3a4950;
+    --ink:#e7edf0;
+    --ink-2:#9aa8b1;
+    --ink-3:#74838d;
+    --accent:#57b6ae;
+    --accent-ink:#8ad3cb;
+    --accent-soft:rgba(87,182,174,.12);
+    --flag:#d9a03f;
+    --flag-soft:rgba(217,160,63,.13);
+    --earned:#6cbd7c;
+    --earned-soft:rgba(108,189,124,.13);
+    --design:#7fb0e8;
+    --design-soft:rgba(127,176,232,.13);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--f-body);
+    font-size:15px;
+    line-height:1.55;
+    margin:0;
+  }
+  .page{max-width:1000px;margin:0 auto;padding-inline:20px;padding-block:40px 72px;}
+
+  .eyebrow{
+    font-family:var(--f-mono);font-size:11px;font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+    margin:0 0 10px;
+  }
+  h1{
+    font-family:var(--f-display);font-weight:800;
+    font-size:clamp(34px,6vw,52px);line-height:1.02;letter-spacing:-.025em;
+    margin:0 0 14px;text-wrap:balance;
+  }
+  .standfirst{font-size:16.5px;color:var(--ink-2);max-width:62ch;margin:0 0 32px;}
+  .standfirst b{color:var(--ink);font-weight:600;}
+
+  .status{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:1px;background:var(--line);border:1px solid var(--line);
+    border-radius:4px;overflow:hidden;margin-bottom:40px;
+  }
+  .stat{background:var(--surface);padding:16px 18px;}
+  .stat .k{
+    font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ink-3);margin-bottom:6px;
+  }
+  .stat .v{
+    font-family:var(--f-display);font-weight:600;font-size:24px;line-height:1.1;
+    letter-spacing:-.02em;font-variant-numeric:tabular-nums;
+  }
+  .stat .v small{font-size:13px;font-weight:500;color:var(--ink-2);font-family:var(--f-body);}
+  .stat--flag .v{color:var(--flag);}
+
+  h2{
+    font-family:var(--f-display);font-weight:600;font-size:23px;letter-spacing:-.018em;
+    margin:0 0 6px;
+  }
+  .sec{margin-top:56px;}
+  .sec-note{color:var(--ink-2);font-size:14px;margin:0 0 24px;max-width:66ch;}
+  .sec-note b{color:var(--ink);font-weight:600;}
+
+  .legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px;}
+  .tag{
+    font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.09em;
+    text-transform:uppercase;padding:4px 9px;border-radius:3px;white-space:nowrap;
+  }
+  .tag--cert{background:var(--accent-soft);color:var(--accent-ink);}
+  .tag--build{background:var(--flag-soft);color:var(--flag);}
+  .tag--convert{background:var(--earned-soft);color:var(--earned);}
+  .tag--design{background:var(--design-soft);color:var(--design);}
+
+  /* ---------- design scenarios ---------- */
+  .scen{display:flex;flex-direction:column;gap:1px;background:var(--line);
+    border:1px solid var(--line);border-radius:4px;overflow:hidden;}
+  .scenario{background:var(--surface);padding:18px 20px;}
+  .scenario .top{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:6px;}
+  .scenario .wk{
+    font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.11em;
+    text-transform:uppercase;color:var(--design);
+  }
+  .scenario h3{
+    font-family:var(--f-display);font-weight:600;font-size:18px;letter-spacing:-.015em;margin:0;
+  }
+  .scenario .case{color:var(--ink-2);font-size:13.5px;margin:0 0 10px;}
+  .scenario .case b{color:var(--ink);font-weight:600;}
+  .scenario .covers{font-size:14px;margin:0 0 8px;}
+  .svc{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;}
+  .svc span{
+    font-family:var(--f-mono);font-size:10.5px;padding:3px 7px;border-radius:3px;
+    background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line);
+  }
+
+  /* ---------- timeline ---------- */
+  .weeks{display:flex;flex-direction:column;gap:2px;}
+  .week{
+    display:grid;grid-template-columns:132px 1fr;
+    background:var(--surface);border:1px solid var(--line);border-radius:4px;overflow:hidden;
+  }
+  .week--now{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);}
+  .week--exam{border-color:var(--flag);box-shadow:0 0 0 1px var(--flag);}
+  .wk-rail{background:var(--surface-2);padding:18px 16px;border-right:1px solid var(--line);}
+  .wk-n{
+    font-family:var(--f-display);font-weight:800;font-size:30px;line-height:1;
+    letter-spacing:-.03em;color:var(--ink-3);
+  }
+  .week--now .wk-n{color:var(--accent);}
+  .week--exam .wk-n{color:var(--flag);}
+  .wk-dates{font-family:var(--f-mono);font-size:11px;font-weight:500;color:var(--ink-2);margin-top:6px;line-height:1.45;}
+  .wk-flag{
+    display:inline-block;margin-top:10px;font-family:var(--f-mono);font-size:9.5px;
+    font-weight:600;letter-spacing:.11em;text-transform:uppercase;
+    padding:3px 7px;border-radius:3px;background:var(--accent);color:var(--surface);
+  }
+  .week--exam .wk-flag{background:var(--flag);}
+  .wk-body{padding:18px 20px;min-width:0;}
+  .wk-theme{font-family:var(--f-display);font-weight:600;font-size:18px;letter-spacing:-.015em;margin:0 0 4px;}
+  .wk-sub{color:var(--ink-2);font-size:13.5px;margin:0 0 14px;}
+  .lines{display:flex;flex-direction:column;gap:10px;}
+  .line{display:grid;grid-template-columns:82px 1fr;gap:12px;align-items:start;}
+  .line p{margin:0;font-size:14px;}
+  .line p b{font-weight:600;}
+  .line p em{font-style:normal;color:var(--ink-2);}
+  .paused{color:var(--ink-3);}
+
+  /* ---------- gates ---------- */
+  .gates{display:flex;flex-direction:column;gap:1px;background:var(--line);
+    border:1px solid var(--line);border-radius:4px;overflow:hidden;}
+  .gate{background:var(--surface);display:grid;grid-template-columns:118px 1fr;gap:16px;padding:14px 18px;align-items:baseline;}
+  .gate .when{font-family:var(--f-mono);font-size:12px;font-weight:600;color:var(--accent-ink);font-variant-numeric:tabular-nums;}
+  .gate--exam{background:var(--flag-soft);}
+  .gate--exam .when{color:var(--flag);}
+  .gate .what{margin:0;font-size:14.5px;}
+  .gate .what b{font-weight:600;}
+  .gate .what span{display:block;color:var(--ink-2);font-size:13px;margin-top:2px;}
+
+  /* ---------- services ---------- */
+  .svcgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;
+    background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden;}
+  .svcbox{background:var(--surface);padding:15px 17px;}
+  .svcbox h4{
+    font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ink-3);margin:0 0 9px;
+  }
+  .svcbox ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px;}
+  .svcbox li{font-size:13.5px;}
+  .svcbox li b{font-weight:600;}
+  .svcbox li i{font-style:normal;color:var(--ink-2);}
+
+  /* ---------- claims ---------- */
+  .tw{overflow-x:auto;border:1px solid var(--line);border-radius:4px;background:var(--surface);}
+  table{border-collapse:collapse;width:100%;min-width:560px;}
+  th{
+    font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ink-3);text-align:left;
+    padding:12px 16px;border-bottom:1px solid var(--line-strong);white-space:nowrap;
+  }
+  td{padding:12px 16px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top;}
+  tbody tr:last-child td{border-bottom:none;}
+  td.date{font-family:var(--f-mono);font-size:12.5px;font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums;}
+  .pill{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.08em;
+    text-transform:uppercase;padding:3px 8px;border-radius:3px;white-space:nowrap;}
+  .pill--held{background:var(--flag-soft);color:var(--flag);}
+  .pill--locked{background:var(--surface-2);color:var(--ink-3);}
+
+  .rule{margin-top:56px;border:1px solid var(--line-strong);border-radius:4px;background:var(--surface);padding:22px 24px;}
+  .rule h3{font-family:var(--f-display);font-weight:600;font-size:17px;margin:0 0 8px;letter-spacing:-.01em;}
+  .rule p{margin:0 0 10px;color:var(--ink-2);font-size:14.5px;max-width:68ch;}
+  .rule p:last-child{margin-bottom:0;}
+  .rule b{color:var(--ink);font-weight:600;}
+  .quote{font-family:var(--f-mono);font-size:13px;color:var(--ink);
+    border-left:2px solid var(--flag);padding-left:14px;margin:14px 0;}
+
+  .foot{margin-top:40px;color:var(--ink-3);font-size:12.5px;font-family:var(--f-mono);}
+
+  @media (max-width:640px){
+    .week{grid-template-columns:1fr;}
+    .wk-rail{border-right:none;border-bottom:1px solid var(--line);
+      display:flex;align-items:baseline;gap:12px;padding:12px 16px;flex-wrap:wrap;}
+    .wk-n{font-size:22px;}
+    .wk-dates{margin-top:0;}
+    .wk-flag{margin-top:0;}
+    .line{grid-template-columns:1fr;gap:3px;}
+    .gate{grid-template-columns:1fr;gap:4px;}
+  }
+  .toc{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:22px 24px;margin:0 0 40px;}
+  .toc .hd{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-3);margin:0 0 16px;}
+  .toc ol{list-style:none;margin:0;padding:0;counter-reset:toc;display:flex;flex-direction:column;gap:13px;}
+  .toc li{counter-increment:toc;display:grid;grid-template-columns:30px 1fr;gap:10px;margin:0;}
+  .toc li::before{content:counter(toc,decimal-leading-zero);font-family:var(--f-mono);
+    font-size:11px;font-weight:600;color:var(--accent);padding-top:4px;}
+  .toc .t{grid-column:2;font-weight:600;font-size:15px;display:block;}
+  .toc .p{grid-column:2;color:var(--ink-2);font-size:13.5px;display:block;line-height:1.5;}
+  @media (max-width:480px){ .toc li{grid-template-columns:24px 1fr;} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+
+<div class="page">
+
+  <p class="eyebrow">Solution Architect · delivery plan</p>
+  <h1>Six Weeks to the Exam</h1>
+  <p class="standfirst">
+    One owner, three tracks, one week at a time. Everything below exists to produce two things by
+    31 October: <b>a defensible AWS certification</b> and <b>a shortlist that converts</b>.
+    The spine is a weekly <b>design scenario</b> in banking or telecom — cert study and build work
+    attach to it rather than running in parallel.
+  </p>
+
+  <div class="status">
+    <div class="stat stat--flag">
+      <div class="k">SAA-C03</div>
+      <div class="v"><span id="days">40</span> <small>days</small></div>
+    </div>
+    <div class="stat">
+      <div class="k">Exam date</div>
+      <div class="v">31 Oct <small>Sat</small></div>
+    </div>
+    <div class="stat">
+      <div class="k">Applications sent</div>
+      <div class="v">2 <small>of 11 ready</small></div>
+    </div>
+    <div class="stat">
+      <div class="k">Live now</div>
+      <div class="v">2 <small>Macquarie · Capgemini</small></div>
+    </div>
+  </div>
+
+  <div class="toc">
+    <p class="hd">What's on this page</p>
+    <ol>
+      <li><span class="t">The three tracks</span><span class="p">How a day is shaped, and which block to drop first when the day is short.</span></li>
+      <li><span class="t">The stack, as built</span><span class="p">What PayFlow actually is, read from the repository rather than assumed. Check this before believing any plan that mentions it.</span></li>
+      <li><span class="t">The design thread</span><span class="p">The four interview scenarios — one per week, in banking and telecom. This is the job-prep spine.</span></li>
+      <li><span class="t">The services that carry the questions</span><span class="p">Twenty AWS services worth real depth, versus the thirty-five worth recognising. Use it to stop studying everything.</span></li>
+      <li><span class="t">The six weeks</span><span class="p">Week by week, each with one theme, all three tracks aligned on it.</span></li>
+      <li><span class="t">Milestones, and when they land</span><span class="p">Seven dated gates. Each one either happened or it didn't.</span></li>
+      <li><span class="t">What you can put on your resume, and from when</span><span class="p">The answer to "when will I have something to show." Nothing is claimable until you can explain it cold.</span></li>
+      <li><span class="t">The rule this plan rests on</span><span class="p">Why a repository isn't knowledge, and what has to happen between the two.</span></li>
+    </ol>
+  </div>
+
+  <div class="sec" style="margin-top:0">
+    <h2>The three tracks</h2>
+    <p class="sec-note">
+      Every day gets one item from each — never more. On a short day, drop Build first, then Cert.
+      Convert is protected: it is the only track with income attached, and the one that historically disappears.
+      <b>Cert study and design-interview practice are different skills</b> — the services overlap, the
+      skill does not, so they get separate time.
+    </p>
+    <div class="legend">
+      <span class="tag tag--design">Design · the weekly scenario</span>
+      <span class="tag tag--cert">Cert · SAA-C03</span>
+      <span class="tag tag--convert">Convert · applications &amp; interviews</span>
+      <span class="tag tag--build">Build · PayFlow</span>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>The stack, as built</h2>
+    <p class="sec-note">
+      Read from the repository on 21 Sep, not assumed. <b>The build track plans against these facts;
+      the design thread deliberately doesn't</b> — an interviewer won't hand you your own codebase.
+    </p>
+    <div class="svcgrid">
+      <div class="svcbox">
+        <h4>Runtime</h4>
+        <ul>
+          <li><b>Spring Boot 4.1.1</b> <i>— current line; most tutorials online are still 3.x</i></li>
+          <li><b>Java 25</b> <i>— virtual threads available</i></li>
+          <li><b>Maven</b>, two independent POMs <i>— no parent module</i></li>
+        </ul>
+      </div>
+      <div class="svcbox">
+        <h4>Services</h4>
+        <ul>
+          <li><b>accounts</b> <i>— port 8081, owns balances</i></li>
+          <li><b>transactions</b> <i>— port 8082, owns the ledger</i></li>
+          <li><b>RestClient</b> <i>— synchronous, service to service</i></li>
+        </ul>
+      </div>
+      <div class="svcbox">
+        <h4>Data</h4>
+        <ul>
+          <li><b>PostgreSQL 17</b>, two databases <i>— one per service</i></li>
+          <li><b>Flyway</b> <i>— schema owned by migrations</i></li>
+          <li><b>ddl-auto: validate</b> <i>— Hibernate never writes schema</i></li>
+        </ul>
+      </div>
+      <div class="svcbox">
+        <h4>Added 21 Sep — unverified</h4>
+        <ul>
+          <li><b>Dockerfile ×2</b> <i>— multi-stage, non-root, Maven in the image</i></li>
+          <li><b>Actuator</b> <i>— health endpoint for container probes</i></li>
+          <li><b>Compose runs all four</b> <i>— databases and both services</i></li>
+          <li><i>Not "done" until the build runs green</i></li>
+        </ul>
+      </div>
+      <div class="svcbox">
+        <h4>Still missing</h4>
+        <ul>
+          <li><b>No tests</b> <i>— neither service has a single one</i></li>
+          <li><b>No CI</b> <i>— nothing runs on push</i></li>
+          <li><b>No security</b> <i>— any caller can move any money</i></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>The design thread</h2>
+    <p class="sec-note">
+      Four scenarios, one per week, each one a topic that actually gets asked. Both domains are yours:
+      <b>five years in banking payments and fraud, seventeen in carrier-grade telecom.</b> Week 2 in
+      particular is territory almost no other candidate can speak to from experience.
+    </p>
+    <div class="scen">
+
+      <div class="scenario">
+        <div class="top"><span class="wk">Week 1</span><h3>Zero trust and partner API access</h3></div>
+        <p class="case"><b>Case:</b> a bank exposes a collections API to 40 partner agencies and ~500 agent users. Accounts move between agencies. Every action must be auditable.</p>
+        <p class="covers">Authentication versus authorization · object-level authorization and why it is never a token claim · token exchange across a trust boundary · why network position is not identity · time-boxed grants and revocation · the confused deputy.</p>
+        <div class="svc"><span>IAM</span><span>Organizations / SCP</span><span>Cognito</span><span>IAM Identity Center</span><span>API Gateway</span><span>WAF</span><span>Secrets Manager</span><span>KMS</span><span>CloudTrail</span></div>
+      </div>
+
+      <div class="scenario">
+        <div class="top"><span class="wk">Week 2</span><h3>Atomicity and race conditions</h3></div>
+        <p class="case"><b>Case:</b> real-time charging on a telecom network — two sessions debit one balance at the same moment. Then the same problem as a bank payout.</p>
+        <p class="covers">Idempotency on a domain identifier · optimistic versus pessimistic locking · lost updates and TOCTOU · transaction boundaries and what a commit actually guarantees · sagas and compensating actions · why exactly-once is a claim with an asterisk.</p>
+        <div class="svc"><span>RDS / Aurora</span><span>DynamoDB conditional writes</span><span>ElastiCache</span><span>SQS FIFO</span><span>Step Functions</span><span>DAX</span></div>
+      </div>
+
+      <div class="scenario">
+        <div class="top"><span class="wk">Week 3</span><h3>Resilience and the numbers</h3></div>
+        <p class="case"><b>Case:</b> fraud scoring inline on the card authorisation path — 350 transactions per second, p99 under 100 ms, under 0.1% timeouts.</p>
+        <p class="covers">RTO versus RPO · multi-AZ versus multi-region and what replication actually costs you · circuit breakers, bulkheads, load shedding · SLI, SLO and error budgets · capacity arithmetic stated as assumptions and sanity-checked.</p>
+        <div class="svc"><span>ALB / NLB</span><span>Route 53</span><span>CloudFront</span><span>Auto Scaling</span><span>ECS Fargate</span><span>Lambda</span><span>CloudWatch</span><span>X-Ray</span></div>
+      </div>
+
+      <div class="scenario">
+        <div class="top"><span class="wk">Week 4</span><h3>Events and streaming</h3></div>
+        <p class="case"><b>Case:</b> fraud, reporting and analytics all need arrangement events in near-real time, from one producer, without coupling.</p>
+        <p class="covers">Partition keys and the ordering they actually guarantee · consumer groups and rebalancing · a log versus a table, and log compaction · transactional outbox and inbox · replay, duplicates, poison events and DLQs · schema evolution.</p>
+        <div class="svc"><span>MSK / Kafka</span><span>Kinesis Data Streams</span><span>EventBridge</span><span>SNS</span><span>SQS</span><span>Glue Schema Registry</span><span>Lambda</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>The services that actually carry the questions</h2>
+    <p class="sec-note">
+      There are roughly thirty-five services worth knowing and about twenty that carry most of the
+      interview. <b>Depth on these beats a shallow pass over everything</b> — for each one, be able to
+      say what it is for, what it guarantees, and what you would use instead.
+    </p>
+    <div class="svcgrid">
+      <div class="svcbox">
+        <h4>Compute</h4>
+        <ul>
+          <li><b>ECS Fargate</b> <i>— steady containerised services</i></li>
+          <li><b>Lambda</b> <i>— spiky, event-driven, cold starts</i></li>
+          <li><b>EKS</b> <i>— when the org already runs Kubernetes</i></li>
+          <li><b>EC2</b> <i>— the baseline you argue against</i></li>
+        </ul>
+      </div>
+      <div class="svcbox">
+        <h4>Networking &amp; edge</h4>
+        <ul>
+          <li><b>VPC</b> <i>— subnets, NAT, routing, endpoints</i></li>
+          <li><b>ALB / NLB</b> <i>— L7 versus L4, where TLS ends</i></li>
+          <li><b>API Gateway</b> <i>— external, managed, throttled</i></li>
+          <li><b>PrivateLink</b> <i>— private cross-account access</i></li>
+          <li><b>Route 53 · CloudFront</b> <i>— DNS, failover, edge</i></li>
+        </ul>
+      </div>
+      <div class="svcbox">
+        <h4>Data</h4>
+        <ul>
+          <li><b>RDS / Aurora</b> <i>— relational, Multi-AZ, failover</i></li>
+          <li><b>DynamoDB (+DAX)</b> <i>— key access, conditional writes</i></li>
+          <li><b>ElastiCache</b> <i>— hot working set, TTLs</i></li>
+          <li><b>S3</b> <i>— the default answer for objects</i></li>
+        </ul>
+      </div>
+      <div class="svcbox">
+        <h4>Events &amp; integration</h4>
+        <ul>
+          <li><b>SQS</b> <i>— durable queue, FIFO variant</i></li>
+          <li><b>SNS · EventBridge</b> <i>— fan-out and routing</i></li>
+          <li><b>MSK / Kinesis</b> <i>— the durable ordered log</i></li>
+          <li><b>Step Functions</b> <i>— orchestration and sagas</i></li>
+        </ul>
+      </div>
+      <div class="svcbox">
+        <h4>Identity &amp; security</h4>
+        <ul>
+          <li><b>IAM · Organizations / SCP</b> <i>— the real boundary</i></li>
+          <li><b>Cognito</b> <i>— customer identity</i></li>
+          <li><b>IAM Identity Center</b> <i>— workforce identity</i></li>
+          <li><b>KMS · Secrets Manager</b> <i>— keys and rotation</i></li>
+        </ul>
+      </div>
+      <div class="svcbox">
+        <h4>Operations</h4>
+        <ul>
+          <li><b>CloudWatch</b> <i>— metrics, alarms, logs</i></li>
+          <li><b>X-Ray</b> <i>— tracing across services</i></li>
+          <li><b>CloudTrail · Config</b> <i>— audit and detection</i></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>The six weeks</h2>
+    <p class="sec-note">
+      Weeks run Monday to Sunday. Each week has one theme, and all three tracks cover that same
+      subject so they reinforce each other rather than compete.
+    </p>
+
+    <div class="weeks">
+
+      <div class="week week--now">
+        <div class="wk-rail">
+          <div class="wk-n">01</div>
+          <div class="wk-dates">21 – 27 Sep</div>
+          <span class="wk-flag">You are here</span>
+        </div>
+        <div class="wk-body">
+          <h3 class="wk-theme">Identity</h3>
+          <p class="wk-sub">Everything this week answers one question: who is allowed to do what, and how is that enforced.</p>
+          <div class="lines">
+            <div class="line"><span class="tag tag--design">Design</span>
+              <p><b>Zero trust and partner API access</b> — the 40-agency collections API, drawn and defended.</p></div>
+            <div class="line"><span class="tag tag--cert">Cert</span>
+              <p>IAM inside one account, then <b>the account as a boundary</b> — principals, roles, trust policies, <em>AssumeRole</em>, SCPs.</p></div>
+            <div class="line"><span class="tag tag--build">Build</span>
+              <p>Add Actuator, move the hardcoded <em>localhost</em> URLs and credentials to environment config, Dockerfile per service, compose runs the whole stack with health checks. Then <b>the ownership check</b> — a lab owed since 16 August.</p></div>
+            <div class="line"><span class="tag tag--convert">Convert</span>
+              <p>Capgemini sent · the <b>CBA Integration CoE story</b> built · 3 of the 9 drafted applications out · chase Macquarie for a date.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="week">
+        <div class="wk-rail">
+          <div class="wk-n">02</div>
+          <div class="wk-dates">28 Sep – 4 Oct</div>
+        </div>
+        <div class="wk-body">
+          <h3 class="wk-theme">Atomicity</h3>
+          <p class="wk-sub">The week your telecom background does more work than anyone else's.</p>
+          <div class="lines">
+            <div class="line"><span class="tag tag--design">Design</span>
+              <p><b>Atomicity and race conditions</b> — real-time charging, then the same problem as a bank payout.</p></div>
+            <div class="line"><span class="tag tag--cert">Cert</span>
+              <p>Databases and storage — RDS, Aurora, DynamoDB, consistency models, S3 classes.</p></div>
+            <div class="line"><span class="tag tag--build">Build</span>
+              <p><b>GitHub Actions: build and test on every push</b> · first Testcontainers tests, starting with the ledger's concurrency case.</p></div>
+            <div class="line"><span class="tag tag--convert">Convert</span>
+              <p>3 applications · <b>the first timed whiteboard — 45 minutes, blank page.</b> Never once attempted; it blocks every readiness estimate.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="week">
+        <div class="wk-rail">
+          <div class="wk-n">03</div>
+          <div class="wk-dates">5 – 11 Oct</div>
+        </div>
+        <div class="wk-body">
+          <h3 class="wk-theme">Resilience</h3>
+          <p class="wk-sub">Stop being taught the answer and build it instead.</p>
+          <div class="lines">
+            <div class="line"><span class="tag tag--design">Design</span>
+              <p><b>Resilience and the numbers</b> — 350 TPS, p99 100 ms, and what you trade to hold it.</p></div>
+            <div class="line"><span class="tag tag--cert">Cert</span>
+              <p>Networking and VPC — subnets, NAT, endpoints, PrivateLink, multi-VPC and multi-account patterns.</p></div>
+            <div class="line"><span class="tag tag--build">Build</span>
+              <p><b>Resilience4j on the accounts client</b> — timeouts, retries, circuit breaker. Answers in code what happens when accounts is down mid-transfer.</p></div>
+            <div class="line"><span class="tag tag--convert">Convert</span>
+              <p>Full <b>mock interview #1</b>, timed, no coaching during · 3 applications.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="week">
+        <div class="wk-rail">
+          <div class="wk-n">04</div>
+          <div class="wk-dates">12 – 18 Oct</div>
+        </div>
+        <div class="wk-body">
+          <h3 class="wk-theme">Events</h3>
+          <p class="wk-sub">The densest week on the board — four blocked claims in one piece of work.</p>
+          <div class="lines">
+            <div class="line"><span class="tag tag--design">Design</span>
+              <p><b>Events and streaming</b> — one producer, three consumers, no coupling, and replay that doesn't lie.</p></div>
+            <div class="line"><span class="tag tag--cert">Cert</span>
+              <p>Compute and integration — EC2, ECS, Lambda, SQS, SNS, EventBridge, Step Functions.</p></div>
+            <div class="line"><span class="tag tag--build">Build</span>
+              <p><b>Transactional outbox, then Kafka.</b> Event-driven design, outbox, schema handling and consumer semantics together.</p></div>
+            <div class="line"><span class="tag tag--convert">Convert</span>
+              <p>Macquarie rebalancer <b>v2 → v3</b> — BigDecimal with a stated rounding policy, then a no-trade band with tests · 3 applications.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="week">
+        <div class="wk-rail">
+          <div class="wk-n">05</div>
+          <div class="wk-dates">19 – 25 Oct</div>
+        </div>
+        <div class="wk-body">
+          <h3 class="wk-theme">Cert sprint</h3>
+          <p class="wk-sub">Design and build both pause. Deliberately, not by accident.</p>
+          <div class="lines">
+            <div class="line"><span class="tag tag--cert">Cert</span>
+              <p>Practice exams first, then the weakest domains <b>by score</b> rather than by feel.</p></div>
+            <div class="line"><span class="tag tag--build">Build</span>
+              <p class="paused">Paused for the week.</p></div>
+            <div class="line"><span class="tag tag--convert">Convert</span>
+              <p>Applications keep ticking over. No new preparation material started.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="week week--exam">
+        <div class="wk-rail">
+          <div class="wk-n">06</div>
+          <div class="wk-dates">26 – 31 Oct</div>
+          <span class="wk-flag">Exam week</span>
+        </div>
+        <div class="wk-body">
+          <h3 class="wk-theme">Sit it</h3>
+          <p class="wk-sub">Cert only. Anything else this week is a distraction, including a good one.</p>
+          <div class="lines">
+            <div class="line"><span class="tag tag--cert">Cert</span>
+              <p>Final practice rounds, weak-domain review, and the exam on <b>Saturday 31 October</b>.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>Milestones, and when they land</h2>
+    <p class="sec-note">Each one either happened or it didn't — no partial credit, no "mostly done".</p>
+    <div class="gates">
+      <div class="gate">
+        <span class="when">Wed 23 Sep</span>
+        <p class="what"><b>PayFlow runs in containers</b><span>Dockerfile per service, one compose command starts the stack.</span></p>
+      </div>
+      <div class="gate">
+        <span class="when">Sun 27 Sep</span>
+        <p class="what"><b>Ownership check live on accounts</b><span>Closes a lab owed since 16 August and the longest-running gap in the record.</span></p>
+      </div>
+      <div class="gate">
+        <span class="when">Sun 4 Oct</span>
+        <p class="what"><b>CI pipeline green on every push</b><span>Build and tests running automatically, with real tests behind it.</span></p>
+      </div>
+      <div class="gate">
+        <span class="when">Sun 4 Oct</span>
+        <p class="what"><b>First timed whiteboard completed</b><span>45 minutes, blank page. The first in the entire programme.</span></p>
+      </div>
+      <div class="gate">
+        <span class="when">Sun 11 Oct</span>
+        <p class="what"><b>First full mock interview</b><span>Timed, no coaching during, rated afterwards.</span></p>
+      </div>
+      <div class="gate">
+        <span class="when">Sun 18 Oct</span>
+        <p class="what"><b>Outbox and Kafka working end to end</b><span>The single densest piece of work in the six weeks.</span></p>
+      </div>
+      <div class="gate gate--exam">
+        <span class="when">Sat 31 Oct</span>
+        <p class="what"><b>AWS Solutions Architect – Associate</b><span>SAA-C03. The one fixed date on the page.</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>What you can put on your resume, and from when</h2>
+    <p class="sec-note">
+      Nothing here is claimable on the day it is built. Every row becomes claimable only after you
+      can explain it cold, in a later session, with nothing in front of you.
+    </p>
+    <div class="tw">
+      <table>
+        <thead>
+          <tr><th>Claim</th><th>Earned</th><th>Status today</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Spring Boot multi-service · JPA · Flyway migrations · PostgreSQL · double-entry ledger</td>
+            <td class="date">Built</td>
+            <td><span class="pill pill--held">Held back — explain cold first</span></td>
+          </tr>
+          <tr><td>Docker and containerised services</td><td class="date">23 Sep</td><td><span class="pill pill--locked">Not yet</span></td></tr>
+          <tr><td>Object-level authorization implemented in code</td><td class="date">27 Sep</td><td><span class="pill pill--locked">Not yet</span></td></tr>
+          <tr><td>CI/CD pipelines · automated testing with Testcontainers</td><td class="date">4 Oct</td><td><span class="pill pill--locked">Not yet</span></td></tr>
+          <tr><td>Resilience patterns — timeouts, retries, circuit breakers</td><td class="date">11 Oct</td><td><span class="pill pill--locked">Not yet</span></td></tr>
+          <tr><td>Event-driven design · transactional outbox · Kafka</td><td class="date">18 Oct</td><td><span class="pill pill--locked">Not yet</span></td></tr>
+          <tr><td>AWS Solutions Architect – Associate</td><td class="date">31 Oct</td><td><span class="pill pill--locked">Not yet</span></td></tr>
+          <tr><td>AWS hands-on — ECS/EKS, RDS, MSK, IAM least-privilege</td><td class="date">After the exam</td><td><span class="pill pill--locked">Not yet</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="rule">
+    <h3>The rule this whole plan rests on</h3>
+    <p>
+      Everything in PayFlow so far has been built with help. That is a perfectly legitimate way to
+      learn — it is how the rebalancer went, and that worked. The risk is different:
+      <b>guided building feels like progress and produces a repository, and a repository is not knowledge.</b>
+    </p>
+    <div class="quote">"this is not cold.. this is fully assisted.. i dont know any of this" — 20 Sep</div>
+    <p>
+      So every build task gets a verification entry, tested in a <b>later</b> session and in a different
+      context. Teaching and testing never happen in the same sitting. Nothing reaches the resume until
+      it survives that. Saying so plainly was the right call, and it is the reason this plan has a
+      check step where the previous one didn't.
+    </p>
+  </div>
+
+  <p class="foot">Last set 21 Sep 2026 · daily items decided each morning · nothing here is ever "burnt" — a missed block carries forward</p>
+
+</div>
+
+<script>
+  (function(){
+    try{
+      var exam = new Date(2026,9,31);
+      var now = new Date();
+      var a = Date.UTC(exam.getFullYear(),exam.getMonth(),exam.getDate());
+      var b = Date.UTC(now.getFullYear(),now.getMonth(),now.getDate());
+      var d = Math.round((a-b)/86400000);
+      var el = document.getElementById('days');
+      if(el) el.textContent = d > 0 ? d : (d === 0 ? 'Today' : '—');
+    }catch(e){}
+  })();
+</script>

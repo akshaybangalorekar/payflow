@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NAB Deep Dive | Westpac TL Interview Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SF Mono', Consolas, monospace;
+  --bg: #14181d; --surface: #1b2129; --surface2: #20262f;
+  --border: rgba(255,255,255,0.10); --border-bright: rgba(255,255,255,0.22);
+  --text: #e6edf3; --dim: #93a1ad;
+  --navy: #7ba7d4; --navy-dim: rgba(123,167,212,0.12);
+  --terra: #f08c56; --terra-dim: rgba(240,140,86,0.12);
+  --sage: #9cc84a; --sage-dim: rgba(156,200,74,0.12);
+  --gold: #e3a04b; --red: #ef7070; --red-dim: rgba(239,112,112,0.10);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; font-family: var(--font-body); color: var(--text); background: var(--bg);
+  background-image: linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 56px 56px; background-attachment: fixed;
+  overflow-wrap: break-word;
+}
+.wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px 80px; }
+nav.top {
+  position: sticky; top: 0; z-index: 50; background: var(--surface);
+  border-bottom: 1px solid var(--border); padding: 10px 18px;
+  display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center;
+}
+nav.top .brand { font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--navy); letter-spacing: 1px; text-transform: uppercase; margin-right: 10px; }
+nav.top a { font-family: var(--font-mono); font-size: 11.5px; color: var(--dim); text-decoration: none; padding: 3px 8px; border-radius: 5px; }
+nav.top a:hover { background: var(--navy-dim); color: var(--text); }
+nav.top a.on { background: var(--navy); color: var(--surface); }
+header.hero { padding: 44px 0 10px; }
+.kicker { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--terra); margin-bottom: 10px; }
+h1 { font-size: clamp(26px, 4vw, 38px); line-height: 1.15; margin: 0 0 10px; color: var(--navy); letter-spacing: -0.5px; }
+.sub { font-size: 16.5px; color: var(--dim); max-width: 70ch; line-height: 1.6; margin: 0; }
+section { margin-top: 46px; }
+.section-label {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--navy); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+.section-label::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--terra); }
+h2 { font-size: 21px; margin: 34px 0 8px; color: var(--navy); }
+h3 { font-size: 16.5px; margin: 22px 0 6px; color: var(--text); }
+p { line-height: 1.65; font-size: 15px; margin: 8px 0; }
+.ve-card { background: var(--surface); border: 1px solid var(--border); border-radius: 11px; padding: 18px 20px; }
+.ve-card--elev { background: var(--surface2); box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+.ve-card--hero { background: linear-gradient(120deg, var(--navy-dim), var(--surface) 60%); border-color: var(--border-bright); }
+.say {
+  border-left: 4px solid var(--terra); background: var(--terra-dim); border-radius: 0 9px 9px 0;
+  padding: 13px 16px; margin: 16px 0; font-size: 14.5px; line-height: 1.6;
+}
+.say .lbl { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--terra); display: block; margin-bottom: 5px; }
+.note { border-left: 4px solid var(--sage); background: var(--sage-dim); border-radius: 0 9px 9px 0; padding: 12px 16px; margin: 16px 0; font-size: 14.5px; line-height: 1.6; }
+.note .lbl { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--sage); display: block; margin-bottom: 5px; }
+.warn { border-left: 4px solid var(--gold); background: rgba(180,83,9,0.08); border-radius: 0 9px 9px 0; padding: 12px 16px; margin: 16px 0; font-size: 14px; line-height: 1.6; }
+.warn .lbl { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 5px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+@media (max-width: 820px) { .grid2 { grid-template-columns: 1fr; } }
+.grid2 > *, .grid3 > * { min-width: 0; }
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 18px 0; }
+.kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.kpi .v { font-size: 26px; font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; }
+.kpi .l { font-family: var(--font-mono); font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; color: var(--dim); margin-top: 4px; }
+.table-wrap { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin: 14px 0; }
+.table-scroll { overflow-x: auto; }
+table.dt { width: 100%; border-collapse: collapse; font-size: 13.5px; line-height: 1.5; }
+table.dt th { background: var(--surface2); font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--dim); text-align: left; padding: 10px 14px; border-bottom: 2px solid var(--border-bright); white-space: nowrap; }
+table.dt td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+table.dt tbody tr:nth-child(even) { background: var(--navy-dim); }
+table.dt tbody tr:last-child td { border-bottom: none; }
+table.dt code, p code, li code, .say code, .note code { font-family: var(--font-mono); font-size: 12px; background: var(--navy-dim); color: var(--navy); padding: 1px 5px; border-radius: 4px; }
+.tag { font-family: var(--font-mono); font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 5px; background: var(--navy-dim); color: var(--navy); white-space: nowrap; display: inline-block; }
+.tag--terra { background: var(--terra-dim); color: var(--terra); }
+.tag--sage { background: var(--sage-dim); color: var(--sage); }
+.tag--red { background: var(--red-dim); color: var(--red); }
+ul.nl, ol.nl { list-style: none; padding: 0; margin: 8px 0; }
+ul.nl li, ol.nl li { padding-left: 16px; position: relative; line-height: 1.65; font-size: 14.5px; margin: 5px 0; }
+ul.nl li::before { content: '\203A'; position: absolute; left: 0; color: var(--terra); font-weight: 700; }
+ol.nl { counter-reset: it; }
+ol.nl li { counter-increment: it; padding-left: 26px; }
+ol.nl li::before { content: counter(it) "."; position: absolute; left: 0; color: var(--terra); font-weight: 700; font-family: var(--font-mono); font-size: 13px; }
+.fig { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 18px 12px; margin: 20px 0; }
+.fig svg { width: 100%; height: auto; display: block; }
+.fig .cap { font-family: var(--font-mono); font-size: 11px; color: var(--dim); text-align: center; margin-top: 12px; }
+details.col { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin: 12px 0; }
+details.col summary { padding: 12px 18px; background: var(--surface); font-family: var(--font-mono); font-size: 12px; font-weight: 600; cursor: pointer; list-style: none; color: var(--text); }
+details.col summary::-webkit-details-marker { display: none; }
+details.col summary::before { content: '\25B8'; font-size: 10px; color: var(--dim); margin-right: 8px; display: inline-block; transition: transform .15s ease; }
+details.col[open] summary::before { transform: rotate(90deg); }
+details.col .bd { padding: 4px 18px 16px; border-top: 1px solid var(--border); font-size: 14px; line-height: 1.6; }
+footer.pn { display: flex; justify-content: space-between; gap: 12px; margin-top: 56px; border-top: 1px solid var(--border); padding-top: 18px; }
+footer.pn a { font-family: var(--font-mono); font-size: 12px; color: var(--navy); text-decoration: none; }
+footer.pn a:hover { text-decoration: underline; }
+.lead { font-size: 17px; line-height: 1.65; color: var(--text); max-width: 75ch; }
+a { color: var(--navy); }
+a.navcard { text-decoration: none; color: inherit; display: block; transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
+a.navcard:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.35); border-color: var(--terra); }
+a.navcard h3 { color: var(--navy); }
+a.navcard .pill { margin-bottom: 0; }
+.pill { font-family: var(--font-mono); font-size: 10px; padding: 2px 8px; border-radius: 99px; border: 1px solid var(--border-bright); color: var(--dim); }
+</style>
+<style>
+svg text { font-family: var(--font-body); }
+svg .h  { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 1.4px; fill: var(--dim); }
+svg .t  { font-size: 13px; font-weight: 600; fill: var(--text); }
+svg .s  { font-size: 11.5px; fill: var(--dim); }
+svg .a  { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .9px; fill: var(--navy); }
+svg .o  { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .9px; fill: var(--terra); }
+svg .g  { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .9px; fill: var(--sage); }
+svg .bx  { fill: var(--surface2); stroke: var(--border-bright); stroke-width: 1.1; }
+svg .bxn { fill: var(--navy-dim);  stroke: var(--navy);  stroke-width: 1.1; }
+svg .bxt { fill: var(--terra-dim); stroke: var(--terra); stroke-width: 1.1; }
+svg .bxs { fill: var(--sage-dim);  stroke: var(--sage);  stroke-width: 1.1; }
+svg .ln  { stroke: var(--border-bright); stroke-width: 1.5; fill: none; }
+svg .lnn { stroke: var(--navy);  stroke-width: 1.6; fill: none; }
+svg .lnt { stroke: var(--terra); stroke-width: 1.6; fill: none; }
+svg .lns { stroke: var(--sage);  stroke-width: 1.6; fill: none; }
+svg .mk  { fill: var(--border-bright); }
+svg .mkn { fill: var(--navy); }
+svg .mkt { fill: var(--terra); }
+svg .mks { fill: var(--sage); }
+.fig { overflow-x: auto; }
+.fig svg { min-width: 720px; }
+@media (max-width: 780px) { .fig svg { min-width: 680px; } }
+
+/* ── post-it wall ─────────────────────────────────────────────────────── */
+.pi-legend { display: flex; flex-wrap: wrap; gap: 9px; margin: 10px 0 4px; }
+.pi-key { font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; letter-spacing: 1px;
+  text-transform: uppercase; padding: 6px 12px; border-radius: 4px; color: #17202b; }
+.pk-gold{background:#f2d27c;} .pk-violet{background:#c8b6ec;} .pk-navy{background:#a6c8ee;}
+.pk-terra{background:#f4bd99;} .pk-teal{background:#a0dcd4;} .pk-sage{background:#c2e08c;}
+.pk-red{background:#f1a8a8;} .pk-slate{background:#bcc7d6;}
+
+.pi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 20px; margin: 16px 0 6px; }
+.pi { border-radius: 3px; padding: 22px 22px 24px; min-height: 210px; display: flex; flex-direction: column;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.38); position: relative; }
+.pi .n { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; opacity: .62; margin-bottom: 14px; }
+.pi .line { font-size: 17px; line-height: 1.52; font-weight: 500; }
+.pi .line strong { font-weight: 700; }
+.pi .sub { font-size: 13px; line-height: 1.55; margin-top: auto; padding-top: 16px; opacity: .86;
+  border-top: 1px solid rgba(0,0,0,0.20); }
+.pi em { font-style: italic; }
+.pi--gold  { background:#f2d27c; color:#3a2f0e; }
+.pi--violet{ background:#c8b6ec; color:#2c1f46; }
+.pi--navy  { background:#a6c8ee; color:#11283e; }
+.pi--terra { background:#f4bd99; color:#472312; }
+.pi--teal  { background:#a0dcd4; color:#0f3739; }
+.pi--sage  { background:#c2e08c; color:#26380e; }
+.pi--red   { background:#f1a8a8; color:#481414; }
+.pi--slate { background:#bcc7d6; color:#1c2532; }
+@media print {
+  body { background: #fff; }
+  .pi-grid { grid-template-columns: 1fr 1fr; }
+  .pi { box-shadow: none; border: 1px solid #999; break-inside: avoid; }
+  nav.top, footer.pn { display: none; }
+}
+</style>
+</head>
+<body>
+<nav class="top"><span class="brand">Westpac TL Role</span><a href="index.html">Start Here</a><a href="01-role-and-initiatives.html">The Role</a><a href="02-banking-story.html">My Banking Story</a><a href="03-design-patterns.html">Design Patterns</a><a href="04-integration-patterns.html">Integration Patterns</a><a href="05-things-i-dont-know.html">Honest Gaps</a><a href="06-panel-and-questions.html">Panel and Questions</a><a href="07-revision.html">Revision</a><a href="08-payments-primer.html">Payments Primer</a><a href="09-followups.html">Follow-ups</a><a href="10-nab-deep-dive.html" class="on">NAB Deep Dive</a><a href="11-postits.html">Post-its</a></nav>
+<div class="wrap">
+
+<header class="hero">
+<div class="kicker">Page 10 &middot; the deep version</div>
+<h1>The NAB platform, properly</h1>
+<p class="sub">Page 2 tells the story. This page is what happens when they keep asking. <strong>What was configured at the
+edge, what the gateway actually enforced, how the fast path is built, what runs off it, and the wallet work in full</strong>
+&mdash; each with the follow-ups that come next. This is the page the backend developer and the principal tech lead will
+drive you into.</p>
+</header>
+
+<div class="note"><div class="lbl">How to use this page</div>
+<p>You will not say all of this. <strong>You will say the first two sentences of each section, and then answer follow-ups
+from the rest.</strong> That is how a deep answer actually works in an interview &mdash; short first, deep on demand.
+Read a section, close the drop-downs, and say the short version out loud.</p></div>
+
+<!-- ═══════════════════════════════════════════ PART 0 -->
+<section>
+<div class="section-label">Before anything else &mdash; two rules that protect this whole page</div>
+
+<div class="warn"><div class="lbl">Rule 1 &mdash; the answer has two halves, and you separate them out loud</div>
+<p><strong>You did not build this on AWS.</strong> So every technical answer splits: <em>what we actually did</em>, told as
+fact, and <em>how I would realise that on AWS today</em>, told explicitly as design reasoning.</p>
+<p>That is not hedging, it is stronger. If you blur it and say "we ran it on MSK", the very next question is
+<em>"what was your partition count, and how did you handle consumer rebalancing?"</em> &mdash; and you are finished. The
+split invites exactly the same conversation with no trap in it, and it proves the thing they are actually testing: can
+you map a real problem onto a platform.</p>
+<p><strong>The sentence:</strong> "That part I lived. This next part is how I'd build it on AWS &mdash; design reasoning,
+not something I've operated."</p></div>
+
+<div class="warn"><div class="lbl">Rule 2 &mdash; use one set of numbers, and it is this one</div>
+<p>Your own notes carry <strong>three different sets</strong> of latency and throughput figures for this platform. Only
+one set is on your resume, so only one set is safe:</p>
+<div class="kpi-row">
+<div class="kpi"><div class="v">350</div><div class="l">TPS sustained, auth path</div></div>
+<div class="kpi"><div class="v">~100ms</div><div class="l">p99 decision latency</div></div>
+<div class="kpi"><div class="v">&lt;0.1%</div><div class="l">timeouts</div></div>
+<div class="kpi"><div class="v">A$0.70</div><div class="l">fraud loss per A$1,000</div></div>
+</div>
+<p><strong>Do not use the other two sets</strong> (the sub-second-at-240-TPS version, or the 30ms-target-at-5k-TPS
+version). Mixing them in one conversation is the fastest way to sound like you are quoting someone else's platform.</p></div>
+</section>
+
+<!-- ═══════════════════════════════════════════ PART 1 -->
+<section>
+<div class="section-label">Part 1</div>
+<h2>The shape, in one paragraph</h2>
+
+<p class="lead">Every question on this page has the same root, so learn the root and the rest follows.</p>
+
+<div class="say"><div class="lbl">Start here, every time</div>
+<p>"The constraint was external and we could not negotiate it. A card authorisation has a scheme-mandated response
+budget &mdash; the issuer answers within a few hundred milliseconds or the transaction times out and goes to stand-in.
+<strong>Fraud got a slice of a budget somebody else set.</strong> That one fact splits the design in two: the decision is
+synchronous because a payment is waiting on it, and <strong>everything that is not waiting is asynchronous.</strong>"</p></div>
+
+<p>Everything else &mdash; the edge rules, the timeouts, the caching, the event stream &mdash; is a consequence of that
+sentence. If you get lost mid-answer, come back to it.</p>
+
+<details class="col"><summary>Follow-up: "Why not just make the whole thing asynchronous?"</summary>
+<div class="bd"><p>"Because the authorisation is blocking on the answer. <strong>There is no such thing as an
+eventually-consistent decline</strong> &mdash; the terminal needs a response while the cardholder is standing there."</p></div></details>
+
+<details class="col"><summary>Follow-up: "Why not make the whole thing synchronous and keep it simple?"</summary>
+<div class="bd"><p>"Because then every downstream consumer is on the payment's critical path. <strong>The moment a
+reporting consumer can slow an authorisation, you have built a fraud system that declines good customers when the
+dashboard is busy.</strong> The async half is not an optimisation, it is the isolation."</p></div></details>
+</section>
+
+<!-- ═══════════════════════════════════════════ PART 2 -->
+<section>
+<div class="section-label">Part 2</div>
+<h2>The edge &mdash; what is actually configured</h2>
+
+<p class="lead">This is the question you said you wanted: not "we had a WAF", but <em>what was set, to what value,
+and why</em>. Here it is, outside in.</p>
+
+<div class="fig">
+<svg viewBox="0 0 910 566" role="img" aria-label="The three admission-control layers with their actual configuration and the response code each returns">
+<defs><marker id="d1a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker><marker id="d1n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mkn"/></marker><marker id="d1t" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mkt"/></marker><marker id="d1s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mks"/></marker></defs><text x="0" y="16" class="h">WHAT IS ACTUALLY CONFIGURED, OUTSIDE IN</text><rect x="0" y="30" width="910" height="132" rx="8" class="bxt"/><text x="18" y="56" class="o">EDGE FILTERING</text><text x="18" y="80" class="s">a rate rule: one source over ~2,000 requests in 5 minutes is blocked</text><text x="18" y="98" class="s">scoped to the expensive endpoint only, never to the health check</text><text x="18" y="116" class="s">a body size cap of ~32 KB — an auth request is small and predictable</text><text x="18" y="134" class="s">managed rule sets and known-bad blocking</text><text x="892" y="56" class="s" text-anchor="end">403, before anything downstream sees it</text><rect x="0" y="176" width="910" height="150" rx="8" class="bxn"/><text x="18" y="202" class="a">THE GATEWAY</text><text x="18" y="226" class="s">mTLS on a custom domain, against a truststore of partner certificates</text><text x="18" y="244" class="s">OAuth2 / OIDC — a short-lived token, validated on every call</text><text x="18" y="262" class="s">per-partner plan: ~500 requests/second, burst ~1,000</text><text x="18" y="280" class="s">one global ceiling for the whole stage: ~5,000/second, burst ~10,000</text><text x="18" y="298" class="s">POST only, request validation on, everything else refused</text><text x="892" y="202" class="s" text-anchor="end">429 when a plan or the ceiling is hit</text><rect x="0" y="340" width="910" height="114" rx="8" class="bxs"/><text x="18" y="366" class="g">THE SERVICE</text><text x="18" y="390" class="s">required fields and schema checked before any scoring work is done</text><text x="18" y="408" class="s">the idempotency key claimed before processing, not after</text><text x="18" y="426" class="s">the 32 KB cap enforced again — defence in depth, not trust</text><text x="892" y="366" class="s" text-anchor="end">400, with a structured body and a correlation ID</text><rect x="0" y="472" width="910" height="82" rx="8" class="bxn"/><text x="18" y="498" class="a">THE ONE DISTINCTION WORTH REHEARSING</text><text x="18" y="520" class="s">Rate limiting controls requests per second. Concurrency limiting controls requests in flight at once. They are different controls.</text><text x="18" y="538" class="s">And 429 tells one client to slow down; 503 tells everyone the platform is in trouble. Prefer the first — always.</text>
+</svg>
+<div class="cap">figure 1 &mdash; these are the numbers from your own notes. Say them as "roughly" &mdash; a rounded real number beats a precise invented one</div>
+</div>
+
+<h3>The edge rules, one at a time</h3>
+
+<div class="table-wrap"><div class="table-scroll">
+<table class="dt">
+<thead><tr><th>Control</th><th>Set to roughly</th><th>Why that, and not something else</th></tr></thead>
+<tbody>
+<tr><td><strong>Rate rule</strong></td><td>~2,000 requests in 5 minutes from one source</td><td>It is an <em>abuse</em> control, not a capacity control. It has to be loose enough that a busy legitimate partner never trips it, and tight enough to stop a credential-stuffing run. The capacity control lives one layer down.</td></tr>
+<tr><td><strong>What it groups by</strong></td><td>Source address first; partner identity where you have it</td><td>Grouping by source address is the only thing available before authentication. <strong>Once a caller is identified, the better key is the partner's own client identity</strong>, because that is what the commercial agreement is written against &mdash; an address can be shared, rotated, or behind a cloud egress you do not control.</td></tr>
+<tr><td><strong>Scope</strong></td><td>The expensive endpoint only</td><td>Applying the rule to the whole API means a health check or a status poll can trip an abuse rule. <strong>Scope it to what is worth protecting.</strong></td></tr>
+<tr><td><strong>Body size cap</strong></td><td>~32 KB</td><td>An authorisation request is small and predictable &mdash; an identifier, an amount, a merchant, a few device hints. Anything much larger is malformed or hostile, and rejecting it early keeps memory and latency stable.</td></tr>
+<tr><td><strong>Managed rules</strong></td><td>On</td><td>The known-bad list you would otherwise be maintaining yourself. Cheap, and you should say you did not hand-roll it.</td></tr>
+</tbody></table>
+</div></div>
+
+<details class="col"><summary>Follow-up: "What does the edge actually protect you from that the gateway doesn't?"</summary>
+<div class="bd"><p>"Volume that is not worth authenticating. <strong>Validating a token costs something. Scoring a transaction
+costs a lot more.</strong> The edge exists so that a flood never reaches the part of the system where requests are
+expensive."</p></div></details>
+
+<details class="col"><summary>Follow-up: "Rate limiting and concurrency limiting — what's the difference?"</summary>
+<div class="bd"><p>"Rate is requests per second. <strong>Concurrency is requests in flight at the same time.</strong> They
+catch different problems: rate stops a client hammering you; concurrency stops a slow dependency turning ten requests a
+second into a thousand simultaneous open calls. <strong>A system can be well inside its rate limit and still be out of
+threads.</strong>"</p>
+<p><strong>This is a genuinely common distinction to be tested on, and getting it right reads as experience.</strong></p></div></details>
+
+<details class="col"><summary>Follow-up: "429 or 503 — which do you return, and why does it matter?"</summary>
+<div class="bd"><p>"<strong>429 whenever you possibly can.</strong> 429 tells one specific client it is over its limit and
+should back off. 503 tells everyone the platform is in trouble &mdash; and in a bank that is a very different
+conversation, because partners and monitoring both react to it. <strong>Returning 429 is a controlled outcome; returning
+503 is an incident.</strong>"</p></div></details>
+
+<details class="col"><summary>Follow-up: "Would you allow-list partner IP addresses?"</summary>
+<div class="bd"><p>"Where the partner's egress is genuinely static, yes &mdash; it is a cheap extra layer. But I would
+never treat it as the trust anchor. <strong>A lot of partner traffic now comes out of cloud egress that is dynamic,
+shared, or changes without telling you</strong>, so address allow-listing becomes a coarse filter that creates outages
+rather than a control that prevents breaches. The identity has to come from the certificate and the token."</p></div></details>
+</section>
+
+<!-- ═══════════════════════════════════════════ PART 3 -->
+<section>
+<div class="section-label">Part 3</div>
+<h2>The gateway &mdash; two different questions, answered separately</h2>
+
+<p class="lead">This is your strongest single piece of security material, so slow down here. <strong>The whole thing
+rests on one distinction.</strong></p>
+
+<div class="say"><div class="lbl">The distinction, said exactly</div>
+<p>"<strong>mTLS answers 'who is on this connection'. OAuth answers 'what is this software allowed to do'.</strong> They
+are different questions, you need both, and <strong>neither of them answers 'whose customer record is this'</strong> —
+which is why the object-level check has to live in the service."</p></div>
+
+<div class="table-wrap"><div class="table-scroll">
+<table class="dt">
+<thead><tr><th>What is configured</th><th>Roughly</th><th>What it is actually for</th></tr></thead>
+<tbody>
+<tr><td><strong>Mutual TLS</strong></td><td>A custom domain with a truststore of partner certificates</td><td>Proves the calling <em>system</em> is who it claims to be, at the transport layer. A certificate expiry here is an outage, not a breach &mdash; worth knowing, because it changes how you run the rotation.</td></tr>
+<tr><td><strong>OAuth2 / OIDC</strong></td><td>Short-lived tokens, validated on every call</td><td>Says what that software is permitted to do. <strong>Validated on every request, not trusted because it was valid at issue</strong> &mdash; a stale entitlement is a breach, and that is a different failure mode from an expired certificate.</td></tr>
+<tr><td><strong>Per-partner plan</strong></td><td>~500 requests/second, burst ~1,000</td><td>So one partner's bad afternoon cannot cause mass declines for every other partner. This is fairness, not security.</td></tr>
+<tr><td><strong>Stage-wide ceiling</strong></td><td>~5,000/second, burst ~10,000</td><td>The building's maximum occupancy. <strong>Even if every partner is individually inside their own plan, the total is capped</strong>, because backend capacity is finite and a coordinated spike is a real scenario.</td></tr>
+<tr><td><strong>Per-method limits</strong></td><td>The decision endpoint tighter than everything else</td><td>An expensive endpoint gets a stricter limit than a cheap one. Otherwise your most costly call is your least protected.</td></tr>
+<tr><td><strong>The contract</strong></td><td>POST only, request validation on</td><td>Everything not explicitly allowed is refused. It stops an attacker mapping your API by poking methods and paths.</td></tr>
+</tbody></table>
+</div></div>
+
+<div class="note"><div class="lbl">The honesty boundary on this one &mdash; say it before they find it</div>
+<p>The OAuth / mTLS / JWT pattern <strong>already existed as a reference design before you arrived</strong>. What you did
+was instantiate it for the fraud, tokenisation and disputes APIs &mdash; decide <em>where</em> each control actually
+enforces, which is the harder half &mdash; and other teams then used your instantiation rather than re-deriving it.</p>
+<p><strong>Say it like this:</strong> "I didn't originate it &mdash; there was already a reference design in the bank.
+What I owned was making it real for a specific estate, and that turned out to be the harder half." <strong>That answer
+survives a follow-up. Claiming authorship does not.</strong></p></div>
+
+<details class="col"><summary>Follow-up: "If you already have mTLS, why do you need OAuth as well?"</summary>
+<div class="bd"><p>"Because mTLS proves a system's identity on the connection and nothing else. It cannot express scope,
+it cannot expire in minutes, and it cannot be revoked quickly. <strong>OAuth gives you narrow permissions, short life,
+revocation and a decent audit trail.</strong> Different problems."</p></div></details>
+
+<details class="col"><summary>Follow-up: "Where do you terminate TLS?"</summary>
+<div class="bd"><p>"At the edge, so policy is enforced in one place &mdash; and then re-encrypt to the backend, so it is
+still encrypted the rest of the way. <strong>Terminating and then running plaintext internally is the thing to avoid,
+and it is still surprisingly common.</strong>"</p></div></details>
+
+<details class="col"><summary>Follow-up: "How do you rotate partner certificates without an outage?"</summary>
+<div class="bd"><p>"Overlap. <strong>Register the new certificate, trust both for a controlled window, watch which one is
+actually being used, then retire the old one.</strong> Never a cutover at midnight. And alert on approaching expiry
+early enough that the partner has time to act, because you are dependent on their change process, not yours."</p></div></details>
+
+<details class="col"><summary>Follow-up: "What is object-level authorization, and where does it live?"</summary>
+<div class="bd"><p>"It is the check that <em>this record belongs to this caller</em>. <strong>The gateway can tell me which
+client is calling. It can never tell me whose record this is</strong> &mdash; that needs business context the gateway
+does not have. So the check has to be in the service, on every read, and the query has to be scoped by the caller's own
+context rather than by whatever identifier arrived in the request."</p>
+<p><strong>Rehearse this until it is automatic.</strong> It is the most common serious API flaw in banking, and offering
+it before being asked is a strong signal.</p></div></details>
+
+<details class="col"><summary>Follow-up: "Give me a concrete example of it going wrong."</summary>
+<div class="bd"><p>"An endpoint that takes an account identifier in the path, authenticates the caller properly, and then
+trusts the identifier. <strong>The caller is real. The record isn't theirs.</strong> It passes every gateway control and
+every test that only checks authentication. The fix is unglamorous: never query by the identifier alone, always query by
+the identifier <em>and</em> the caller's own scope."</p></div></details>
+</section>
+
+<!-- ═══════════════════════════════════════════ PART 4 -->
+<section>
+<div class="section-label">Part 4</div>
+<h2>The real-time path &mdash; how the fast side is actually built</h2>
+
+<div class="fig">
+<svg viewBox="0 0 910 588" role="img" aria-label="The five steps of the real-time decision path and how the latency budget is divided between them">
+<defs><marker id="d2a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker><marker id="d2n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mkn"/></marker><marker id="d2t" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mkt"/></marker><marker id="d2s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mks"/></marker></defs><text x="0" y="16" class="h">THE DECISION PATH, STEP BY STEP — EVERYTHING HERE IS INSIDE THE BUDGET</text><rect x="0" y="30" width="910" height="56" rx="8" class="bxn"/><circle cx="28" cy="50" r="12" class="bxn"/><text x="28" y="54" class="a" text-anchor="middle">1</text><text x="52" y="54" class="a">IDEMPOTENCY FIRST</text><text x="52" y="74" class="s">Has this authorisation already been decided? Check the cache, then the store. If yes, return that answer — do not score it again.</text><rect x="0" y="96" width="910" height="56" rx="8" class="bx"/><circle cx="28" cy="116" r="12" class="bxn"/><text x="28" y="120" class="a" text-anchor="middle">2</text><text x="52" y="120" class="t">ENRICH, CHEAPLY</text><text x="52" y="140" class="s">Customer attributes and velocity counters, precomputed and looked up. Nothing is calculated from cold inside the budget.</text><rect x="0" y="162" width="910" height="56" rx="8" class="bx"/><circle cx="28" cy="182" r="12" class="bxn"/><text x="28" y="186" class="a" text-anchor="middle">3</text><text x="52" y="186" class="t">EXTERNAL SIGNALS</text><text x="52" y="206" class="s">One adapter per vendor, each with its own timeout and no retries. Optional signals are skipped under load, by design.</text><rect x="0" y="228" width="910" height="56" rx="8" class="bx"/><circle cx="28" cy="248" r="12" class="bxn"/><text x="28" y="252" class="a" text-anchor="middle">4</text><text x="52" y="252" class="t">RULES, THEN MODEL</text><text x="52" y="272" class="s">Deterministic rules first, because they are fast and explainable. The behavioural score is layered on only if it fits.</text><rect x="0" y="294" width="910" height="56" rx="8" class="bxs"/><circle cx="28" cy="314" r="12" class="bxn"/><text x="28" y="318" class="a" text-anchor="middle">5</text><text x="52" y="318" class="g">WRITE, THEN ANSWER</text><text x="52" y="338" class="s">A conditional write on the key, so one authorisation can only ever have one decision. Then publish the event and reply.</text><text x="0" y="382" class="h">WHERE THE TIME GOES — THE BUDGET, SLICED</text><rect x="0" y="396" width="120" height="34" rx="5" class="bx"/><text x="60" y="418" class="s" text-anchor="middle">edge and routing</text><rect x="130" y="396" width="240" height="34" rx="5" class="bx"/><text x="250" y="418" class="s" text-anchor="middle">internal enrichment</text><rect x="380" y="396" width="240" height="34" rx="5" class="bx"/><text x="500" y="418" class="s" text-anchor="middle">external signals</text><rect x="630" y="396" width="130" height="34" rx="5" class="bx"/><text x="695" y="418" class="s" text-anchor="middle">scoring</text><rect x="770" y="396" width="140" height="34" rx="5" class="bx"/><text x="840" y="418" class="s" text-anchor="middle">write and publish</text><text x="0" y="454" class="s">Each slice has its own timeout, and no single dependency may consume the whole budget. That is the entire design.</text><rect x="0" y="476" width="910" height="100" rx="8" class="bxn"/><text x="18" y="502" class="a">THE ARITHMETIC THEY MAY ASK FOR — HAVE IT READY</text><text x="18" y="524" class="s">Concurrency equals throughput times latency. 350 a second at 100 milliseconds is 35 requests in flight.</text><text x="18" y="542" class="s">So you size for about 35 concurrent, not for 350 anything — and you run three tasks across three availability zones</text><text x="18" y="560" class="s">for failure-domain reasons, not for throughput. Scale on in-flight requests, not CPU: CPU is a lagging indicator when the problem is latency.</text>
+</svg>
+<div class="cap">figure 2 &mdash; idempotency first, external calls last and bounded, write before you answer</div>
+</div>
+
+<h3>Why the order is the order</h3>
+
+<ol class="nl">
+<li><strong>Idempotency first, before any work.</strong> The schemes retry. If the same authorisation arrives twice, the
+second one must return the first one's answer, not produce a second answer. <strong>Two different decisions for one
+transaction is not a performance problem, it is an explainability problem</strong> &mdash; you cannot tell a regulator
+which one was real.</li>
+<li><strong>Enrichment is a lookup, never a calculation.</strong> A rule like "how many transactions has this card
+attempted in ten minutes, across how many countries" cannot be computed from a cold database inside the budget. So those
+counters are <strong>precomputed, held in a fast store, and kept current by the event stream</strong>. The events feed
+the state that the fast path reads.</li>
+<li><strong>External calls last, bounded, and skippable.</strong> Each vendor gets its own adapter with its own timeout
+and its own breaker, so vendor-specific behaviour never leaks into the core logic.</li>
+<li><strong>Rules before model.</strong> Deterministic rules are fast and explainable and handle the common case; the
+behavioural score is layered on only if it fits in the remaining budget.</li>
+<li><strong>Write, then answer.</strong> The decision is persisted with a conditional write on the key before the
+response goes back, so a retry cannot race it.</li>
+</ol>
+
+<details class="col"><summary>Follow-up: "How exactly do you implement idempotency?"</summary>
+<div class="bd"><p>"Key on the <strong>domain identifier &mdash; the authorisation identifier &mdash; not on anything the
+transport invented</strong>, because a message ID changes when a retry comes through a different route. Then claim the
+key with a conditional write: the first one succeeds, and any later attempt for the same key fails that condition and
+returns the stored decision. <strong>The part people miss is that you have to store the result, not just the fact that
+you have seen it</strong> &mdash; otherwise the retry gets 'yes, seen it' and nothing useful."</p></div></details>
+
+<details class="col"><summary>Follow-up: "Why a cache in front of the durable store, and not just one of them?"</summary>
+<div class="bd"><p>"Different jobs. The counters need sub-millisecond reads and rich structures &mdash; sliding windows
+per card, per device, per merchant &mdash; so a cache is the right shape. The durable store is what makes the decision
+survive and stays authoritative. <strong>Cache first, durable store on a miss.</strong> And I would want the cache
+lifetimes written down as a business decision, not chosen by whoever wrote the code."</p></div></details>
+
+<details class="col"><summary>Follow-up: "How stale can a cached value be?"</summary>
+<div class="bd"><p>"That is a risk question, not a technical one, and it should have an owner. For something that only
+affects ranking, seconds are fine. <strong>For anything that changes whether a payment is approved, I want the number
+written down, because 'it was cached' is not an answer you can give after an incident.</strong>"</p></div></details>
+
+<details class="col"><summary>Follow-up: "Why containers rather than functions on this path?"</summary>
+<div class="bd"><p>"<strong>Both have a warm-up cost. The difference is where it lands.</strong> A function pays it on a
+request, every time it needs a new environment &mdash; and published guidance puts that anywhere from a hundred
+milliseconds to a couple of seconds, which for a JVM is at the bad end. A container pays it at deploy and scale-out,
+off the request path. Inside a hard budget I would rather pay it where the customer is not waiting &mdash; and accept
+that I now have to keep capacity ahead of demand instead of scaling reactively."</p>
+<p><strong>Then offer the inversion, before they ask:</strong> "If the traffic were spiky and low-volume, or the budget
+were seconds rather than milliseconds, I would use functions and take the operational saving. The duty cycle and the
+budget decide it, not a preference."</p></div></details>
+
+<details class="col"><summary>Follow-up: "How many instances, and show me the arithmetic."</summary>
+<div class="bd"><p>"<strong>Concurrency equals throughput times latency.</strong> 350 a second at 100 milliseconds is
+35 requests in flight. So I am not sizing for 350 of anything &mdash; I am sizing for about 35 concurrent, plus headroom.
+At roughly twenty workers per instance that is two instances at steady state, so I would run at least three, spread
+across three availability zones &mdash; <strong>and that third one is there for the failure domain, not for
+throughput.</strong>"</p></div></details>
+
+<details class="col"><summary>Follow-up: "What do you scale on?"</summary>
+<div class="bd"><p>"In-flight requests and latency, with CPU as a backstop. <strong>CPU is a lagging indicator when your
+problem is latency</strong> &mdash; a service waiting on a slow dependency looks idle. And for anything reading a
+stream, scale on lag, never CPU: <strong>lag is the actual service level.</strong>"</p></div></details>
+
+<details class="col"><summary>Follow-up: "What breaks first as you scale out?"</summary>
+<div class="bd"><p>"<strong>Connections, before compute.</strong> Every instance holds a pool to the feature store and to
+anything relational, so total connections is pool size times instance count &mdash; which means scaling out to fix
+latency can exhaust the thing downstream. I would cap the pools deliberately and treat downstream connection count as a
+capacity input, not an afterthought."</p>
+<p><strong>This is a rarely-given answer and it lands well.</strong></p></div></details>
+
+<details class="col"><summary>Follow-up (Java-specific, for the developer): "Anything else on the JVM?"</summary>
+<div class="bd"><p>"Cold start and JVM warm-up get conflated, and they are different. <strong>Even a freshly started
+container has worse tail latency until the code is compiled rather than interpreted.</strong> So a new instance should
+not take production traffic the moment it reports healthy &mdash; warm it first, gate the health check on warm rather
+than alive, and shift traffic gradually. That is true whichever compute you pick, and it is the part that gets missed."</p></div></details>
+</section>
+
+<!-- ═══════════════════════════════════════════ PART 5 -->
+<section>
+<div class="section-label">Part 5</div>
+<h2>Signals, timeouts, and what happens when something is slow</h2>
+
+<p class="lead">This is the material that wins the backend developer, because it is all mechanism and you have real
+numbers for it.</p>
+
+<h3>Mandatory versus optional &mdash; the classification is the design</h3>
+
+<p>Signals are not equal, and treating them as equal is what makes a platform fragile. <strong>An optional signal
+improves confidence; a mandatory one is required for a safe decision.</strong> That single classification is what lets
+the platform stay up when a vendor has a bad day.</p>
+
+<div class="table-wrap"><div class="table-scroll">
+<table class="dt">
+<thead><tr><th>Control</th><th>Roughly</th><th>The reasoning</th></tr></thead>
+<tbody>
+<tr><td><strong>Per-vendor timeout</strong></td><td>5&ndash;10 ms, sometimes up to 50&ndash;80 ms depending on the budget</td><td>Set from the top down: start from what you promised, subtract your own work, and what is left is what the call below gets. <strong>If the vendor's own latency does not fit in that, the answer is not a longer timeout &mdash; it is that the call does not belong on this path.</strong></td></tr>
+<tr><td><strong>Retries on external calls</strong></td><td><strong>Zero</strong>, in the real-time path</td><td>At this budget a single retry with backoff can consume the whole allowance. <strong>"Retries are a reliability tool, not a default."</strong> At most one retry, and only for an internal idempotent read with jitter.</td></tr>
+<tr><td><strong>Circuit breaker</strong></td><td>Opens on a rolling window when failures or slow calls cross a threshold; stays open ~60 seconds; then probes with a handful of calls</td><td>Stops you calling a dead dependency repeatedly and turning its outage into yours. <strong>Per dependency, never global</strong> &mdash; one vendor being down must not trip breakers for unrelated calls.</td></tr>
+<tr><td><strong>Bulkhead</strong></td><td>~20 concurrent calls per vendor per instance, zero wait</td><td>One blocked dependency must not exhaust the threads and connections everything else shares. <strong>"Fail fast, don't queue."</strong></td></tr>
+<tr><td><strong>Which signals get called</strong></td><td>Low risk: none. Medium: cached only. High: live calls.</td><td>You do not call every vendor for every transaction. <strong>That protects both the budget and the bill</strong>, and it is a good detail to volunteer.</td></tr>
+</tbody></table>
+</div></div>
+
+<div class="fig">
+<svg viewBox="0 0 910 434" role="img" aria-label="The four rungs of the safe degradation ladder, from an optional signal missing to step-up being unavailable">
+<defs><marker id="d3a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker><marker id="d3n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mkn"/></marker><marker id="d3t" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mkt"/></marker><marker id="d3s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mks"/></marker></defs><text x="0" y="16" class="h">WHAT HAPPENS WHEN A SIGNAL DOES NOT ARRIVE</text><rect x="0" y="32" width="910" height="62" rx="8" class="bxs"/><text x="18" y="57" class="g">AN OPTIONAL SIGNAL IS SLOW OR DOWN</text><text x="18" y="79" class="s">Skip it. Score on what you have. Tag the decision "degraded" so it can be counted later.</text><rect x="0" y="104" width="910" height="62" rx="8" class="bxt"/><text x="18" y="129" class="o">A MANDATORY SIGNAL IS MISSING, AND RISK IS LOW OR MEDIUM</text><text x="18" y="151" class="s">Do not approve on a guess. Step the customer up — a code, or an approval in the app.</text><rect x="0" y="176" width="910" height="62" rx="8" class="bxt"/><text x="18" y="201" class="o">A MANDATORY SIGNAL IS MISSING, AND RISK IS HIGH</text><text x="18" y="223" class="s">Fail closed. Decline. This is a risk-appetite decision the business signs, not the architect.</text><rect x="0" y="248" width="910" height="62" rx="8" class="bxn"/><text x="18" y="273" class="a">STEP-UP ITSELF IS UNHEALTHY</text><text x="18" y="295" class="s">Tighten every threshold and fail closed for the sensitive cases, platform-wide.</text><rect x="0" y="322" width="910" height="100" rx="8" class="bxn"/><text x="18" y="348" class="a">AND THE PART ALMOST NOBODY SAYS — VOLUNTEER IT</text><text x="18" y="370" class="s">Degraded mode must not become a quiet backdoor. When the platform is degraded, thresholds tighten,</text><text x="18" y="388" class="s">step-up happens more often, and degraded approvals are tagged and reviewed separately.</text><text x="18" y="406" class="s">Otherwise you have published a recipe: knock the signal provider over, and everything gets approved.</text>
+</svg>
+<div class="cap">figure 3 &mdash; fewer signals means stricter decisions. Say the ladder in that order and it sounds designed, because it was</div>
+</div>
+
+<details class="col"><summary>Follow-up: "Why not make every signal mandatory, for maximum safety?"</summary>
+<div class="bd"><p>"Because then any one vendor's outage becomes mass declines across the bank. <strong>A deliberately
+small mandatory set with safe fallbacks for everything else is what keeps availability and safety in the same
+design</strong> &mdash; making everything mandatory optimises for one of them and destroys the other."</p></div></details>
+
+<details class="col"><summary>Follow-up: "How do you stop fraudsters exploiting degraded mode?"</summary>
+<div class="bd"><p><strong>This is the question that separates a good answer from a great one, and most people have not
+thought about it.</strong></p>
+<p>"When we are degraded, we get <em>stricter</em>, not more permissive. Thresholds tighten, step-up happens more often,
+risk-based limits shorten, and we watch for anomaly spikes harder. <strong>And every degraded approval is tagged and
+reviewed separately, so degraded mode is measurable rather than invisible.</strong> If you do not do that, you have
+published a recipe: knock over the signal provider and everything gets approved."</p></div></details>
+
+<details class="col"><summary>Follow-up: "A vendor is slow and traffic is ten times normal. First five minutes — what do you do?"</summary>
+<div class="bd"><p>"<strong>Stabilise before scaling.</strong> Freeze deploys. Tighten the edge throttles so we shed load
+deliberately. Turn on degrade mode for optional signals. Cap vendor concurrency and shorten those timeouts. Then, once
+the tail is back under control, scale."</p>
+<p>"<strong>Scaling first would make it worse</strong> &mdash; if the latency is dependency-driven, more instances just
+means more simultaneous calls into the thing that is already struggling."</p></div></details>
+
+<details class="col"><summary>Follow-up: "What happens if the whole fraud service is down?"</summary>
+<div class="bd"><p>"The payment path does not wait to find out. The bounded window expires and a predefined policy applies
+&mdash; step up for medium risk, decline for high risk. <strong>That is a risk-appetite decision the business signs off,
+not one an architect makes alone</strong>, because it has a loss rate attached. And the alternative is categorically
+worse: a fraud outage becoming a payments outage."</p></div></details>
+
+<details class="col"><summary>Follow-up: "Is a timeout an error?"</summary>
+<div class="bd"><p>"No &mdash; and this is the line I would want to land. <strong>A timeout is a business decision with a
+loss rate, not a technical failure.</strong> You decided in advance what happens when the window expires. If you did not
+decide, you delegated it to whoever deployed last."</p></div></details>
+</section>
+
+<!-- ═══════════════════════════════════════════ PART 6 -->
+<section>
+<div class="section-label">Part 6</div>
+<h2>The non-critical path &mdash; and the Kafka-or-Kinesis question</h2>
+
+<p class="lead">This is the second half of the platform and the half people under-prepare. <strong>Start by reframing the
+question, because "which streaming service" is the wrong first question.</strong></p>
+
+<div class="say"><div class="lbl">Open with this &mdash; it reframes and it buys you time</div>
+<p>"First thing: fraud has two paths with different physics. The decision is synchronous and sits inside someone else's
+budget. Everything else is asynchronous. <strong>So the stream is not on the decision path &mdash; the stream is what
+keeps the decision path's state current.</strong>"</p></div>
+
+<div class="fig">
+<svg viewBox="0 0 910 384" role="img" aria-label="One decision event published once and read independently by four different consumer groups">
+<defs><marker id="d4a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker><marker id="d4n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mkn"/></marker><marker id="d4t" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mkt"/></marker><marker id="d4s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mks"/></marker></defs><text x="0" y="16" class="h">ONE PUBLISH, MANY INDEPENDENT READERS — THIS IS WHY IT IS A LOG, NOT A QUEUE</text><rect x="0" y="40" width="232" height="90" rx="8" class="bxn"/><text x="116" y="64" class="a" text-anchor="middle">the decision service</text><text x="116" y="82" class="s" text-anchor="middle">publishes ONE fact:</text><text x="116" y="99" class="s" text-anchor="middle">"a decision was made"</text><text x="116" y="116" class="s" text-anchor="middle">and then forgets about it</text><rect x="292" y="40" width="200" height="90" rx="8" class="bxs"/><text x="392" y="64" class="g" text-anchor="middle">ONE TOPIC PER FACT</text><text x="392" y="86" class="s" text-anchor="middle">owned by the producer</text><text x="392" y="104" class="s" text-anchor="middle">keyed by the account —</text><text x="392" y="122" class="s" text-anchor="middle">the thing that never changes</text><line x1="234" y1="85" x2="288" y2="85" class="lnn" marker-end="url(#d4n)"/><rect x="560" y="26" width="350" height="40" rx="6" class="bx"/><text x="576" y="51" class="t">case management</text><text x="896" y="51" class="s" text-anchor="end">own consumer group</text><path d="M 494 85 L 527 85 L 527 46 L 554 46" class="lns" marker-end="url(#d4s)"/><rect x="560" y="74" width="350" height="40" rx="6" class="bx"/><text x="576" y="99" class="t">the feature store</text><text x="896" y="99" class="s" text-anchor="end">own consumer group</text><path d="M 494 85 L 527 85 L 527 94 L 554 94" class="lns" marker-end="url(#d4s)"/><rect x="560" y="122" width="350" height="40" rx="6" class="bx"/><text x="576" y="147" class="t">audit and reporting</text><text x="896" y="147" class="s" text-anchor="end">own consumer group</text><path d="M 494 85 L 527 85 L 527 142 L 554 142" class="lns" marker-end="url(#d4s)"/><rect x="560" y="170" width="350" height="40" rx="6" class="bx"/><text x="576" y="195" class="t">analytics</text><text x="896" y="195" class="s" text-anchor="end">own consumer group</text><path d="M 494 85 L 527 85 L 527 190 L 554 190" class="lns" marker-end="url(#d4s)"/><text x="0" y="232" class="s">New consumers SUBSCRIBE. They do not get their own topic. A topic per consumer is how you end up with two hundred topics and no owner.</text><rect x="0" y="254" width="910" height="118" rx="8" class="bxn"/><text x="18" y="280" class="a">THE FOUR THINGS TO SAY IF THEY GO DEEPER</text><text x="18" y="302" class="s">Ordering only exists inside a partition, so key by the thing whose order you actually need — the account, not the payee.</text><text x="18" y="320" class="s">Partition count is effectively fixed once chosen, so size it for years of consumers, not for today's throughput.</text><text x="18" y="338" class="s">Delivery is at-least-once, so the consumer must be idempotent. "Exactly once" stops at the moment you write outside the broker.</text><text x="18" y="356" class="s">A message that fails every time goes to a dead-letter topic with its offset and its reason — never a silent skip.</text>
+</svg>
+<div class="cap">figure 4 &mdash; the producer publishes a fact. Who reads it, and how fast, is none of the producer's business</div>
+</div>
+
+<h3>So: Kafka, or Kinesis?</h3>
+
+<div class="note"><div class="lbl">The honest answer, and it is a good one</div>
+<p><strong>Your resume does not name a broker, and "event-driven" on it describes the design pattern, not a confirmed
+product.</strong> So do not name one as fact. The strong answer is: "I'd choose on the estate rather than on merit
+&mdash; whichever the platform team already runs well." <strong>That is not a dodge; it is the right answer</strong>,
+and it protects you from the follow-up about partition counts and consumer rebalancing on a product you have not
+operated.</p>
+<p>Then show you can actually make the choice, from the properties &mdash; which is what the table below is for.</p></div>
+
+<div class="table-wrap"><div class="table-scroll">
+<table class="dt">
+<thead><tr><th>Reach for&hellip;</th><th>When you need&hellip;</th><th>Because</th></tr></thead>
+<tbody>
+<tr><td><strong>A log</strong> (Kafka, or a managed Kafka)</td><td>Several independent consumers of the same facts, ordering within a key, replay, and schema governance</td><td>A log <em>keeps</em> the events. That is what lets you add a consumer next year, or replay a year of history against a new model, <strong>without touching the producer</strong>. For fraud that replay requirement is not a nice-to-have — it is how models get trained and how a regulator's question gets answered.</td></tr>
+<tr><td><strong>A managed stream</strong> (Kinesis)</td><td>The same streaming shape with less to operate, in an estate that is already all-in on one cloud</td><td>Lower operational burden, tighter native integration. <strong>The trade is ecosystem and portability</strong> — you are choosing the cloud's stream rather than the open one.</td></tr>
+<tr><td><strong>A queue</strong> (SQS-shaped)</td><td>One consumer group, work that is taken and finished, retries and a dead-letter path</td><td>A queue hands a message to one consumer and it is gone. <strong>Simpler, and if you do not need replay or multiple readers you probably do not need a log.</strong></td></tr>
+<tr><td><strong>A router</strong> (EventBridge-shaped)</td><td>Simple fan-out to many small consumers, filtering by rule, low throughput</td><td>Nothing to run. <strong>But no replay and no ordering guarantee</strong> — which for a fraud decision stream is the disqualifier.</td></tr>
+</tbody></table>
+</div></div>
+
+<div class="say"><div class="lbl">The one-liner if they push for a single answer</div>
+<p>"For this workload I'd want a log rather than a queue or a router, because <strong>replay and multiple independent
+consumers are both real requirements</strong> — model retraining needs history, and an investigation needs to reproduce
+a decision years later. Whether that log is self-run Kafka or the cloud's managed equivalent is an estate decision, and
+I'd take whichever the platform team runs well."</p></div>
+
+<h3>The design details, if they go deeper</h3>
+
+<div class="table-wrap"><div class="table-scroll">
+<table class="dt">
+<thead><tr><th>Question</th><th>Your answer</th></tr></thead>
+<tbody>
+<tr><td><strong>How do you lay out topics?</strong></td><td><strong>One topic per fact type, owned by whoever produces the fact.</strong> Payment submitted, decision made, case events, confirmed-mule list. <strong>New consumers subscribe; they do not get their own topic.</strong> A topic per consumer is how you end up with two hundred topics and nobody owning any of them.</td></tr>
+<tr><td><strong>What is the partition key?</strong></td><td><strong>The immutable subject &mdash; the account.</strong> Ordering only exists inside a partition, so you key by the thing whose order you actually need, and two payments on the same account must be evaluated in order. <strong>Not the payee, not the channel, not whoever is handling the case</strong> — those all change, and you cannot move a record after it is written.</td></tr>
+<tr><td><strong>Account, or account owner?</strong></td><td><strong>Account.</strong> Ownership changes. Joint accounts change. The account number does not.</td></tr>
+<tr><td><strong>How many partitions?</strong></td><td>Peak rate divided by what one consumer actually processes, then rounded up hard. "At 700 a second, and one consumer handling a couple of hundred, that is about four &mdash; <strong>so I would start at twelve, not four</strong>, because the count is effectively fixed once chosen and it is also the ceiling on consumers in a group."</td></tr>
+<tr><td><strong>Consumer groups?</strong></td><td>One per application. Case management, analytics and audit each get their own, so <strong>a slow consumer in one domain cannot create lag in another.</strong></td></tr>
+<tr><td><strong>Exactly-once?</strong></td><td>"Not across systems. <strong>What you get is at-least-once delivery plus idempotent processing, which behaves like exactly-once from the outside.</strong> The broker's own exactly-once stops at the moment your consumer writes to a store outside its transaction."</td></tr>
+<tr><td><strong>Poison messages?</strong></td><td>Bounded retry, then a dead-letter topic carrying the original offset and the reason &mdash; <strong>never a silent skip.</strong> And an alert, because a dead-letter queue nobody looks at is a slower way of losing data.</td></tr>
+<tr><td><strong>Retention and replay?</strong></td><td>Weeks hot in the stream, then out to object storage for years. <strong>The stream is not the data lake.</strong> And replay has to be <em>safe</em>: separate deciding from acting, so replaying a decision topic does not re-block anyone's account.</td></tr>
+<tr><td><strong>Reference state that is "what is true now"?</strong></td><td>A compacted topic keyed by the subject &mdash; latest value per key. <strong>"A table in a log's clothing."</strong> Consumers can rebuild their whole view from it.</td></tr>
+<tr><td><strong>What do you alert on?</strong></td><td><strong>Consumer lag, not CPU. Lag is the service level.</strong></td></tr>
+</tbody></table>
+</div></div>
+
+<details class="col"><summary>Follow-up: "How do you guarantee the event fires when the database write succeeds?"</summary>
+<div class="bd"><p>"<strong>An outbox.</strong> The service writes its row and writes the event into an outbox table in the
+same local transaction, and a relay drains that table to the topic. <strong>That turns an unreliable dual write into one
+atomic write plus a retryable publish.</strong> The cost is a little latency and one more thing to operate &mdash; and in
+payments that is a trade worth making, because for an irrevocable payment, a broker outage that silently drops the event
+means losing the evidence that a decision was made."</p></div></details>
+
+<details class="col"><summary>Follow-up: "What if one key is much hotter than the others?"</summary>
+<div class="bd"><p>"Then that one partition is your throughput, no matter how many others you have. <strong>A hot key is a
+design problem, not a capacity problem.</strong> Either the key is wrong, or the expensive work needs to move off the
+consumer path, or you accept it and size that consumer for the peak. Adding partitions does not help — the hash sends
+the same key to the same place."</p></div></details>
+
+<details class="col"><summary>Follow-up: "Three identities show up here. Can you name them?"</summary>
+<div class="bd"><p><strong>Volunteer this one &mdash; very few candidates separate these, and collapsing them is a real
+security flaw.</strong></p>
+<p>"There are three and people collapse them: <strong>the ingesting service's own platform identity, the stream
+principal it authenticates to the broker with, and the customer the event is about.</strong> Authorisation is per
+principal on topics and consumer groups. And the customer attribution is stamped at ingest, not taken from the payload
+&mdash; otherwise a compromised producer can write events claiming to be anyone."</p></div></details>
+
+<details class="col"><summary>Follow-up: "Does the event carry customer data?"</summary>
+<div class="bd"><p>"<strong>The event references the customer; it does not carry a copy of them.</strong> And card numbers
+never go into logs or events at all &mdash; that is not a preference, it is a scoping decision: if they never enter the
+event infrastructure, that whole estate stays outside the card-data compliance boundary, which materially reduces what
+has to be audited."</p></div></details>
+
+<details class="col"><summary>Follow-up: "What's the residual risk in this design?"</summary>
+<div class="bd"><p><strong>Close on this. Very few candidates close on a measured residual risk, and it is the strongest
+thirty seconds available to you.</strong></p>
+<p>"The decision depends on state that is kept current asynchronously, so <strong>there is a lag between something
+happening and it affecting the next decision.</strong> I would measure that lag as an explicit service level, because it
+is the difference between catching the second fraudulent payment and not."</p></div></details>
+</section>
+
+<!-- ═══════════════════════════════════════════ PART 7 -->
+<section>
+<div class="section-label">Part 7</div>
+<h2>The near-real-time path &mdash; the third shape</h2>
+
+<p class="lead">There were three ingestion shapes, not two, and mentioning the third makes the answer sound complete.</p>
+
+<div class="grid3">
+<div class="ve-card"><h3 style="margin-top:0">Real time</h3><p>Synchronous. A payment is waiting. Hard budget, bounded, one round trip.</p></div>
+<div class="ve-card"><h3 style="margin-top:0">Near real time</h3><p>Streaming. Session, device and location patterns that only make sense across a <em>window</em> of events, not a single one.</p></div>
+<div class="ve-card"><h3 style="margin-top:0">Batch</h3><p>Overnight partner files and historical analysis. Model training, deep analytics, reporting.</p></div>
+</div>
+
+<p style="margin-top:18px">The near-real-time path is the one worth being able to explain, because it answers a question
+the fast path cannot. <strong>"Two logins from opposite sides of the country in ten minutes" is not visible in a single
+transaction</strong> &mdash; it needs something holding state across a window of events. That processing runs off the
+stream, updates the feature store, and <strong>changes what the fast path sees on the customer's <em>next</em>
+transaction.</strong> It never sits in the authorisation path itself.</p>
+
+<div class="say"><div class="lbl">The sentence that ties the three together</div>
+<p>"Three ingestion shapes, one event backbone. <strong>The synchronous path decides. The streaming path keeps the
+decision's inputs current. The batch path improves the rules.</strong> And none of the three can slow the other two down,
+which is the only reason the design holds together."</p></div>
+
+<details class="col"><summary>Follow-up: "Why can't the rules engine just do that itself?"</summary>
+<div class="bd"><p>"Because the rules engine evaluates one transaction, now, against inputs it is handed. <strong>Impossible
+travel is a property of a sequence, not of a transaction</strong> &mdash; you need something holding windowed state per
+customer. That is a different kind of processing, and it belongs off the hot path."</p></div></details>
+
+<details class="col"><summary>Follow-up: "So the fast path is always slightly behind reality?"</summary>
+<div class="bd"><p>"Yes &mdash; and I would say that before you asked. <strong>That lag is the residual risk of the whole
+design, and the right response is to measure it rather than pretend it isn't there.</strong>"</p></div></details>
+</section>
+
+<!-- ═══════════════════════════════════════════ PART 8 -->
+<section>
+<div class="section-label">Part 8</div>
+<h2>Wallets, in depth &mdash; the GPAY half of the job description</h2>
+
+<p class="lead">This is the initiative with your name on it. <strong>Two wallet ideas, one architecture point, and one
+thing almost nobody prepares.</strong></p>
+
+<div class="grid2">
+<div class="ve-card"><h3 style="margin-top:0">The token replaces the card number</h3>
+<p>The real card number never reaches the phone or the merchant. The scheme issues a token that works on the rails but is
+<strong>domain restricted</strong> &mdash; bound to that device or that channel, and worthless anywhere else.</p>
+<p><strong>A stolen token is a key to a door that only opens for one lock.</strong></p></div>
+<div class="ve-card"><h3 style="margin-top:0">The token outlives the card</h3>
+<p>Lose the card, replace the card, and the card number changes &mdash; but the scheme just updates the mapping.
+<strong>The customer's wallet keeps working and they never re-add it.</strong></p>
+<p>That automatic refresh is the entire reason the lifecycle path exists.</p></div>
+</div>
+
+<div class="fig">
+<svg viewBox="0 0 910 428" role="img" aria-label="Wallet provisioning split into synchronous green and red answers and an asynchronous yellow step-up, plus the lifecycle event path">
+<defs><marker id="d5a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker><marker id="d5n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mkn"/></marker><marker id="d5t" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mkt"/></marker><marker id="d5s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mks"/></marker></defs><text x="0" y="16" class="h">THE BIT THAT MAKES THIS AN ARCHITECTURE PROBLEM, NOT A FORM</text><rect x="0" y="32" width="250" height="92" rx="8" class="bxn"/><text x="125" y="56" class="a" text-anchor="middle">the scheme is waiting</text><text x="125" y="74" class="s" text-anchor="middle">it cannot provision until</text><text x="125" y="91" class="s" text-anchor="middle">the issuer answers, so</text><text x="125" y="108" class="s" text-anchor="middle">there is a real budget here</text><path d="M 252 78 L 300 78" class="lnn" marker-end="url(#d5n)"/><rect x="306" y="32" width="250" height="92" rx="8" class="bxs"/><text x="431" y="56" class="g" text-anchor="middle">GREEN or RED</text><text x="431" y="74" class="s" text-anchor="middle">answer synchronously,</text><text x="431" y="91" class="s" text-anchor="middle">from signals already cached.</text><text x="431" y="108" class="s" text-anchor="middle">Fast, and the common case.</text><path d="M 558 78 L 606 78" class="lnt" marker-end="url(#d5t)"/><rect x="612" y="32" width="298" height="92" rx="8" class="bxt"/><text x="761" y="56" class="o" text-anchor="middle">YELLOW is different</text><text x="761" y="74" class="s" text-anchor="middle">a step-up can take minutes.</text><text x="761" y="91" class="s" text-anchor="middle">Answer "pending", then finish</text><text x="761" y="108" class="s" text-anchor="middle">provisioning on a callback.</text><text x="0" y="152" class="s">Holding the scheme's request open while a customer finds their phone is how wallet provisioning ends up feeling broken.</text><text x="0" y="192" class="h">AND THE SECOND HALF NOBODY PREPARES — LIFECYCLE</text><rect x="0" y="206" width="290" height="74" rx="8" class="bx"/><text x="145" y="230" class="t" text-anchor="middle">the card changes</text><text x="145" y="248" class="s" text-anchor="middle">lost, stolen, reissued,</text><text x="145" y="265" class="s" text-anchor="middle">or moved to a new product</text><line x1="294" y1="243" x2="324" y2="243" class="lnn" marker-end="url(#d5n)"/><rect x="330" y="206" width="250" height="74" rx="8" class="bxn"/><text x="455" y="230" class="a" text-anchor="middle">the issuer publishes it</text><text x="455" y="248" class="s" text-anchor="middle">to the scheme's</text><text x="455" y="265" class="s" text-anchor="middle">lifecycle API</text><line x1="584" y1="243" x2="614" y2="243" class="lnn" marker-end="url(#d5n)"/><rect x="620" y="206" width="290" height="74" rx="8" class="bxs"/><text x="765" y="230" class="g" text-anchor="middle">the token keeps working</text><text x="765" y="248" class="s" text-anchor="middle">the mapping is updated —</text><text x="765" y="265" class="s" text-anchor="middle">the customer never re-adds it</text><rect x="0" y="298" width="910" height="118" rx="8" class="bxn"/><text x="18" y="324" class="a">TWO DESIGN POINTS TO VOLUNTEER</text><text x="18" y="346" class="s">One: the issuer does not build its own token vault. That is a deliberate "do not build" decision — the scheme already runs one,</text><text x="18" y="364" class="s">and building it means certification and key management you have no reason to own.</text><text x="18" y="382" class="s">Two: a mass reissue after a breach hits that lifecycle path all at once, on the scheme's timetable, not yours.</text><text x="18" y="400" class="s">So it has to absorb a burst, not just a steady trickle. Almost nobody thinks of that one, and it is the strongest thing on this page.</text>
+</svg>
+<div class="cap">figure 5 &mdash; green and red are fast and synchronous; yellow is a workflow. Getting that split wrong is what breaks wallet provisioning</div>
+</div>
+
+<h3>The three answers, and why the middle one is an architecture problem</h3>
+
+<p>Before a card goes into a wallet, the issuer checks that the person adding it is the cardholder. Three outcomes:
+<strong>approve, step up, decline.</strong> Easy to say &mdash; but the middle one changes the shape of the system.</p>
+
+<ul class="nl">
+<li><strong>Approve and decline are synchronous.</strong> The scheme is waiting, so these have to resolve fast, from
+signals you already hold.</li>
+<li><strong>Step up is not.</strong> Sending a code and waiting for a customer to find their phone takes minutes.
+<strong>If you hold the scheme's request open while that happens, wallet provisioning feels broken.</strong> So you
+answer "pending" and complete provisioning on a callback &mdash; which means the step-up is a small workflow with its own
+state and its own timeout, not a service holding a thread.</li>
+</ul>
+
+<div class="say"><div class="lbl">Your own line, and it is the strongest thing you have here</div>
+<p>"Three wallets, three separate identity checks, one issuer-side orchestration model. <strong>A single
+'authenticated, therefore trusted' flag wasn't good enough &mdash; the design had to carry <em>which wallet vouched for
+this</em></strong>, because the assurance behind each one isn't automatically equivalent, and that distinction has to
+survive into the token lifecycle decision rather than being flattened at the front door."</p></div>
+
+<details class="col"><summary>Follow-up: "Would you build your own token vault?"</summary>
+<div class="bd"><p>"<strong>No, and that is a deliberate decision rather than a default.</strong> Running a vault means
+certification, hardware key management and a permanent compliance burden, for something the scheme already operates at
+scale. The issuer's job here is the decision and the lifecycle events, not the vault. <strong>Being able to say 'don't
+build' clearly is worth more than designing one.</strong>"</p></div></details>
+
+<details class="col"><summary>Follow-up: "What happens after a breach, when a lot of cards are reissued at once?"</summary>
+<div class="bd"><p><strong>Almost nobody prepares this. Volunteer it.</strong></p>
+<p>"A mass reissue hits the lifecycle path all at once, <strong>on the scheme's compromise-response timetable, not
+ours.</strong> So that path has to absorb a burst, not just a steady trickle of individual card events. That is a
+capacity requirement you would completely miss if you only designed for the normal case."</p></div></details>
+
+<details class="col"><summary>Follow-up: "Who can suspend a token?"</summary>
+<div class="bd"><p>"The issuer, if it suspects fraud &mdash; or the wallet, if the device is reported lost. <strong>The
+policy lives on the issuer side even though the wallet holds the token.</strong> That sentence is the whole relationship."</p></div></details>
+
+<details class="col"><summary>Follow-up: "How is a network token different from a merchant storing your card?"</summary>
+<div class="bd"><p>"A merchant storing your card holds a <strong>real credential</strong> &mdash; breach them and it is a
+real card number, and they carry the compliance burden. A network token is domain restricted and carries a one-time
+cryptogram per transaction. <strong>One is breach risk and audit scope; the other is neither.</strong>"</p></div></details>
+
+<details class="col"><summary>Follow-up: "Have you integrated VCAS?"</summary>
+<div class="bd"><p>"Not VCAS specifically &mdash; my Visa work was tokenisation, disputes and authorisation. <strong>But
+the issuer-side shape is one I know well: score in real time, frictionless when it's low risk, step up when it isn't, and
+own the fallback when a signal is missing. That is the same decision ladder I designed on the fraud path.</strong> Is it
+replacing an existing 3DS solution or is it greenfield, and is the integration direct or through the processor?"</p>
+<p><strong>Answer, pivot, question back.</strong> The question back proves you know the terrain better than a claim would.</p></div></details>
+</section>
+
+<!-- ═══════════════════════════════════════════ PART 9 -->
+<section>
+<div class="section-label">Part 9</div>
+<h2>Proving it afterwards &mdash; audit and observability</h2>
+
+<p class="lead">In a bank, "it made the right decision" is only half the job. The other half is proving which decision was
+made, why, and under which version of the rules &mdash; <strong>sometimes years later.</strong></p>
+
+<div class="table-wrap"><div class="table-scroll">
+<table class="dt">
+<thead><tr><th>Requirement</th><th>How the design answers it</th></tr></thead>
+<tbody>
+<tr><td>Explain a decision years later</td><td>Every decision is an <strong>event carrying its own inputs</strong> &mdash; the rules that fired, the features used, the version in force, whether the platform was degraded at the time, and a correlation identifier. <strong>You can replay it, not just read a log line saying what happened.</strong></td></tr>
+<tr><td>Prove nobody edited the record</td><td>Write-once storage. <strong>Even a compromised administrator cannot retroactively alter history</strong>, which is the specific thing an auditor needs to trust &mdash; access control alone is a policy promise, not a structural one.</td></tr>
+<tr><td>Not slow the payment down</td><td>Audit events are published <strong>after the decision, never as part of it.</strong> A slow audit consumer cannot block an authorisation.</td></tr>
+<tr><td>Find things across services</td><td>One correlation identifier, created at the edge, carried through every hop, in structured logs with the same fields everywhere.</td></tr>
+<tr><td>Know when you are breaching</td><td>Alarms on the tail, not the average. Plus degraded-decision rate, vendor health, timeout rate, throttle rate, and consumer lag.</td></tr>
+</tbody></table>
+</div></div>
+
+<details class="col"><summary>Follow-up: "How would you know the audit pipeline itself had silently stopped?"</summary>
+<div class="bd"><p><strong>A genuinely good question, and the obvious answer is wrong.</strong></p>
+<p>"Not by checking whether the consumer is running &mdash; it can be running and producing nothing. <strong>You compare
+decision volume on the payment path against audit events landed.</strong> A mismatch between 'decisions made' and
+'decisions recorded' is the real signal."</p></div></details>
+
+<details class="col"><summary>Follow-up: "Why two separate pipelines for audit and operations?"</summary>
+<div class="bd"><p>"Different retention, different access, different consumers. <strong>Audit needs immutability and
+years; operations needs low latency and alerting.</strong> Merging them means compromising one of the two, and it is
+usually the audit one that quietly loses."</p></div></details>
+
+<details class="col"><summary>Follow-up: "What did that actually buy the business?"</summary>
+<div class="bd"><p>"Audit evidence requests went from days to minutes, because teams could self-serve against a standard
+set of queries instead of raising a request and waiting. <strong>And it cost the payment path nothing, because the whole
+pipeline runs after the decision.</strong>"</p></div></details>
+</section>
+
+<!-- ═══════════════════════════════════════════ PART 10 -->
+<section>
+<div class="section-label">Part 10</div>
+<h2>The trade-offs &mdash; volunteer these, do not wait to be asked</h2>
+
+<p class="lead">An interviewer who has to extract the weaknesses of your design from you has learned less about your
+judgement than one you told upfront. <strong>Name three.</strong></p>
+
+<div class="table-wrap"><div class="table-scroll">
+<table class="dt">
+<thead><tr><th>What you gained</th><th>What it cost</th><th>The sentence</th></tr></thead>
+<tbody>
+<tr><td>Fault isolation &mdash; a fraud outage cannot become a payments outage</td><td>A fraud decision can arrive late or be ignored entirely</td><td><strong>"We chose bounded correctness over unbounded waiting."</strong></td></tr>
+<tr><td>Predictable behaviour under failure</td><td>Potentially higher fraud loss while degraded</td><td>"That is an explicit risk appetite the business signs, not a technical shortcut."</td></tr>
+<tr><td>Independent scaling and independent evolution</td><td>More components, harder debugging, eventual consistency</td><td><strong>"We trade simplicity for resilience &mdash; in payments, preventing cascading failure matters more than minimising components."</strong></td></tr>
+<tr><td>Replay and audit</td><td>Schema discipline, and a real operational burden</td><td>"A stream without schema governance becomes a liability the first time a producer changes a field."</td></tr>
+</tbody></table>
+</div></div>
+
+<div class="say"><div class="lbl">How to close the trade-offs answer</div>
+<p>"This architecture deliberately optimises for <strong>availability, controlled risk and evolvability</strong> over
+simplicity and absolute correctness &mdash; which is how a large bank actually defines success."</p>
+<p class="pill" style="display:inline-block;margin-top:8px">Your own notes call this the single sentence most likely to signal seniority in the whole case study.</p></div>
+</section>
+
+<!-- ═══════════════════════════════════════════ PART 11 -->
+<section>
+<div class="section-label">Part 11</div>
+<h2>Cram sheet for this page</h2>
+
+<div class="ve-card ve-card--hero">
+<ol class="nl">
+<li><strong>Fraud got a slice of a budget somebody else set.</strong> Everything follows from that.</li>
+<li><strong>Synchronous where something is waiting; asynchronous for everything else.</strong></li>
+<li><strong>mTLS says who is on the connection. OAuth says what the software may do. Neither says whose record this is.</strong></li>
+<li><strong>Idempotency on the domain identifier, claimed before the work, and store the result, not just the fact.</strong></li>
+<li><strong>The events feed the state that the fast path reads.</strong></li>
+<li><strong>Fewer signals means stricter decisions &mdash; degraded mode tightens, it does not relax.</strong></li>
+<li><strong>A timeout is a business decision with a loss rate, not an error.</strong></li>
+<li><strong>Key by the account, because ordering only exists inside a partition.</strong></li>
+<li><strong>At-least-once plus idempotent processing. Exactly-once stops at the door.</strong></li>
+<li><strong>Three wallets, three identity checks, one orchestration model &mdash; and the design carries which wallet vouched.</strong></li>
+<li><strong>Don't build a token vault. Do design for the mass-reissue burst.</strong></li>
+<li><strong>Concurrency equals throughput times latency: 350 at 100ms is 35 in flight.</strong></li>
+</ol>
+</div>
+
+<div class="warn"><div class="lbl">And the one thing that undoes all of it</div>
+<p><strong>Claiming to have operated what you designed.</strong> Every sentence on this page is safe if you keep the two
+halves apart. "Here's what we built and why" is fact. "Here's how I'd realise it on AWS" is reasoning. <strong>Blur them
+once and the rest of the interview is spent testing you on a platform you have not run.</strong></p></div>
+</section>
+
+
+<footer class="pn"><a href="09-followups.html">&larr; Follow-up Bank</a><a href="11-postits.html">Post-its &rarr;</a></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,1480 @@
+<title>Alice Sends Bob $250</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f6f7; --surface:#ffffff; --surface-2:#eceff1;
+    --line:#dde2e5; --line-strong:#c3ccd1;
+    --ink:#12181c; --ink-2:#5a666e; --ink-3:#85939c;
+    --accent:#0f6466; --accent-ink:#0b4f51; --accent-soft:rgba(15,100,102,.09);
+    --flag:#8f5400; --flag-soft:rgba(143,84,0,.10);
+    --good:#2c6b38; --good-soft:rgba(44,107,56,.10);
+    --pom:#6b4fa8; --yml:#0f6466; --comp:#1f6fa8; --sql:#8f5400; --dock:#2c6b38; --java:#a33d5b;
+    --f-display:'Bricolage Grotesque','Archivo',system-ui,sans-serif;
+    --f-body:'Archivo',system-ui,-apple-system,sans-serif;
+    --f-mono:'IBM Plex Mono','SF Mono',Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+    --bg:#0e1316; --surface:#161d21; --surface-2:#1d262b;
+    --line:#27333a; --line-strong:#3a4950;
+    --ink:#e7edf0; --ink-2:#9aa8b1; --ink-3:#74838d;
+    --accent:#57b6ae; --accent-ink:#8ad3cb; --accent-soft:rgba(87,182,174,.12);
+    --flag:#d9a03f; --flag-soft:rgba(217,160,63,.13);
+    --good:#6cbd7c; --good-soft:rgba(108,189,124,.13);
+    --pom:#b49ae0; --yml:#57b6ae; --comp:#79bde6; --sql:#d9a03f; --dock:#6cbd7c; --java:#e08aa0;
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0e1316; --surface:#161d21; --surface-2:#1d262b;
+    --line:#27333a; --line-strong:#3a4950;
+    --ink:#e7edf0; --ink-2:#9aa8b1; --ink-3:#74838d;
+    --accent:#57b6ae; --accent-ink:#8ad3cb; --accent-soft:rgba(87,182,174,.12);
+    --flag:#d9a03f; --flag-soft:rgba(217,160,63,.13);
+    --good:#6cbd7c; --good-soft:rgba(108,189,124,.13);
+    --pom:#b49ae0; --yml:#57b6ae; --comp:#79bde6; --sql:#d9a03f; --dock:#6cbd7c; --java:#e08aa0;
+  }
+  *{box-sizing:border-box;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15.5px;line-height:1.65;margin:0;}
+  .page{max-width:820px;margin:0 auto;padding-inline:20px;padding-block:44px 80px;}
+  .eyebrow{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 10px;}
+  h1{font-family:var(--f-display);font-weight:800;font-size:clamp(32px,6vw,48px);line-height:1.04;
+    letter-spacing:-.025em;margin:0 0 14px;text-wrap:balance;}
+  .standfirst{font-size:17px;color:var(--ink-2);margin:0 0 8px;}
+  .standfirst b{color:var(--ink);font-weight:600;}
+  h2{font-family:var(--f-display);font-weight:600;font-size:26px;letter-spacing:-.02em;
+    margin:52px 0 4px;text-wrap:balance;}
+  h2 .num{font-family:var(--f-mono);font-size:13px;font-weight:600;color:var(--accent);
+    display:block;letter-spacing:.12em;margin-bottom:6px;}
+  h3{font-family:var(--f-display);font-weight:600;font-size:18.5px;letter-spacing:-.012em;margin:30px 0 4px;}
+  p{margin:0 0 14px;max-width:68ch;}
+  b,strong{font-weight:600;}
+  ul,ol{margin:0 0 14px;padding-left:22px;max-width:68ch;}
+  li{margin-bottom:6px;}
+  code{font-family:var(--f-mono);font-size:.88em;background:var(--surface-2);
+    padding:1px 5px;border-radius:3px;color:var(--accent-ink);}
+  pre{font-family:var(--f-mono);font-size:12.5px;line-height:1.55;background:var(--surface);
+    border:1px solid var(--line);border-radius:5px;padding:18px 20px;overflow-x:auto;margin:0 0 18px;}
+  pre code{background:none;padding:0;color:inherit;font-size:inherit;}
+  .fig{background:var(--surface);border:1px solid var(--line);border-radius:5px;
+    padding:20px;overflow-x:auto;margin:0 0 8px;}
+  .fig pre{border:none;background:none;padding:0;margin:0;}
+  .cap{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);margin:0 0 24px;
+    letter-spacing:.04em;}
+  .note{border-left:3px solid var(--accent);background:var(--accent-soft);
+    padding:14px 18px;border-radius:0 5px 5px 0;margin:0 0 18px;}
+  .note p{margin:0;}
+  .warn{border-left:3px solid var(--flag);background:var(--flag-soft);
+    padding:14px 18px;border-radius:0 5px 5px 0;margin:0 0 18px;}
+  .warn p{margin:0;}
+  .takeaway{border:1px solid var(--line-strong);background:var(--surface);border-radius:5px;
+    padding:16px 20px;margin:22px 0;}
+  .takeaway .lbl{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-3);margin-bottom:6px;}
+  .takeaway p{margin:0;font-size:15px;}
+  .tw{overflow-x:auto;border:1px solid var(--line);border-radius:5px;background:var(--surface);margin:0 0 20px;}
+  table{border-collapse:collapse;width:100%;min-width:520px;}
+  th{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-3);text-align:left;padding:11px 15px;border-bottom:1px solid var(--line-strong);white-space:nowrap;}
+  td{padding:11px 15px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top;}
+  tbody tr:last-child td{border-bottom:none;}
+  .pill{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.07em;
+    text-transform:uppercase;padding:3px 8px;border-radius:3px;white-space:nowrap;}
+  .pill--cold{background:var(--good-soft);color:var(--good);}
+  .pill--rough{background:var(--accent-soft);color:var(--accent-ink);}
+  .pill--skip{background:var(--surface-2);color:var(--ink-3);}
+  .foot{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);
+    font-family:var(--f-mono);font-size:12px;color:var(--ink-3);}
+  .toc{background:var(--surface);border:1px solid var(--line);border-radius:5px;padding:22px 24px;margin:30px 0 8px;}
+  .toc .hd{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-3);margin:0 0 16px;}
+  .toc ol{list-style:none;margin:0;padding:0;counter-reset:toc;display:flex;flex-direction:column;gap:13px;max-width:none;}
+  .toc li{counter-increment:toc;display:grid;grid-template-columns:30px 1fr;gap:10px;margin:0;}
+  .toc li::before{content:counter(toc,decimal-leading-zero);font-family:var(--f-mono);
+    font-size:11px;font-weight:600;color:var(--accent);padding-top:4px;}
+  .toc .t{grid-column:2;font-weight:600;font-size:15px;display:block;}
+  .toc .p{grid-column:2;color:var(--ink-2);font-size:13.5px;display:block;line-height:1.5;}
+  .goal{border:1px solid var(--accent);background:var(--accent-soft);border-radius:5px;
+    padding:18px 22px;margin:26px 0 0;}
+  .goal .hd{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--accent-ink);margin:0 0 8px;}
+  .goal p{margin:0 0 10px;font-size:15px;}
+  .goal p:last-child{margin:0;}
+  @media (max-width:560px){ pre,.fig pre{font-size:11px;} .toc li{grid-template-columns:24px 1fr;} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+
+  html{scroll-behavior:smooth;}
+  h2{scroll-margin-top:18px;}
+  h3,h4,.scen{scroll-margin-top:18px;}
+  a{color:var(--accent-ink);text-decoration-thickness:1px;text-underline-offset:2px;}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;}
+  .toc a{text-decoration:none;}
+  .toc a:hover{text-decoration:underline;}
+  .back{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;color:var(--ink-3);
+    text-decoration:none;display:inline-block;margin:0;}
+  .back:hover{color:var(--accent);}
+  .ft{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.05em;
+    padding:3px 8px;border-radius:3px;border:1px solid currentColor;white-space:nowrap;
+    display:inline-block;}
+  .ft--pom{color:var(--pom);}
+  .ft--yml{color:var(--yml);}
+  .ft--comp{color:var(--comp);}
+  .ft--sql{color:var(--sql);}
+  .ft--dock{color:var(--dock);}
+  .ft--java{color:var(--java);}
+  .files{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px;}
+  .scen{border:1px solid var(--line-strong);border-radius:5px;background:var(--surface);
+    padding:20px 22px 18px;margin:0 0 22px;}
+  .scen .sc-n{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.14em;
+    color:var(--ink-3);margin:0 0 6px;}
+  .scen h4{font-family:var(--f-display);font-weight:600;font-size:18px;letter-spacing:-.012em;
+    margin:0 0 14px;color:var(--ink);text-wrap:balance;}
+  .scen pre{background:var(--surface-2);border-color:var(--line);}
+  .scen p{max-width:none;}
+  .scen .cost{font-size:14px;color:var(--ink-2);margin-top:14px;}
+  .say{border-left:3px solid var(--good);background:var(--good-soft);
+    padding:13px 17px;border-radius:0 5px 5px 0;margin:16px 0 0;}
+  .say p{margin:0;font-size:14.5px;}
+  .toc--mini .mini{display:flex;flex-direction:column;gap:5px;}
+  .toc--mini .mini a{font-size:14px;font-family:var(--f-body);}
+  .toc--mini .grp{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--accent);margin:14px 0 3px;}
+  .toc--mini .grp:first-child{margin-top:0;}
+  ul.refs{list-style:none;padding-left:0;}
+  ul.refs li{margin-bottom:10px;padding-left:16px;position:relative;font-size:14.5px;}
+  ul.refs li::before{content:"\2197";position:absolute;left:0;color:var(--ink-3);
+    font-family:var(--f-mono);font-size:12px;}
+  .rw{font-style:italic;color:var(--ink-2);}
+  table.reftbl{min-width:660px;table-layout:fixed;}
+  table.reftbl td{font-size:13.5px;line-height:1.5;}
+  table.reftbl td code{font-size:.85em;word-break:break-word;}
+</style>
+
+<div class="page">
+
+<p class="eyebrow">PayFlow · what happens end to end</p>
+<h1>Alice Sends Bob $250</h1>
+<p class="standfirst">
+  Alice sends Bob $250. Follow that one request all the way down and back, and you will
+  have met every container, every setting and every layer that matters — <b>in the order they
+  actually appear</b>, rather than as a list of tools to memorise. Then sixteen production
+  scenarios take the same three files — <b>pom.xml, application.yml and compose.yml</b> — and ask
+  the only question that matters in an incident: <b>what changes, in which file, and what does it
+  cost?</b>
+</p>
+
+<div class="goal">
+  <p class="hd">Why this note exists</p>
+  <p>
+    The most common opening question in a system design interview is some version of
+    <b>"walk me through what happens when a user does X."</b> Not "what is Docker" — nobody asks that.
+    They ask you to <b>narrate a request through a system</b> and they listen for where you stop
+    being able to.
+  </p>
+  <p>
+    This note is a worked example of that answer, using a system you built. By the end you should be
+    able to trace one request from a <code>curl</code> command to a row in Postgres and back, naming
+    every boundary it crosses and what each layer decides. <b>That narration is the skill. The Docker
+    facts are the scenery.</b>
+  </p>
+  <p>
+    Parts eight and nine are the interview half. A panel rarely asks "what does <code>open-in-view</code>
+    do" — they describe a symptom and watch you locate it. <b>Every scenario there is written from the
+    symptom inward</b>, and each ends with the one sentence worth saying out loud.
+  </p>
+</div>
+
+<div class="toc" id="toc">
+  <p class="hd">What's covered &mdash; click any line to jump</p>
+  <ol>
+    <li><a class="t" href="#s1">Why containers exist at all</a><span class="p">The shipping-container story. Gives you a one-sentence answer to "why did we containerise this" that isn't a list of tools.</span></li>
+    <li><a class="t" href="#s2">Image and container &mdash; one distinction</a><span class="p">The only Docker vocabulary you must never mix up, mapped onto class and object so it sticks.</span></li>
+    <li><a class="t" href="#s3">Alice presses send</a><span class="p">The four-container map, and the thing that breaks for everyone first: what <code>localhost</code> means inside a container.</span></li>
+    <li><a class="t" href="#s4">The three files, and the moment each one acts</a><span class="p"><b>pom.xml, application.yml and compose.yml</b> separated by <i>when</i> they act, the override chain between them, and the rule for deciding which one to open.</span></li>
+    <li><a class="t" href="#s5">What the container knew before it started</a><span class="p">Where settings come from at startup, and why the same image can run on your laptop and in production unchanged.</span></li>
+    <li><a class="t" href="#s6">Inside the service &mdash; the layers Alice passes through</a><span class="p">Controller down to Postgres, with each setting you've seen placed on the layer that owns it.</span></li>
+    <li><a class="t" href="#s7">Three settings worth understanding properly</a><span class="p"><code>ddl-auto</code>, <code>open-in-view</code> and Actuator &mdash; the three that carry real consequences, explained with what goes wrong.</span></li>
+    <li><a class="t" href="#s8">Sixteen production scenarios</a><span class="p"><b>The main event.</b> Real incident symptoms across performance, resilience, observability, secrets, schema and build &mdash; each one worked through to which file changes, the config, and the sentence to say in an interview.</span></li>
+    <li><a class="t" href="#s9">The configuration reference card</a><span class="p">Every setting in one table: which file owns it, what it controls, the production value. The revision page.</span></li>
+    <li><a class="t" href="#s10">What an architect is expected to know</a><span class="p">An honest split: know cold / know roughly / look it up. Read this one before an interview.</span></li>
+    <li><a class="t" href="#s11">The whole thing in six sentences</a><span class="p">The compressed version, for revision. Only useful after the sections above have landed.</span></li>
+    <li><a class="t" href="#s12">References</a><span class="p">Official sources for every property named here, grouped by scenario, with the two or three worth reading in full marked.</span></li>
+  </ol>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s1"><span class="num">PART ONE</span>Why containers exist at all</h2>
+
+<p>
+  Before 1956, loading a ship meant dockworkers carrying barrels, sacks and crates aboard one at a
+  time. Every cargo was a different shape, so every ship, truck and warehouse handled it differently.
+  Loading a ship took days.
+</p>
+<p>
+  Then someone standardised the <b>box</b>. Not the cargo — the box. Suddenly it didn't matter
+  whether you were shipping coffee or car parts: the crane, the ship, the truck and the train all
+  handled one standard shape. Loading dropped from days to hours.
+</p>
+<p>
+  <b>Software had exactly this problem.</b> Your app needs Java 25, Maven, a particular Postgres
+  version and a pile of settings. Your laptop has one combination, a colleague's has another, the
+  build server a third, production a fourth. Most deployment failures were some version of
+  <i>"but it works on my machine."</i>
+</p>
+<p>
+  A container is the standard box. Your application <b>and everything it needs to run</b>, sealed
+  into one unit. The machine underneath doesn't need Java installed. It only needs to know how to
+  handle a box.
+</p>
+
+<div class="takeaway">
+  <div class="lbl">Say this out loud</div>
+  <p>"Containers standardise the unit of deployment. The host stops needing to know what's inside — it only needs a runtime that can start a box."</p>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s2"><span class="num">PART TWO</span>Image and container — one distinction</h2>
+
+<p>You already know this shape from Java:</p>
+
+<div class="fig"><pre><code>   DOCKER                          JAVA
+   ──────                          ────
+   IMAGE          is like          CLASS
+   a frozen filesystem             a template
+   sitting on disk, inert          sitting in a .class file, inert
+   built once                      compiled once
+        │                               │
+        ▼                               ▼
+   CONTAINER      is like          OBJECT
+   a running instance              a running instance
+   many from one image             many from one class</code></pre></div>
+<p class="cap">figure 1 — the only Docker vocabulary you must never mix up</p>
+
+<p>
+  An <b>image</b> is a frozen snapshot of a filesystem, plus a note saying what to run when it
+  starts: <i>"here is Linux with a JRE installed and a jar at /app/app.jar — run
+  <code>java -jar /app/app.jar</code>."</i>
+</p>
+<p>
+  A <b>container</b> is that image actually running. Start three containers from one image and you
+  get three separate processes with separate memory — exactly like three objects from one class.
+</p>
+<p><b>Images are built. Containers are run.</b> That's the whole vocabulary.</p>
+
+<!-- ============================================================ -->
+<h2 id="s3"><span class="num">PART THREE</span>Alice presses send</h2>
+
+<p>Here is the request you actually ran:</p>
+
+<pre><code>curl -X POST localhost:18082/api/transactions \
+  -d '{"fromAccountId":"alice","toAccountId":"bob","amount":250.00}'</code></pre>
+
+<p>Four containers are involved. Here is the whole board before anything moves:</p>
+
+<div class="fig"><pre><code>   YOUR MAC
+   ┌──────────────────────────────────────────────────────────────┐
+   │  curl ──► port 18082                                         │
+   │              │                                               │
+   │  ╔═══════════╪═══════ docker network: docker_default ══════╗ │
+   │  ║           ▼                                             ║ │
+   │  ║   ┌───────────────┐         ┌───────────────┐           ║ │
+   │  ║   │ transactions  │────────►│   accounts    │           ║ │
+   │  ║   │  :8082        │  http://│    :8081      │           ║ │
+   │  ║   └───────┬───────┘ accounts└───────┬───────┘           ║ │
+   │  ║           │           :8081         │                   ║ │
+   │  ║           ▼                         ▼                   ║ │
+   │  ║   ┌───────────────┐         ┌───────────────┐           ║ │
+   │  ║   │transactions-db│         │ accounts-db   │           ║ │
+   │  ║   │  :5432        │         │   :5432       │           ║ │
+   │  ║   └───────────────┘         └───────────────┘           ║ │
+   │  ╚═════════════════════════════════════════════════════════╝ │
+   └──────────────────────────────────────────────────────────────┘</code></pre></div>
+<p class="cap">figure 2 — four containers, two databases, one private network</p>
+
+<h3>Stop here. This is the bit that trips everyone.</h3>
+
+<p>
+  Notice that <code>transactions</code> reaches accounts at <code>http://accounts:8081</code> —
+  <b>not</b> <code>localhost:8081</code>. And it reaches its database at
+  <code>transactions-db:5432</code>, not <code>localhost:5433</code>.
+</p>
+
+<div class="warn"><p>
+  <b>Inside a container, <code>localhost</code> means that container itself.</b> Not your Mac, not
+  the other containers. A container is its own little machine with its own network identity.
+</p></div>
+
+<p>
+  Compose gives every service a name, and <b>that name works as a hostname</b> on the private
+  network it creates. So <code>accounts</code>, <code>accounts-db</code> and
+  <code>transactions-db</code> are all reachable by name, from any other container in that network.
+</p>
+<p>
+  The only reason <code>18082</code> exists at all is so <i>you</i>, standing outside, can get in.
+  That's what <code>ports: "18082:8082"</code> does — <b>host port on the left, container port on
+  the right.</b> Inside the network nobody uses 18082. They all use 8082.
+</p>
+
+<div class="takeaway">
+  <div class="lbl">Say this out loud</div>
+  <p>"Inside the compose network, services address each other by service name. Published ports only exist for traffic entering from outside."</p>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s4"><span class="num">PART FOUR</span>The three files, and the moment each one acts</h2>
+<p><a class="back" href="#toc">&uarr; contents</a></p>
+
+<p>
+  Alice's $250 moved because three files did three different jobs. They are usually taught together
+  as "the config files", which is the single most confusing thing anyone can say about them. They are
+  not the same kind of thing, they are not read at the same time, and <b>changing one has a completely
+  different blast radius from changing another</b>.
+</p>
+
+<p>The clearest way to separate them is by <i>when</i> they act.</p>
+
+<div class="fig"><pre><code>  ① BUILD TIME — on a build machine, once per commit
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │  pom.xml                                                            │
+  │    which Java version compiles this                                 │
+  │    which libraries are on the classpath                             │
+  │    which plugins assemble the jar                                   │
+  │                              │                                      │
+  │                        mvn package                                  │
+  │                              ▼                                      │
+  │                          app.jar                                    │
+  │                              ▲                                      │
+  │            application.yml is packaged INSIDE this jar              │
+  └─────────────────────────────────────────────────────────────────────┘
+                                 │
+  ② IMAGE BUILD — the Dockerfile copies the jar onto a JRE base image
+                                 ▼
+                   payflow/transactions:2026.09.21
+                                 │
+  ③ RUN TIME — on every environment, every restart, many times
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │  compose.yml   (locally — an ECS task definition or a K8s            │
+  │                 Deployment says the same things in production)      │
+  │    environment variables       published ports                      │
+  │    networks                    volumes                              │
+  │    healthchecks, start order   cpu and memory limits                │
+  │                              │                                      │
+  │                              ▼                                      │
+  │                      a running container                            │
+  └─────────────────────────────────────────────────────────────────────┘</code></pre></div>
+<p class="cap">figure 3 — three files, three different moments, three different blast radii</p>
+
+<h3>One question each</h3>
+
+<div class="tw"><table>
+  <thead><tr><th>File</th><th>Answers the question</th><th>Acts at</th><th>To change it you must…</th></tr></thead>
+  <tbody>
+    <tr><td><span class="ft ft--pom">pom.xml</span></td><td><b>What capabilities does this application have at all?</b></td><td>Build time</td><td>rebuild, re-test, re-image, redeploy</td></tr>
+    <tr><td><span class="ft ft--yml">application.yml</span></td><td><b>How do those capabilities behave by default?</b></td><td>Startup, from inside the jar</td><td>rebuild — <i>unless</i> you left a <code>${VAR}</code> hook</td></tr>
+    <tr><td><span class="ft ft--comp">compose.yml</span></td><td><b>What does this particular environment set them to?</b></td><td>Every container start</td><td>edit and restart the container</td></tr>
+  </tbody>
+</table></div>
+
+<div class="note"><p>
+  <b>This is the sentence that matters in an incident.</b> If the fix needs a new library, it needs a
+  build, an image and a deploy — call it thirty minutes on a good day. If the fix is a value, it needs
+  a restart — call it two minutes. <b>Where a setting lives decides how fast you can recover from it.</b>
+  That is why mature services push as much as possible out of the jar and into the environment.
+</p></div>
+
+<h3>Which file wins when they disagree?</h3>
+
+<p>
+  They <i>do</i> disagree, constantly — and that is by design. Spring Boot reads configuration from
+  several places and applies a strict precedence order. Higher in this list beats lower.
+</p>
+
+<div class="fig"><pre><code>   WINS
+    ▲   1. command-line arguments      java -jar app.jar --server.port=9000
+    │   2. OS environment variables    SERVER_PORT=9000
+    │                                     ◄── this is what compose.yml sets
+    │   3. application-{profile}.yml   application-prod.yml
+    │   4. application.yml             ◄── your defaults, baked into the jar
+    │   5. library defaults            ◄── decided by what pom.xml put on the classpath
+    ▼
+   LOSES</code></pre></div>
+<p class="cap">figure 4 — the override chain; compose.yml wins over application.yml, always</p>
+
+<p>
+  Read that chain once more, because it contains the whole design. <code>pom.xml</code> supplies the
+  floor — a library's own defaults. <code>application.yml</code> states what <i>you</i> want as a
+  baseline. <code>compose.yml</code> — or an ECS task definition, or a Kubernetes ConfigMap — states
+  what <i>this environment</i> wants, and it overrules everything below it.
+</p>
+
+<h3>The trick that makes this work in production</h3>
+
+<p>
+  In PayFlow you wrote explicit hooks like
+  <code>${ACCOUNTS_SERVICE_URL:http://localhost:8081}</code>. Useful, but you do not actually need
+  them. <b>Any Spring property can be overridden by an environment variable</b>, whether or not you
+  planned for it, using a naming rule Spring calls <i>relaxed binding</i>:
+</p>
+
+<div class="fig"><pre><code>   upper-case everything · dots become underscores · hyphens disappear
+
+   spring.datasource.url                     →  SPRING_DATASOURCE_URL
+   server.port                               →  SERVER_PORT
+   spring.jpa.open-in-view                   →  SPRING_JPA_OPENINVIEW
+   spring.datasource.hikari.maximum-pool-size →  SPRING_DATASOURCE_HIKARI_MAXIMUMPOOLSIZE
+   management.endpoints.web.exposure.include →  MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE</code></pre></div>
+<p class="cap">figure 5 — the hyphen disappearing catches everyone once</p>
+
+<p>
+  That rule is why a platform team can operate your service without ever opening your source. They set
+  variables in the task definition; your jar never changes. It is also the mechanical reason the
+  twelve-factor rule <i>"store config in the environment"</i> is implementable at all.
+</p>
+
+<h3>So which file do I change?</h3>
+
+<div class="fig"><pre><code>   Does it need a NEW LIBRARY, or a Java / Maven change?      →  pom.xml
+   Is it a BEHAVIOUR that is the same in every environment?   →  application.yml
+   Does the VALUE DIFFER between dev, test and production?    →  compose.yml  (env var)
+   Is it a SECRET?                                            →  a secret store, referenced
+                                                                 by compose / task definition
+   Is it the SHAPE of the database?                           →  a new Flyway .sql migration
+   Is it about HOW THE IMAGE IS BUILT or WHO IT RUNS AS?      →  Dockerfile
+   Is it CORRECTNESS — money, ordering, atomicity?            →  Java. No file will save you.</code></pre></div>
+<p class="cap">figure 6 — the decision rule; pin this one</p>
+
+<div class="takeaway">
+  <div class="lbl">Say this out loud</div>
+  <p>"pom.xml decides what the application <i>can</i> do, application.yml decides what it does by default, and the environment decides what it does here. Anything that varies by environment must be a variable, or you have three different artifacts pretending to be one."</p>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s5"><span class="num">PART FIVE</span>What the container knew before it started</h2>
+<p><a class="back" href="#toc">↑ contents</a></p>
+
+<p>
+  How did <code>transactions</code> know to look for <code>accounts</code> at that address? It
+  didn't — not when the code was written. It was <b>told at startup</b>.
+</p>
+
+<div class="fig"><pre><code>   compose.yml                        application.yml
+   ───────────                        ───────────────
+   environment:                       accounts:
+     ACCOUNTS_SERVICE_URL:              service:
+       http://accounts:8081    ──────►    base-url: ${ACCOUNTS_SERVICE_URL:http://localhost:8081}
+                                                      │                    │
+                                        "use this variable"      "…or this, if it isn't set"</code></pre></div>
+<p class="cap">figure 7 — the same jar, three different addresses, zero rebuilds</p>
+
+<p>Read <code>${NAME:fallback}</code> as: <b>"use the environment variable NAME; if it isn't set, use the value after the colon."</b> Which gives you:</p>
+
+<ul>
+  <li>On your Mac, nothing set → falls back to <code>localhost</code>. Works as it always did.</li>
+  <li>In compose, the variable is set → uses <code>accounts</code>.</li>
+  <li>In AWS later, point it at a load balancer. <b>Same jar. No rebuild.</b></li>
+</ul>
+
+<p>
+  This is the principle behind the phrase <b>"build once, deploy anywhere"</b>: one artifact,
+  configuration injected from outside. It is also why a database password should never sit in a file
+  you commit — because then it isn't configuration, it's cargo.
+</p>
+
+<!-- ============================================================ -->
+<h2 id="s6"><span class="num">PART SIX</span>Inside the service — the layers Alice passes through</h2>
+<p><a class="back" href="#toc">↑ contents</a></p>
+
+<p>The request is now inside the <code>transactions</code> container. Here is what it passes through:</p>
+
+<div class="fig"><pre><code>   ┌─ TransactionController ────────── your code
+   │      handles HTTP, validates the JSON body
+   │
+   ├─ TransactionService ───────────── your code
+   │      the business logic
+   │
+   ├─ TransactionRepository ────────── Spring Data JPA
+   │      an interface you wrote; Spring writes the implementation
+   │
+   ├─ Hibernate ───────────────────── turns objects ⇄ SQL
+   │      ddl-auto lives here
+   │
+   ├─ HikariCP ────────────────────── the connection pool (10 connections)
+   │      open-in-view decides how long one is held
+   │
+   ├─ JDBC driver ─────────────────── the postgresql dependency in your pom
+   │
+   └─ PostgreSQL ──────────────────── the actual database, in its own container</code></pre></div>
+<p class="cap">figure 8 — the stack, top to bottom</p>
+
+<p>
+  Everything above <b>PostgreSQL</b> lives inside your container. PostgreSQL lives in a different
+  one. That boundary is why your transfer is two HTTP calls and four database writes with nothing
+  making them atomic — but that's a later lesson.
+</p>
+
+<h3>Where each setting you've seen actually lives</h3>
+
+<div class="tw"><table>
+  <thead><tr><th>Setting</th><th>Layer</th><th>What it decides</th></tr></thead>
+  <tbody>
+    <tr><td><code>spring.datasource.url</code></td><td>JDBC driver</td><td>Which database to connect to</td></tr>
+    <tr><td><code>ddl-auto: validate</code></td><td>Hibernate</td><td>Check the schema, never change it</td></tr>
+    <tr><td><code>open-in-view: false</code></td><td>Connection pool</td><td>Give the connection back early</td></tr>
+    <tr><td><code>flyway.enabled: true</code></td><td>Flyway</td><td>Run the <code>.sql</code> files at startup</td></tr>
+    <tr><td><code>server.port</code></td><td>Embedded Tomcat</td><td>Which port the app listens on</td></tr>
+    <tr><td><code>management.*</code></td><td>Actuator</td><td>Which <code>/actuator/*</code> endpoints exist</td></tr>
+  </tbody>
+</table></div>
+
+<!-- ============================================================ -->
+<h2 id="s7"><span class="num">PART SEVEN</span>Three settings worth understanding properly</h2>
+<p><a class="back" href="#toc">↑ contents</a></p>
+
+<h3>ddl-auto — who is allowed to change the database structure?</h3>
+
+<p>
+  <b>DDL</b> is Data Definition Language: the SQL that defines structure
+  (<code>CREATE TABLE</code>, <code>ALTER TABLE</code>), as opposed to the SQL that moves data around.
+  So <code>ddl-auto</code> asks: <i>how much may Hibernate change the schema on its own?</i>
+</p>
+
+<div class="tw"><table>
+  <thead><tr><th>Value</th><th>At startup, Hibernate…</th><th>Use it</th></tr></thead>
+  <tbody>
+    <tr><td><code>none</code></td><td>doesn't look</td><td>rarely</td></tr>
+    <tr><td><code>validate</code></td><td><b>compares every entity to the real tables and refuses to start on a mismatch</b></td><td><b>every environment</b></td></tr>
+    <tr><td><code>update</code></td><td>silently creates and alters tables to match your Java</td><td>never</td></tr>
+    <tr><td><code>create</code></td><td>drops everything and rebuilds</td><td>throwaway test fixtures</td></tr>
+  </tbody>
+</table></div>
+
+<p>
+  <b>Why <code>update</code> is dangerous:</b> the schema stops being something you wrote down and
+  reviewed, and becomes a side effect of whatever your Java classes happened to look like that day.
+  Your migration files and your real database drift apart, and nobody notices until a fresh
+  environment produces a schema no one recognises.
+</p>
+<p>
+  <b>One system owns the schema.</b> Here it's Flyway. Hibernate is only allowed to mark the homework.
+</p>
+
+<h3>open-in-view — how long do we hold a connection?</h3>
+
+<p>
+  Your app borrows database connections from a small pool — ten by default. Every request takes one
+  and gives it back.
+</p>
+
+<div class="fig"><pre><code>   request in
+     │
+     ├─ controller
+     ├─ service        ◄── the actual database work happens here
+     ├─ repository
+     │
+     ├─ Spring writes the JSON response
+     │
+   response out
+
+   open-in-view: TRUE    ├──────────────────────────────────┤   held all the way
+   open-in-view: FALSE   ├─────────────┤                        released early</code></pre></div>
+<p class="cap">figure 9 — the same request, two very different connection lifetimes</p>
+
+<p>
+  <code>true</code> is Spring Boot's default. It exists so that lazily-loaded relationships still
+  work if the JSON writer touches one. The cost is real: with ten connections, ten slow clients
+  and everything queues behind them — <b>while no database work is happening at all.</b>
+</p>
+
+<h3>Actuator — the health endpoint you didn't write</h3>
+
+<p>
+  Add <code>spring-boot-starter-actuator</code> and you get <code>/actuator/health</code> for free.
+  It isn't just "the process is alive" — Spring checks that the database answers and Flyway ran, so
+  <code>UP</code> means <b>genuinely ready to serve traffic</b>.
+</p>
+<p>
+  That's why compose can say <i>"don't start transactions until accounts is healthy"</i>. It's also
+  the same mechanism Kubernetes uses for liveness and readiness probes, which is the next place
+  you'll meet it.
+</p>
+
+<!-- ============================================================ -->
+<h2 id="s8"><span class="num">PART EIGHT</span>Sixteen production scenarios — what changes, where, and why</h2>
+<p><a class="back" href="#toc">&uarr; contents</a></p>
+
+<p>
+  Everything above was the machinery. This part is the reason to learn it. Each scenario below is a
+  real production symptom — the kind that gets written on an incident ticket — and each one is worked
+  through the same way: <b>what is actually happening, which file changes, the configuration, the
+  sentence to say in an interview, and what the change costs you.</b>
+</p>
+
+<p>
+  Read the "architect's line" in each one carefully. That sentence is the deliverable. Anyone can copy
+  a YAML block; the interview is testing whether you can say why it is there and what it trades away.
+</p>
+
+<div class="toc toc--mini" id="scix">
+  <p class="hd">The sixteen</p>
+  <div class="mini">
+    <p class="grp">Performance and capacity</p>
+    <a href="#sc1">1 · Fine at 50 TPS, dead at 400</a>
+    <a href="#sc2">2 · Container killed, exit code 137</a>
+    <a href="#sc3">3 · CPU idle, service unresponsive</a>
+    <a href="#sc4">4 · Reporting queries slowing payments</a>
+    <p class="grp">Resilience</p>
+    <a href="#sc5">5 · One dependency down, everything down</a>
+    <a href="#sc6">6 · Every deploy drops requests</a>
+    <a href="#sc7">7 · Traffic arrives before the app is ready</a>
+    <p class="grp">Observability</p>
+    <a href="#sc8">8 · "It was slow" — but which hop?</a>
+    <a href="#sc9">9 · No dashboards, no alerts</a>
+    <a href="#sc10">10 · Logs that cannot be correlated</a>
+    <a href="#sc11">11 · Actuator reachable from the internet</a>
+    <p class="grp">Secrets and hardening</p>
+    <a href="#sc12">12 · The database password is in git</a>
+    <a href="#sc13">13 · 900 MB image running as root</a>
+    <p class="grp">Data and correctness</p>
+    <a href="#sc14">14 · A new column with zero downtime</a>
+    <a href="#sc15">15 · Debited but never credited</a>
+    <p class="grp">Build and cost</p>
+    <a href="#sc16">16 · Nine-minute builds on every commit</a>
+  </div>
+</div>
+
+<h3>Performance and capacity</h3>
+
+<div class="scen" id="sc1">
+  <p class="sc-n">SCENARIO 1</p>
+  <h4>"It is fine at 50 transfers a second. At 400 it collapses with connection timeouts."</h4>
+
+  <p><b>What is actually happening.</b> Every request that touches the database borrows one connection
+  from a pool of ten and gives it back. Little's Law tells you how many you need:
+  <code>concurrency = throughput × latency</code>. At 400 requests per second with a 25 ms database
+  call, that is <code>400 × 0.025 = 10</code> connections just to break even, with zero headroom. The
+  moment Postgres slows to 40 ms you need sixteen, the queue for a connection grows faster than it
+  drains, and requests start failing. <b>The timeouts you see are not database timeouts. They are
+  waiting-for-a-connection timeouts</b>, which is a completely different diagnosis.</p>
+
+  <div class="files"><span class="ft ft--yml">application.yml</span><span class="ft ft--comp">compose.yml</span></div>
+
+<pre><code># application.yml — the behaviour, and a safe default
+spring:
+  datasource:
+    hikari:
+      maximum-pool-size: ${DB_POOL_MAX:10}
+      minimum-idle: ${DB_POOL_MIN:10}      # same as max — avoid pool churn under spiky load
+      connection-timeout: 2000             # ms to wait for a free connection, then fail fast
+      max-lifetime: 1200000                # 20 min — retire before the DB or a proxy does it for you
+      validation-timeout: 1000
+      leak-detection-threshold: 20000      # log a stack trace if code holds one for 20s</code></pre>
+
+<pre><code># compose.yml — the value THIS environment wants
+services:
+  transactions:
+    environment:
+      DB_POOL_MAX: 20</code></pre>
+
+  <p><b>The arithmetic nobody does until it breaks.</b>
+  <code>instances × maximum-pool-size ≤ postgres max_connections − reserved</code>. Six instances at
+  twenty connections each is 120. PostgreSQL ships with <code>max_connections = 100</code>. You will
+  run out of database long before you run out of application, and the failure will look like your
+  application's fault. If you need more, a connection proxy such as PgBouncer or RDS Proxy sits in
+  between and multiplexes — that is a topology change, not a config change.</p>
+
+  <div class="say"><p><b>The architect's line.</b> "The pool is a queue, not a cache. I size it from
+  Little's Law, then check it against the database's connection ceiling across all instances — because
+  the pool is the first place a latency problem turns into an outage."</p></div>
+
+  <p class="cost"><b>What it costs.</b> A bigger pool does not make the database faster. Past the point
+  where Postgres is CPU-bound, more connections means more context switching and <i>worse</i> latency
+  for everyone. A short <code>connection-timeout</code> with a fast failure is almost always better
+  than an unbounded wait, because a failure you can see beats a hang you cannot.</p>
+</div>
+
+<div class="scen" id="sc2">
+  <p class="sc-n">SCENARIO 2</p>
+  <h4>"The container keeps dying under load with exit code 137."</h4>
+
+  <p><b>What is actually happening.</b> 137 is 128 + 9 — the process was SIGKILLed, and under load
+  that means the kernel's out-of-memory killer. The JVM sized its heap from what it believed was
+  available, the container's cgroup limit was lower, and the JVM's <i>total</i> footprint went past it.
+  <b>Heap is not the process.</b> The process is heap plus metaspace plus thread stacks plus the code
+  cache plus direct byte buffers plus GC structures.</p>
+
+  <div class="files"><span class="ft ft--comp">compose.yml</span></div>
+  <p>Note where this is <i>not</i>: <code>application.yml</code>. The JVM has already sized its heap
+  before Spring exists, so heap settings must arrive as JVM flags, which means the environment.</p>
+
+<pre><code>services:
+  transactions:
+    environment:
+      JAVA_TOOL_OPTIONS: >-
+        -XX:MaxRAMPercentage=70
+        -XX:+ExitOnOutOfMemoryError
+        -XX:+HeapDumpOnOutOfMemoryError
+        -XX:HeapDumpPath=/tmp
+    deploy:
+      resources:
+        limits:       { cpus: '2.0', memory: 1G }
+        reservations: { cpus: '0.5', memory: 512M }</code></pre>
+
+  <p><b>The rule of thumb:</b> heap gets 70–75% of the container limit; the remaining quarter is
+  everything else the JVM needs. <code>MaxRAMPercentage</code> is the right flag rather than a fixed
+  <code>-Xmx</code>, because it follows the container limit when you resize the task.</p>
+
+  <p><b>The CPU half of this, which is missed more often.</b> The JVM sizes its GC threads, the common
+  ForkJoinPool and several library thread pools from <code>availableProcessors()</code>. A CPU limit of
+  0.5 reports one processor, so parallel streams silently become serial and your throughput model is
+  wrong. CPU limits change application behaviour, not just speed.</p>
+
+  <div class="say"><p><b>The architect's line.</b> "Container memory limit and JVM heap are two
+  different numbers, and the heap must be the smaller of the two. Exit 137 is the kernel telling you
+  it made that decision on your behalf."</p></div>
+
+  <p class="cost"><b>What it costs.</b> <code>ExitOnOutOfMemoryError</code> means the instance dies
+  instead of limping — which is what you want, because a JVM in GC thrash serves every request slowly
+  and stays "healthy" to a naive health check. You are trading a fast, visible restart for a slow,
+  invisible degradation. Take the trade.</p>
+</div>
+
+<div class="scen" id="sc3">
+  <p class="sc-n">SCENARIO 3</p>
+  <h4>"The service is unresponsive, but CPU is at 3% and the database is idle."</h4>
+
+  <p><b>What is actually happening.</b> Thread pool exhaustion. Every in-flight HTTP request holds one
+  of Tomcat's 200 threads for its entire duration — <i>including the time it spends waiting on a
+  downstream call that is never going to answer</i>. Two hundred threads multiplied by one hung
+  dependency and the service is gone while doing no work at all. This is the signature failure of a
+  synchronous architecture, and the give-away is exactly what you are seeing: an outage with an idle
+  CPU.</p>
+
+  <div class="files"><span class="ft ft--yml">application.yml</span></div>
+
+<pre><code>server:
+  tomcat:
+    threads:
+      max: 200
+      min-spare: 20
+    accept-count: 100          # OS-level queue; beyond this, connections are REFUSED
+    max-connections: 8192
+    connection-timeout: 5s
+spring:
+  jpa:
+    open-in-view: false        # give the connection back before the JSON is written</code></pre>
+
+  <p><b>Why refusing connections is the good outcome.</b> When the accept queue is full the operating
+  system rejects new connections immediately. That is load shedding: the caller finds out now, retries
+  elsewhere, and the queue does not grow invisibly. The alternative — a deep queue — means every
+  request waits, every client times out anyway, and you have burned resources producing responses
+  nobody is still listening for. <b>Bounded queues with fast rejection beat unbounded queues, always.</b></p>
+
+  <div class="say"><p><b>The architect's line.</b> "Thread pool exhaustion presents as a CPU-idle
+  outage. The fix is a timeout on the dependency, not more threads — more threads just buys you a
+  larger failure."</p></div>
+
+  <p class="cost"><b>What it costs.</b> Raising <code>threads.max</code> feels like the fix and is
+  almost never the fix: each thread is a stack allocation, and each one that gets through holds a
+  database connection you do not have. See scenario 5 for the actual remedy.</p>
+</div>
+
+<div class="scen" id="sc4">
+  <p class="sc-n">SCENARIO 4</p>
+  <h4>"Month-end reporting queries are slowing down live payments."</h4>
+
+  <p><b>What is actually happening.</b> One database is serving two workloads with completely
+  different shapes — short, latency-critical transactional writes, and long analytical scans that
+  evict the buffer cache the payment path depends on. They are competing for the same CPU, the same
+  memory and the same connections.</p>
+
+  <div class="files"><span class="ft ft--yml">application.yml</span><span class="ft ft--comp">compose.yml</span></div>
+
+<pre><code># application.yml
+app:
+  datasource:
+    primary:
+      url: ${DB_PRIMARY_URL}
+      hikari: { maximum-pool-size: 20 }
+    replica:
+      url: ${DB_REPLICA_URL:${DB_PRIMARY_URL}}   # falls back to primary locally
+      hikari: { maximum-pool-size: 10, read-only: true }</code></pre>
+
+  <p>In code, a routing <code>DataSource</code> sends anything inside
+  <code>@Transactional(readOnly = true)</code> to the replica.</p>
+
+  <p><b>The trade-off you must name out loud.</b> Replication is asynchronous. A balance read taken
+  immediately after a transfer may return the old number, because the replica is a few hundred
+  milliseconds behind. So the rule is: <b>all writes, and any read-after-write the customer will
+  notice, go to the primary.</b> Only genuinely lag-tolerant reads — statements, reconciliation,
+  reporting, fraud model training — go to the replica. If you cannot say which of your reads are
+  lag-tolerant, you are not ready to add a replica.</p>
+
+  <div class="say"><p><b>The architect's line.</b> "Splitting reads is a consistency decision before it
+  is a performance decision. I would move reporting to a replica and measure replication lag as an SLI,
+  with an alert, because lag is now part of my correctness story."</p></div>
+</div>
+
+<h3>Resilience</h3>
+
+<div class="scen" id="sc5">
+  <p class="sc-n">SCENARIO 5</p>
+  <h4>"accounts is down, and transactions hangs instead of failing."</h4>
+
+  <p><b>What is actually happening.</b> The outbound call has no timeout. A socket that connects and
+  then goes quiet will wait a very long time, and every waiting request is holding a Tomcat thread —
+  which is scenario 3, arriving from a different direction. <b>A missing timeout is how one
+  dependency's outage becomes everyone's outage.</b></p>
+
+  <div class="files"><span class="ft ft--pom">pom.xml</span><span class="ft ft--yml">application.yml</span></div>
+
+<pre><code>&lt;!-- pom.xml — this is a new capability, so it needs a build --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-cloud-starter-circuitbreaker-resilience4j&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+
+<pre><code># application.yml
+accounts:
+  service:
+    base-url: ${ACCOUNTS_SERVICE_URL:http://localhost:8081}
+    connect-timeout: 500ms      # TCP handshake — if this is slow, the host is gone
+    read-timeout: 2s            # waiting for the response body
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      accounts:
+        sliding-window-type: COUNT_BASED
+        sliding-window-size: 50
+        failure-rate-threshold: 50           # >50% failures in the last 50 calls → open
+        wait-duration-in-open-state: 10s     # stop calling entirely for 10s
+        permitted-number-of-calls-in-half-open-state: 5
+  retry:
+    instances:
+      accounts:
+        max-attempts: 3
+        wait-duration: 200ms
+        exponential-backoff-multiplier: 2
+        retry-exceptions:
+          - java.io.IOException</code></pre>
+
+  <p><b>The latency budget nobody checks.</b> Three attempts at a 2-second read timeout is a six-second
+  worst case. If your API promises a 1-second P99, that configuration is a promise you cannot keep.
+  <b>Your own SLA must be larger than the sum of your downstream timeouts multiplied by your retries</b>,
+  or the retry policy is quietly the thing breaking your SLA.</p>
+
+  <p><b>Two rules that carry the most weight.</b> First, the circuit breaker sits <i>outside</i> the
+  retry — otherwise retries pile load onto a dependency that is already failing and you have built a
+  denial-of-service against yourself. Second, <b>only retry idempotent operations.</b> Retrying a debit
+  without an idempotency key debits twice, and in payments that is not an incident, it is a
+  remediation programme.</p>
+
+  <div class="say"><p><b>The architect's line.</b> "Every remote call gets a connect timeout, a read
+  timeout, a bounded retry with jittered backoff, and a circuit breaker outside the retry. And I only
+  retry operations that are safe to repeat — which usually means an idempotency key on the request."</p></div>
+
+  <p class="cost"><b>What it costs.</b> A circuit breaker fails fast when the dependency is
+  <i>recovering</i> too, so you need a sensible half-open probe. And you now have to answer a product
+  question: when the circuit is open, what does the customer see? Queue it, degrade it, or refuse it —
+  that is a business decision, and it belongs in the design, not in the YAML.</p>
+</div>
+
+<div class="scen" id="sc6">
+  <p class="sc-n">SCENARIO 6</p>
+  <h4>"Every deploy shows up as a spike of 502s."</h4>
+
+  <p><b>What is actually happening.</b> The orchestrator sends SIGTERM, the process exits, and every
+  request that was mid-flight dies with it. Graceful shutdown means: stop accepting new work, let
+  in-flight work finish, <i>then</i> exit.</p>
+
+  <div class="files"><span class="ft ft--yml">application.yml</span><span class="ft ft--comp">compose.yml</span></div>
+
+<pre><code># application.yml
+server:
+  shutdown: graceful                    # Spring Boot 4 default; Boot 3 defaulted to immediate
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 25s     # how long the app will wait for in-flight work</code></pre>
+
+<pre><code># compose.yml
+services:
+  transactions:
+    stop_grace_period: 40s              # how long Docker waits before SIGKILL</code></pre>
+
+  <div class="warn"><p>
+    <b>The ordering rule, and it is the whole point of this scenario.</b>
+    <code>stop_grace_period</code> must be <b>longer</b> than
+    <code>timeout-per-shutdown-phase</code>. Get it backwards and Docker SIGKILLs the process halfway
+    through draining — which is precisely the failure graceful shutdown was added to prevent, now with
+    extra configuration. The same rule applies in ECS (<code>stopTimeout</code>) and Kubernetes
+    (<code>terminationGracePeriodSeconds</code>).
+  </p></div>
+
+  <p><b>The half that configuration cannot do.</b> The load balancer must stop sending new requests
+  <i>before</i> the app starts draining. In Kubernetes that is a <code>preStop</code> sleep; on an ALB
+  it is the deregistration delay. Without it you drain gracefully while the balancer cheerfully keeps
+  handing you new work.</p>
+
+  <div class="say"><p><b>The architect's line.</b> "Draining is a three-party agreement between the
+  load balancer, the orchestrator and the application, and their timeouts have to be ordered:
+  deregistration first, then the app's drain window, then the orchestrator's kill."</p></div>
+</div>
+
+<div class="scen" id="sc7">
+  <p class="sc-n">SCENARIO 7</p>
+  <h4>"A new instance receives traffic a second before it can serve it."</h4>
+
+  <p><b>What is actually happening.</b> The health check is answering "the process started" rather than
+  "this instance can do useful work". Those are two different questions and they need two different
+  endpoints.</p>
+
+  <div class="files"><span class="ft ft--yml">application.yml</span><span class="ft ft--comp">compose.yml</span></div>
+
+<pre><code># application.yml
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: when-authorized
+      group:
+        liveness:
+          include: livenessState          # am I wedged? if so, restart me
+        readiness:
+          include: readinessState, db     # can I serve right now? if not, route around me</code></pre>
+
+<pre><code># compose.yml
+    healthcheck:
+      test: ["CMD","curl","-f","http://localhost:8081/actuator/health/readiness"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 45s        # JVM startup is not a failure</code></pre>
+
+  <div class="warn"><p>
+    <b>Put the database in readiness, never in liveness.</b> If a database check is part of liveness,
+    a thirty-second database blip restarts <i>every instance simultaneously</i>, they all come back
+    cold, they all hammer the recovering database, and you have converted a blip into an outage. This
+    is one of the most common self-inflicted incidents in container platforms.
+  </p></div>
+
+  <div class="say"><p><b>The architect's line.</b> "Liveness answers 'restart me', readiness answers
+  'route to me'. A shared dependency belongs in readiness only, because liveness on a shared dependency
+  turns a partial failure into a correlated one."</p></div>
+</div>
+
+<h3>Observability</h3>
+
+<div class="scen" id="sc8">
+  <p class="sc-n">SCENARIO 8</p>
+  <h4>"The payment took nine seconds. Nobody can say which hop was slow."</h4>
+
+  <p><b>What is actually happening.</b> You have logs per service and no way to stitch them into one
+  request. Distributed tracing gives every request an id at the edge and propagates it across every
+  boundary, so nine seconds becomes "seven of them were in the accounts call, and six of those were
+  waiting for a connection."</p>
+
+  <div class="files"><span class="ft ft--pom">pom.xml</span><span class="ft ft--yml">application.yml</span><span class="ft ft--comp">compose.yml</span></div>
+
+<pre><code>&lt;!-- pom.xml --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-boot-starter-opentelemetry&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+
+<pre><code># application.yml
+management:
+  tracing:
+    sampling:
+      probability: ${TRACE_SAMPLE:0.1}       # Boot's own default is 0.1
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: ${OTLP_ENDPOINT:http://otel-collector:4318/v1/traces}</code></pre>
+
+<pre><code># compose.yml
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    ports: ["4318:4318"]
+# and on each service:
+    environment:
+      TRACE_SAMPLE: "1.0"                    # 100% locally; 1–10% in production</code></pre>
+
+  <p><b>The sampling trade-off.</b> Head-based sampling decides at the start of the request, so it is
+  cheap, but it throws away traces before it knows whether they were interesting — and the interesting
+  ones are the slow and failing ones. Tail-based sampling buffers the whole trace in a collector and
+  decides at the end, so it can keep <b>every error and every trace over your latency threshold</b>
+  plus a small random sample of the healthy ones. It costs you a collector with memory and state. In
+  a payments system that cost is usually worth it.</p>
+
+  <div class="say"><p><b>The architect's line.</b> "Trace context has to cross every boundary — the
+  HTTP header, the Kafka record header, the SQS message attribute. If it does not, the trace stops at
+  the queue, and the queue is precisely where the latency was."</p></div>
+</div>
+
+<div class="scen" id="sc9">
+  <p class="sc-n">SCENARIO 9</p>
+  <h4>"We found out from the customer, not from a dashboard."</h4>
+
+  <div class="files"><span class="ft ft--pom">pom.xml</span><span class="ft ft--yml">application.yml</span><span class="ft ft--comp">compose.yml</span></div>
+
+<pre><code>&lt;!-- pom.xml --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;io.micrometer&lt;/groupId&gt;
+  &lt;artifactId&gt;micrometer-registry-prometheus&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+
+<pre><code># application.yml
+spring:
+  application:
+    name: transactions
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus     # never "*" in production — see scenario 11
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      environment: ${ENVIRONMENT:local}</code></pre>
+
+  <div class="warn"><p>
+    <b>Cardinality is the trap.</b> Never tag a metric with an account id, a transaction id, a customer
+    id or a raw URL path. Every distinct tag value creates a new time series. One tag with a million
+    values will take down your metrics backend — not your application, your <i>monitoring</i>, in the
+    middle of the incident it was meant to explain. Identifiers belong in traces and logs, never in
+    metric labels.
+  </p></div>
+
+  <p><b>What to actually measure.</b> The four golden signals — latency, traffic, errors, saturation —
+  and then at least one <b>business</b> metric such as a <code>payflow.transfers.completed</code>
+  counter. "The JVM is healthy" does not tell you that money stopped moving; a flat transfer counter
+  does, and it does it before the customer calls.</p>
+
+  <div class="say"><p><b>The architect's line.</b> "I alert on symptoms customers feel — error rate and
+  latency against the SLO — and I keep resource metrics for diagnosis rather than paging. Paging on CPU
+  produces alert fatigue and misses the outages that matter."</p></div>
+</div>
+
+<div class="scen" id="sc10">
+  <p class="sc-n">SCENARIO 10</p>
+  <h4>"The logs are there. Searching them is hopeless."</h4>
+
+  <p><b>What is actually happening.</b> Human-readable log lines are unparseable at scale. Structured
+  logging emits one JSON object per event, so every field is queryable and — once tracing is on —
+  every line carries the trace id, which is what lets you pivot from a log to the full request.</p>
+
+  <div class="files"><span class="ft ft--yml">application.yml</span><span class="ft ft--comp">compose.yml</span></div>
+
+<pre><code># application.yml
+logging:
+  structured:
+    format:
+      console: ecs             # also: gelf, logstash
+  level:
+    root: INFO
+    com.payflow: ${LOG_LEVEL:INFO}</code></pre>
+
+<pre><code># compose.yml — rotation is an environment concern, not an application one
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"</code></pre>
+
+  <p><b>Two things that bite in production.</b> Without rotation, one chatty service fills the host
+  disk — and a full disk takes down <i>every</i> container on that host, not just the noisy one. And
+  never log a PAN, a CVV, a full account number, an access token or a customer's personal data: mask at
+  the boundary where the value enters, not in the log appender, because the appender is the last place
+  anyone remembers to change.</p>
+
+  <div class="say"><p><b>The architect's line.</b> "Logs, metrics and traces answer different questions
+  — what happened to this one request, what is happening in aggregate, and where did the time go. I
+  correlate them with a trace id in the MDC, and I keep identifiers out of metric labels."</p></div>
+</div>
+
+<div class="scen" id="sc11">
+  <p class="sc-n">SCENARIO 11</p>
+  <h4>"A scan found /actuator/env reachable from the internet."</h4>
+
+  <p><b>What is actually happening.</b> Somebody set <code>include: "*"</code> to make debugging
+  easier. That exposes <code>/actuator/env</code> — your entire resolved configuration — and
+  <code>/actuator/heapdump</code>, which is the contents of your process memory, including credentials
+  and live customer data. This is a data breach with a YAML root cause.</p>
+
+  <div class="files"><span class="ft ft--yml">application.yml</span><span class="ft ft--comp">compose.yml</span></div>
+
+<pre><code># application.yml — move management to its own port
+management:
+  server:
+    port: 9090
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized</code></pre>
+
+<pre><code># compose.yml — publish the business port only
+    ports:
+      - "18082:8082"          # 9090 is deliberately NOT published:
+                              # reachable inside the network, nowhere else</code></pre>
+
+  <p>Moving management to a second port turns "who is allowed to see this" from an application concern
+  into a <b>network</b> concern — a security group, a listener rule, a network policy. That is a much
+  stronger control than an authentication filter, because it fails closed and it does not depend on
+  anyone remembering to configure it correctly next time.</p>
+
+  <div class="say"><p><b>The architect's line.</b> "Operational endpoints get their own port and their
+  own network path, and only the endpoints we actually consume are exposed. Defaults that are
+  convenient in development are an attack surface in production."</p></div>
+</div>
+
+<h3>Secrets and hardening</h3>
+
+<div class="scen" id="sc12">
+  <p class="sc-n">SCENARIO 12</p>
+  <h4>"The database password is in compose.yml, and compose.yml is in git."</h4>
+
+  <p><b>What is actually happening.</b> Configuration and secrets have been treated as the same thing.
+  They are not: configuration is reviewed in a pull request and lives forever in history, and a secret
+  must never appear in one. Once a credential is committed it is compromised — deleting the line does
+  not remove it from the history, and rotating it is now the only remedy.</p>
+
+  <div class="files"><span class="ft ft--comp">compose.yml</span></div>
+
+<pre><code># compose.yml — local development
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt     # and ./secrets/ is in .gitignore
+
+services:
+  transactions:
+    secrets: [db_password]
+    environment:
+      SPRING_DATASOURCE_PASSWORD_FILE: /run/secrets/db_password</code></pre>
+
+  <p><b>In production the value never exists in a file you author at all.</b> An ECS task definition
+  references a Secrets Manager ARN and the agent injects it at task start; the thing your service
+  <i>is</i> — its IAM task role — is the identity, and the password is just a consequence of it.</p>
+
+  <p><b>The better answer is to have no password.</b> RDS IAM authentication lets the task exchange its
+  IAM role for a token that is valid for fifteen minutes. There is no long-lived credential to rotate,
+  to leak, or to find in a log. If someone asks you how you would handle credential rotation, the
+  strongest answer is that you would remove the credential.</p>
+
+  <div class="say"><p><b>The architect's line.</b> "Configuration and secrets have different lifecycles
+  and different blast radii. I keep secrets out of the artifact and out of the repository, inject them
+  at start-up from a managed store, and prefer short-lived identity-based credentials over any secret
+  that needs rotating."</p></div>
+</div>
+
+<div class="scen" id="sc13">
+  <p class="sc-n">SCENARIO 13</p>
+  <h4>"The image is 900 MB, runs as root, and every deploy pushes the whole thing."</h4>
+
+  <div class="files"><span class="ft ft--pom">pom.xml</span><span class="ft ft--dock">Dockerfile</span><span class="ft ft--comp">compose.yml</span></div>
+
+<pre><code>&lt;!-- pom.xml — layered jars, so Docker can cache the slow-changing parts --&gt;
+&lt;plugin&gt;
+  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+  &lt;configuration&gt;
+    &lt;layers&gt;&lt;enabled&gt;true&lt;/enabled&gt;&lt;/layers&gt;
+  &lt;/configuration&gt;
+&lt;/plugin&gt;</code></pre>
+
+<pre><code># compose.yml — runtime hardening
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    user: "1000:1000"</code></pre>
+
+  <p><b>Why layered jars are an architecture point rather than a build trick.</b> Your dependencies are
+  roughly 60 MB and change monthly; your own classes are roughly 2 MB and change hourly. If they are in
+  the same image layer, every single deploy pushes and pulls 60 MB it did not need to. Split them and a
+  code-only deploy moves 2 MB. Multiply by deploys per day, services, and environments, and it becomes
+  deploy latency, registry cost and rollback speed — every day, forever.</p>
+
+  <div class="say"><p><b>The architect's line.</b> "Smallest possible base image, non-root user,
+  read-only root filesystem, no added capabilities, and layers ordered by rate of change. Image size is
+  both an attack surface and a deploy-time cost."</p></div>
+</div>
+
+<h3>Data and correctness</h3>
+
+<div class="scen" id="sc14">
+  <p class="sc-n">SCENARIO 14</p>
+  <h4>"We need a new column on transactions, with no downtime."</h4>
+
+  <div class="files"><span class="ft ft--sql">V7__add_reference.sql</span><span class="ft ft--yml">application.yml (unchanged)</span></div>
+
+  <p><b>The thing to understand first:</b> during a rolling deploy, <b>the old code and the new code
+  are running at the same time, against the same database.</b> Every schema change therefore has to be
+  compatible with both. That constraint is the whole reason for the three-step dance.</p>
+
+<pre><code>-- STEP 1 — EXPAND.  Deployable while the old code is still running.
+ALTER TABLE transactions ADD COLUMN reference VARCHAR(64);   -- nullable, no default rewrite
+-- deploy code that WRITES both old and new, READS old
+
+-- STEP 2 — MIGRATE.  Backfill in batches so you do not lock the table.
+UPDATE transactions SET reference = ... WHERE reference IS NULL AND id BETWEEN ? AND ?;
+-- deploy code that READS new
+
+-- STEP 3 — CONTRACT.  Only once nothing reads the old shape.
+ALTER TABLE transactions ALTER COLUMN reference SET NOT NULL;
+ALTER TABLE transactions DROP COLUMN old_column;</code></pre>
+
+  <p><code>ddl-auto</code> stays on <code>validate</code> throughout. That is the guard that catches a
+  forgotten migration <i>at startup in the pipeline</i>, rather than as a
+  <code>column does not exist</code> error at two in the morning.</p>
+
+  <div class="warn"><p>
+    <b>Never edit a migration that has already run.</b> Flyway stores a checksum of every applied file
+    and will refuse to start if one changes — which is the feature working, not a bug. You correct a
+    mistake by adding a new migration, always.
+  </p></div>
+
+  <div class="say"><p><b>The architect's line.</b> "Schema changes are expand, migrate, contract,
+  because during a rolling deploy two versions of the code share one database. Migrations own the
+  schema and the ORM only validates it."</p></div>
+</div>
+
+<div class="scen" id="sc15">
+  <p class="sc-n">SCENARIO 15</p>
+  <h4>"A transfer debited Alice and never credited Bob."</h4>
+
+  <p>This one is here to mark a boundary. <b>No setting in any of the three files fixes it.</b> The
+  debit and the credit are two HTTP calls against two databases with nothing making them atomic, and a
+  crash between them leaves money missing. That is a design problem.</p>
+
+  <div class="files"><span class="ft ft--sql">V8__outbox.sql</span><span class="ft ft--pom">pom.xml</span><span class="ft ft--java">Java</span></div>
+
+  <p>The shape of the answer is the <b>transactional outbox</b>: write the ledger row and an
+  <code>outbox</code> row in the <i>same</i> local database transaction, so either both exist or
+  neither does, and have a separate relay publish the outbox row afterwards. The transfer becomes a
+  saga with an explicit compensating entry rather than a distributed transaction, and the consumer must
+  be idempotent because the relay will occasionally deliver twice.</p>
+
+  <div class="say"><p><b>The architect's line.</b> "Configuration tunes a system; it cannot make it
+  correct. Atomicity across two services is a design decision — an outbox with an idempotent consumer,
+  or a saga with an explicit compensation — and I would not try to solve it with a transaction
+  manager."</p></div>
+</div>
+
+<h3>Build and cost</h3>
+
+<div class="scen" id="sc16">
+  <p class="sc-n">SCENARIO 16</p>
+  <h4>"Every commit downloads the whole internet. CI takes nine minutes."</h4>
+
+  <div class="files"><span class="ft ft--dock">Dockerfile</span><span class="ft ft--pom">pom.xml</span></div>
+
+<pre><code>FROM maven:3.9-eclipse-temurin-25 AS build
+WORKDIR /build
+COPY pom.xml .                                  # ① changes rarely
+RUN mvn -B -q dependency:go-offline             # ② this layer is now cached
+COPY src/ src/                                  # ③ changes constantly
+RUN mvn -B -q clean package -DskipTests</code></pre>
+
+  <p><b>The rule.</b> Docker caches each instruction as a layer and invalidates every layer after the
+  first one that changed. Copy slow-changing files before fast-changing ones and a code-only commit
+  reuses the dependency layer instead of re-resolving it. Reverse those two COPY lines and every
+  one-character change re-downloads everything.</p>
+
+  <p><b>And pin your versions.</b> <code>:latest</code> means the image you tested is not necessarily
+  the image you shipped, which breaks reproducibility and is a live supply-chain risk. Pin the base
+  image by tag or digest, and pin dependency versions through a BOM in
+  <code>&lt;dependencyManagement&gt;</code> rather than scattering them.</p>
+
+  <div class="say"><p><b>The architect's line.</b> "Build layers are ordered by rate of change, and
+  every input is pinned. A build that is not reproducible is not auditable, and in a regulated
+  environment that is the part that fails the review."</p></div>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s9"><span class="num">PART NINE</span>The configuration reference card</h2>
+<p><a class="back" href="#toc">&uarr; contents</a></p>
+
+<p>
+  One table, for revision. Every setting you have met, which file owns it, what it actually controls,
+  and what a production value looks like. If you can talk through this table you can talk through most
+  of a platform interview.
+</p>
+
+<h3>Where every setting lives</h3>
+
+<div class="tw"><table class="reftbl">
+  <colgroup><col style="width:29%"><col style="width:17%"><col style="width:28%"><col style="width:26%"></colgroup>
+  <thead><tr><th>Setting</th><th>File</th><th>Controls</th><th>Production value</th></tr></thead>
+  <tbody>
+    <tr><td><code>ddl-auto</code></td><td><span class="ft ft--yml">application.yml</span></td><td>Hibernate's permission to change the schema</td><td><code>validate</code> — always</td></tr>
+    <tr><td><code>open-in-view</code></td><td><span class="ft ft--yml">application.yml</span></td><td>How long a DB connection is held per request</td><td><code>false</code></td></tr>
+    <tr><td><code>flyway.enabled</code></td><td><span class="ft ft--yml">application.yml</span></td><td>Whether migrations run at startup</td><td><code>true</code></td></tr>
+    <tr><td><code>hikari.maximum-pool-size</code></td><td><span class="ft ft--yml">application.yml</span> + <span class="ft ft--comp">env</span></td><td>Concurrent DB work per instance</td><td>Little's Law, checked against <code>max_connections</code></td></tr>
+    <tr><td><code>hikari.connection-timeout</code></td><td><span class="ft ft--yml">application.yml</span></td><td>Wait for a free connection, then fail</td><td><code>2000</code> ms — fail fast</td></tr>
+    <tr><td><code>server.tomcat.threads.max</code></td><td><span class="ft ft--yml">application.yml</span></td><td>Concurrent in-flight HTTP requests</td><td><code>200</code>, with downstream timeouts</td></tr>
+    <tr><td><code>server.tomcat.accept-count</code></td><td><span class="ft ft--yml">application.yml</span></td><td>OS queue depth before refusing connections</td><td><code>100</code> — bounded, sheds load</td></tr>
+    <tr><td><code>server.shutdown</code></td><td><span class="ft ft--yml">application.yml</span></td><td>Drain in-flight requests before exit</td><td><code>graceful</code></td></tr>
+    <tr><td><code>lifecycle.timeout-per-shutdown-phase</code></td><td><span class="ft ft--yml">application.yml</span></td><td>How long the app drains</td><td><code>25s</code></td></tr>
+    <tr><td><code>stop_grace_period</code></td><td><span class="ft ft--comp">compose.yml</span></td><td>How long the orchestrator waits before SIGKILL</td><td><b>longer</b> than the drain window</td></tr>
+    <tr><td><code>management.endpoints.web.exposure.include</code></td><td><span class="ft ft--yml">application.yml</span></td><td>Which actuator endpoints exist</td><td><code>health,info,prometheus</code> — never <code>*</code></td></tr>
+    <tr><td><code>management.server.port</code></td><td><span class="ft ft--yml">application.yml</span></td><td>Separates ops traffic from business traffic</td><td><code>9090</code>, not published</td></tr>
+    <tr><td><code>management.endpoint.health.probes.enabled</code></td><td><span class="ft ft--yml">application.yml</span></td><td>Splits liveness from readiness</td><td><code>true</code>; DB in readiness only</td></tr>
+    <tr><td><code>management.tracing.sampling.probability</code></td><td><span class="ft ft--yml">application.yml</span> + <span class="ft ft--comp">env</span></td><td>Fraction of requests traced</td><td><code>0.1</code>, or tail-based keeping all errors</td></tr>
+    <tr><td><code>logging.structured.format.console</code></td><td><span class="ft ft--yml">application.yml</span></td><td>JSON log output instead of prose</td><td><code>ecs</code></td></tr>
+    <tr><td><code>healthcheck.start_period</code></td><td><span class="ft ft--comp">compose.yml</span></td><td>Grace window for JVM startup</td><td><code>45s</code></td></tr>
+    <tr><td><code>deploy.resources.limits.memory</code></td><td><span class="ft ft--comp">compose.yml</span></td><td>Hard cgroup ceiling; exceed it and you are killed</td><td>~1.4× the heap</td></tr>
+    <tr><td><code>JAVA_TOOL_OPTIONS / MaxRAMPercentage</code></td><td><span class="ft ft--comp">compose.yml</span></td><td>Heap as a share of the container limit</td><td><code>70</code></td></tr>
+    <tr><td><code>logging.options.max-size</code></td><td><span class="ft ft--comp">compose.yml</span></td><td>Log rotation; protects the host disk</td><td><code>10m</code> × 3 files</td></tr>
+    <tr><td><code>read_only / cap_drop / user</code></td><td><span class="ft ft--comp">compose.yml</span></td><td>Container hardening</td><td>on / <code>ALL</code> / non-root</td></tr>
+    <tr><td>starters and libraries</td><td><span class="ft ft--pom">pom.xml</span></td><td>What the application is capable of at all</td><td>needs a build and a deploy to change</td></tr>
+    <tr><td><code>&lt;layers&gt;</code> in the boot plugin</td><td><span class="ft ft--pom">pom.xml</span></td><td>Image layering by rate of change</td><td><code>enabled</code></td></tr>
+    <tr><td>table and column shape</td><td><span class="ft ft--sql">V__*.sql</span></td><td>The schema itself</td><td>expand → migrate → contract</td></tr>
+    <tr><td>atomicity, ordering, idempotency</td><td><span class="ft ft--java">Java</span></td><td>Correctness</td><td>no configuration will do this for you</td></tr>
+  </tbody>
+</table></div>
+
+<h3>Capability, default, value — the same idea three times</h3>
+
+<p>
+  Every scenario in Part Eight is one of these three shapes. Recognising which shape you are in tells
+  you which file to open before you have thought about the problem at all.
+</p>
+
+<div class="tw"><table>
+  <thead><tr><th>Shape</th><th>Example</th><th>File</th><th>How fast can you fix it?</th></tr></thead>
+  <tbody>
+    <tr><td><b>Add a capability</b></td><td>Start emitting traces</td><td><span class="ft ft--pom">pom.xml</span></td><td>Build, test, image, deploy</td></tr>
+    <tr><td><b>Shape a behaviour</b></td><td>Release the connection early</td><td><span class="ft ft--yml">application.yml</span></td><td>Build — unless you left a <code>${VAR}</code></td></tr>
+    <tr><td><b>Set a value here</b></td><td>Pool of 20 in production, 5 in dev</td><td><span class="ft ft--comp">compose.yml</span></td><td>Restart the container</td></tr>
+  </tbody>
+</table></div>
+
+<div class="takeaway">
+  <div class="lbl">Say this out loud</div>
+  <p>"Anything I might need to change during an incident should be a variable, not a constant in the jar. The cost of that decision is paid once, at design time; the benefit is paid every time something goes wrong at 3am."</p>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s10"><span class="num">PART TEN</span>What an architect is expected to know</h2>
+<p><a class="back" href="#toc">↑ contents</a></p>
+
+<p>
+  You are not interviewing to operate this. You are interviewing to <b>reason about it</b> — to say
+  what a choice costs and what it buys. Here is the honest split.
+</p>
+
+<div class="tw"><table>
+  <thead><tr><th>Topic</th><th>Depth</th><th>What "enough" sounds like</th></tr></thead>
+  <tbody>
+    <tr><td>Image vs container</td><td><span class="pill pill--cold">Cold</span></td><td>Template versus running instance. Many containers from one image.</td></tr>
+    <tr><td>Why containers exist</td><td><span class="pill pill--cold">Cold</span></td><td>Standard unit of deployment; the host stops caring what's inside.</td></tr>
+    <tr><td>Multi-stage build</td><td><span class="pill pill--cold">Cold</span></td><td>Build with JDK and Maven, ship with a JRE and the jar. Smaller image, no compiler or source in production.</td></tr>
+    <tr><td>Config from environment</td><td><span class="pill pill--cold">Cold</span></td><td>One artifact promoted across environments; settings injected, never baked in.</td></tr>
+    <tr><td>Health checks &amp; startup order</td><td><span class="pill pill--cold">Cold</span></td><td>Readiness gates traffic; dependencies start in order; same idea as K8s probes.</td></tr>
+    <tr><td>Service discovery by name</td><td><span class="pill pill--cold">Cold</span></td><td>Inside the network, address by name, not IP or localhost.</td></tr>
+    <tr><td>Schema ownership</td><td><span class="pill pill--cold">Cold</span></td><td>Migrations own the schema; the ORM validates. Never <code>update</code>.</td></tr>
+    <tr><td>Connection pools</td><td><span class="pill pill--cold">Cold</span></td><td>Small and shared. Anything holding one longer than necessary is a scaling limit.</td></tr>
+    <tr><td>Layer caching</td><td><span class="pill pill--rough">Roughly</span></td><td>Copy slow-changing files before fast-changing ones so dependency layers stay cached.</td></tr>
+    <tr><td>Non-root containers</td><td><span class="pill pill--rough">Roughly</span></td><td>Default is root; drop to an unprivileged user. Baseline hardening.</td></tr>
+    <tr><td>Volumes &amp; persistence</td><td><span class="pill pill--rough">Roughly</span></td><td>Container filesystems are disposable; state needs a volume or an external store.</td></tr>
+    <tr><td>Exact Dockerfile syntax</td><td><span class="pill pill--skip">Look it up</span></td><td>Nobody is testing whether you remember <code>ENTRYPOINT</code> versus <code>CMD</code> under pressure.</td></tr>
+    <tr><td>Docker networking internals</td><td><span class="pill pill--skip">Look it up</span></td><td>Bridge drivers and iptables rules are an operator's problem.</td></tr>
+    <tr><td>Registry and image signing</td><td><span class="pill pill--skip">Look it up</span></td><td>Worth knowing it exists. Detail only if the role is platform engineering.</td></tr>
+  </tbody>
+</table></div>
+
+<div class="note"><p>
+  <b>The pattern worth noticing:</b> everything in the "cold" list is a <i>trade-off or a boundary</i>.
+  Everything in the "look it up" list is <i>syntax or internals</i>. That split is roughly what
+  separates an architecture interview from an engineering one.
+</p></div>
+
+<!-- ============================================================ -->
+<h2 id="s11"><span class="num">PART ELEVEN</span>The whole thing in six sentences</h2>
+<p><a class="back" href="#toc">↑ contents</a></p>
+
+<ol>
+  <li>A container is a standard box holding an application and everything it needs, so the host doesn't have to care what's inside.</li>
+  <li>An image is the frozen template; a container is a running instance of it — class and object.</li>
+  <li>Inside a container, <code>localhost</code> means that container, so services address each other by service name and published ports exist only for outside traffic.</li>
+  <li>Configuration arrives from the environment at startup, so one image promotes unchanged from laptop to production.</li>
+  <li>Migrations own the database schema and the ORM only validates it, because a schema that changes as a side effect is a schema nobody controls.</li>
+  <li>Connections are a small shared pool, so anything that holds one longer than it needs is a limit on how many people you can serve.</li>
+  <li><code>pom.xml</code> decides what the application can do, <code>application.yml</code> decides what it does by default, and the environment decides what it does here — and that ordering is also the ordering of how long each fix takes.</li>
+</ol>
+
+<!-- ============================================================ -->
+<h2 id="s12"><span class="num">REFERENCES</span>Where to read further</h2>
+<p><a class="back" href="#toc">&uarr; contents</a></p>
+
+<p>
+  Official sources only. Property names and defaults in this note were checked against these pages on
+  <b>21 September 2026</b> for Spring Boot 4.1. Two things worth knowing changed recently, so be
+  careful with older blog posts: <code>server.shutdown</code> now defaults to <code>graceful</code>
+  (it defaulted to <code>immediate</code> in Boot 3), and the OTLP tracing properties moved from
+  <code>management.otlp.tracing.*</code> to <code>management.opentelemetry.tracing.export.otlp.*</code>.
+</p>
+
+<h3>Configuration and the three files</h3>
+<ul class="refs">
+  <li><a href="https://docs.spring.io/spring-boot/reference/features/external-config.html">Spring Boot — Externalized Configuration</a> — the full precedence order and the relaxed-binding rules for environment variables. <span class="rw">Read this one properly; it is Part Four in primary-source form.</span></li>
+  <li><a href="https://12factor.net/config">The Twelve-Factor App — Config</a> — the principle behind "one artifact, config from the environment". <span class="rw">Short, and quotable in an interview.</span></li>
+  <li><a href="https://docs.docker.com/reference/compose-file/">Docker — Compose file reference</a> — every key available in compose.yml, including <code>healthcheck</code>, <code>deploy.resources</code>, <code>secrets</code> and <code>stop_grace_period</code>.</li>
+  <li><a href="https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html">Maven — Dependency mechanism</a> — scopes, transitivity and <code>dependencyManagement</code>, which is how you pin versions in one place.</li>
+</ul>
+
+<h3>Performance and capacity</h3>
+<ul class="refs">
+  <li><a href="https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing">HikariCP — About Pool Sizing</a> — the canonical argument that small pools outperform large ones. <span class="rw">Scenario 1 in one page.</span></li>
+  <li><a href="https://docs.spring.io/spring-boot/reference/data/sql.html">Spring Boot — SQL databases</a> — datasource, pool and JPA configuration, including <code>open-in-view</code>.</li>
+  <li><a href="https://www.postgresql.org/docs/current/runtime-config-connection.html">PostgreSQL — Connection settings</a> — <code>max_connections</code> and what it actually costs the server.</li>
+  <li><a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/rds-proxy.html">AWS — RDS Proxy</a> — the answer when instances × pool exceeds the database ceiling.</li>
+</ul>
+
+<h3>Resilience</h3>
+<ul class="refs">
+  <li><a href="https://docs.spring.io/spring-boot/reference/web/graceful-shutdown.html">Spring Boot — Graceful shutdown</a> — <code>server.shutdown</code> and <code>spring.lifecycle.timeout-per-shutdown-phase</code>.</li>
+  <li><a href="https://resilience4j.readme.io/docs/circuitbreaker">Resilience4j — CircuitBreaker</a> — sliding windows, half-open state and why the breaker wraps the retry.</li>
+  <li><a href="https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/">AWS Builders' Library — Timeouts, retries and backoff with jitter</a> — <span class="rw">the single best thing to read on scenario 5. Written by the people who had to learn it the expensive way.</span></li>
+  <li><a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/">Kubernetes — Liveness, readiness and startup probes</a> — the same distinction as scenario 7, one layer up.</li>
+</ul>
+
+<h3>Observability</h3>
+<ul class="refs">
+  <li><a href="https://docs.spring.io/spring-boot/reference/actuator/metrics.html">Spring Boot — Metrics</a> — Micrometer registries, the Prometheus endpoint and common tags.</li>
+  <li><a href="https://docs.spring.io/spring-boot/reference/actuator/tracing.html">Spring Boot — Tracing</a> — the OpenTelemetry starter, sampling and OTLP export properties.</li>
+  <li><a href="https://docs.spring.io/spring-boot/reference/features/logging.html">Spring Boot — Logging</a> — structured logging formats (<code>ecs</code>, <code>gelf</code>, <code>logstash</code>) and MDC.</li>
+  <li><a href="https://opentelemetry.io/docs/concepts/sampling/">OpenTelemetry — Sampling</a> — head-based versus tail-based, which is the trade-off in scenario 8.</li>
+  <li><a href="https://sre.google/sre-book/monitoring-distributed-systems/">Google SRE Book — Monitoring distributed systems</a> — <span class="rw">the four golden signals, and the argument for alerting on symptoms rather than causes.</span></li>
+</ul>
+
+<h3>Security and secrets</h3>
+<ul class="refs">
+  <li><a href="https://docs.spring.io/spring-boot/reference/actuator/endpoints.html">Spring Boot — Actuator endpoints</a> — what each endpoint exposes. Read what <code>env</code> and <code>heapdump</code> return before you ever expose them.</li>
+  <li><a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data.html">AWS — Passing sensitive data to an ECS container</a> — Secrets Manager and Parameter Store injection at task start.</li>
+  <li><a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.html">AWS — IAM database authentication for RDS</a> — the version of scenario 12 with no password at all.</li>
+  <li><a href="https://docs.docker.com/build/building/best-practices/">Docker — Building best practices</a> — layer ordering, non-root users and minimal base images.</li>
+</ul>
+
+<h3>Data and correctness</h3>
+<ul class="refs">
+  <li><a href="https://documentation.red-gate.com/flyway">Flyway documentation</a> — naming, checksums, repeatable migrations and why an applied migration is immutable.</li>
+  <li><a href="https://microservices.io/patterns/data/transactional-outbox.html">Transactional outbox pattern</a> — the shape of the answer in scenario 15.</li>
+  <li><a href="https://microservices.io/patterns/data/saga.html">Saga pattern</a> — compensation instead of distributed transactions.</li>
+  <li><a href="https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html">AWS Well-Architected — Reliability pillar</a> — the vocabulary interviewers expect for availability, RTO and RPO.</li>
+</ul>
+
+<div class="note"><p>
+  <b>How to use this list.</b> Do not read it top to bottom. Pick the scenario that came up in your
+  last interview and read the two links attached to it. The pages marked in italics are the ones worth
+  reading in full; the rest are there so you can check a property name rather than guess at one.
+</p></div>
+
+<p class="foot">PayFlow · written 21 Sep 2026 · property names verified against Spring Boot 4.1 official documentation, 21 Sep 2026 · pair with the PayFlow Runbook for the commands</p>
+
+</div>

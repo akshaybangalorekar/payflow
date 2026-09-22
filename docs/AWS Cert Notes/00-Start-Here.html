@@ -1,0 +1,1316 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AWS for Interviews · Book 00 · Start here</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f6f7; --surface:#ffffff; --surface-2:#eceff1;
+    --line:#dde2e5; --line-strong:#c3ccd1;
+    --ink:#12181c; --ink-2:#5a666e; --ink-3:#85939c;
+    --accent:#0f6466; --accent-ink:#0b4f51; --accent-soft:rgba(15,100,102,.09);
+    --flag:#8f5400; --flag-soft:rgba(143,84,0,.10);
+    --good:#2c6b38; --good-soft:rgba(44,107,56,.10);
+    --f-display:'Bricolage Grotesque','Archivo',system-ui,sans-serif;
+    --f-body:'Archivo',system-ui,-apple-system,sans-serif;
+    --f-mono:'IBM Plex Mono','SF Mono',Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+    --bg:#0e1316; --surface:#161d21; --surface-2:#1d262b;
+    --line:#27333a; --line-strong:#3a4950;
+    --ink:#e7edf0; --ink-2:#9aa8b1; --ink-3:#74838d;
+    --accent:#57b6ae; --accent-ink:#8ad3cb; --accent-soft:rgba(87,182,174,.12);
+    --flag:#d9a03f; --flag-soft:rgba(217,160,63,.13);
+    --good:#6cbd7c; --good-soft:rgba(108,189,124,.13);
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0e1316; --surface:#161d21; --surface-2:#1d262b;
+    --line:#27333a; --line-strong:#3a4950;
+    --ink:#e7edf0; --ink-2:#9aa8b1; --ink-3:#74838d;
+    --accent:#57b6ae; --accent-ink:#8ad3cb; --accent-soft:rgba(87,182,174,.12);
+    --flag:#d9a03f; --flag-soft:rgba(217,160,63,.13);
+    --good:#6cbd7c; --good-soft:rgba(108,189,124,.13);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15.5px;line-height:1.65;margin:0;}
+  .page{max-width:960px;margin:0 auto;padding-inline:20px;padding-block:20px 80px;}
+  a{color:var(--accent-ink);text-decoration-thickness:1px;text-underline-offset:2px;}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;}
+
+  /* ---- book nav ---- */
+  .bnav{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 30px;padding:9px 10px;
+    background:var(--surface);border:1px solid var(--line);border-radius:6px;
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.02em;}
+  .bnav a,.bnav span{padding:5px 9px;border-radius:4px;text-decoration:none;white-space:nowrap;}
+  .bnav a{color:var(--ink-2);}
+  .bnav a:hover{background:var(--accent-soft);color:var(--accent-ink);}
+  .bnav .on{background:var(--accent);color:#fff;font-weight:600;}
+  .bnav .soon{color:var(--ink-3);opacity:.55;}
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .bnav .on{color:#08211f;} }
+
+  .eyebrow{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 10px;}
+  h1{font-family:var(--f-display);font-weight:800;font-size:clamp(30px,5.2vw,46px);line-height:1.05;
+    letter-spacing:-.025em;margin:0 0 14px;text-wrap:balance;}
+  .standfirst{font-size:17px;color:var(--ink-2);margin:0 0 8px;max-width:70ch;}
+  .standfirst b{color:var(--ink);font-weight:600;}
+  h2{font-family:var(--f-display);font-weight:600;font-size:26px;letter-spacing:-.02em;
+    margin:54px 0 4px;text-wrap:balance;scroll-margin-top:16px;}
+  h2 .num{font-family:var(--f-mono);font-size:12.5px;font-weight:600;color:var(--accent);
+    display:block;letter-spacing:.12em;margin-bottom:6px;}
+  h3{font-family:var(--f-display);font-weight:600;font-size:19px;letter-spacing:-.012em;margin:32px 0 6px;}
+  h4{font-family:var(--f-display);font-weight:600;font-size:16.5px;margin:22px 0 4px;}
+  p{margin:0 0 14px;max-width:72ch;}
+  b,strong{font-weight:600;}
+  ul,ol{margin:0 0 14px;padding-left:22px;max-width:72ch;}
+  li{margin-bottom:7px;}
+  code{font-family:var(--f-mono);font-size:.88em;background:var(--surface-2);
+    padding:1px 5px;border-radius:3px;color:var(--accent-ink);}
+  pre{font-family:var(--f-mono);font-size:12.3px;line-height:1.55;background:var(--surface);
+    border:1px solid var(--line);border-radius:5px;padding:18px 20px;overflow-x:auto;margin:0 0 8px;}
+  pre code{background:none;padding:0;color:inherit;font-size:inherit;}
+  .cap{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);margin:0 0 26px;letter-spacing:.04em;}
+  .note{border-left:3px solid var(--accent);background:var(--accent-soft);
+    padding:14px 18px;border-radius:0 5px 5px 0;margin:0 0 18px;}
+  .warn{border-left:3px solid var(--flag);background:var(--flag-soft);
+    padding:14px 18px;border-radius:0 5px 5px 0;margin:0 0 18px;}
+  .note p,.warn p{margin:0;max-width:none;}
+  .note p + p,.warn p + p{margin-top:10px;}
+  .say{border-left:3px solid var(--good);background:var(--good-soft);
+    padding:13px 17px;border-radius:0 5px 5px 0;margin:16px 0 18px;}
+  .say p{margin:0;font-size:14.5px;max-width:none;}
+  .say p + p{margin-top:9px;}
+  .keyq{border:1px solid var(--line-strong);background:var(--surface);border-radius:5px;padding:16px 20px;margin:20px 0;}
+  .keyq .hd{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-3);margin:0 0 8px;}
+  .keyq p{margin:0 0 10px;font-size:15px;max-width:none;}
+  .keyq p:last-child{margin:0;}
+  .tw{overflow-x:auto;border:1px solid var(--line);border-radius:5px;background:var(--surface);margin:0 0 20px;}
+  table{border-collapse:collapse;width:100%;}
+  th{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-3);text-align:left;padding:11px 15px;border-bottom:1px solid var(--line-strong);}
+  td{padding:11px 15px;border-bottom:1px solid var(--line);font-size:13.6px;vertical-align:top;line-height:1.55;}
+  tbody tr:last-child td{border-bottom:none;}
+  td.sw{color:var(--ink-2);border-left:2px solid var(--accent-soft);}
+  td.sw b{color:var(--accent-ink);}
+  td.brief{font-size:13px;color:var(--ink-2);background:var(--surface-2);}
+  .toc{background:var(--surface);border:1px solid var(--line);border-radius:5px;padding:22px 24px;margin:30px 0 8px;}
+  .toc .hd{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-3);margin:0 0 16px;}
+  .toc ol{list-style:none;margin:0;padding:0;counter-reset:toc;display:flex;flex-direction:column;gap:13px;max-width:none;}
+  .toc li{counter-increment:toc;display:grid;grid-template-columns:30px 1fr;gap:10px;margin:0;}
+  .toc li::before{content:counter(toc,decimal-leading-zero);font-family:var(--f-mono);
+    font-size:11px;font-weight:600;color:var(--accent);padding-top:4px;}
+  .toc .t{grid-column:2;font-weight:600;font-size:15px;display:block;text-decoration:none;}
+  .toc .t:hover{text-decoration:underline;}
+  .toc .p{grid-column:2;color:var(--ink-2);font-size:13.5px;display:block;line-height:1.5;}
+  .top{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;margin:0 0 18px;}
+  .top a{color:var(--ink-3);text-decoration:none;}
+  .top a:hover{color:var(--accent);}
+  .xb{display:inline-block;font-family:var(--f-mono);font-size:11.5px;font-weight:600;
+    background:var(--accent-soft);color:var(--accent-ink);padding:2px 7px;border-radius:3px;
+    text-decoration:none;white-space:nowrap;}
+  .xb:hover{background:var(--accent);color:#fff;}
+  .gt{border-bottom:1px dotted var(--ink-3);text-decoration:none;cursor:help;}
+  .steps{margin:0 0 22px;}
+  .step{display:grid;grid-template-columns:30px 1fr;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);}
+  .step:last-child{border-bottom:none;}
+  .step .n{font-family:var(--f-mono);font-size:12px;font-weight:600;color:#fff;background:var(--accent);
+    width:23px;height:23px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-top:2px;}
+  .step .where{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:3px;}
+  .step p{margin:0;font-size:14px;max-width:none;}
+  .step .risk{color:var(--flag);font-size:13.4px;margin-top:5px;display:block;}
+  .ex{border:1px solid var(--line);border-left:3px solid var(--good);background:var(--surface);
+    border-radius:0 5px 5px 0;padding:16px 20px;margin:0 0 16px;}
+  .ex h4{margin:0 0 6px;font-size:16.5px;}
+  .ex .meta{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--good);margin-bottom:9px;}
+  .ex p{margin:0 0 9px;font-size:14px;max-width:none;}
+  .ex p:last-child{margin:0;}
+  .qa{border:1px solid var(--line-strong);border-radius:5px;background:var(--surface);
+    padding:16px 20px;margin:0 0 14px;}
+  .qa .q{font-family:var(--f-display);font-weight:600;font-size:16px;margin:0 0 9px;}
+  .qa p{font-size:14px;margin:0 0 9px;max-width:none;}
+  .qa p:last-child{margin:0;}
+  table.gl td:first-child{width:22%;color:var(--ink);}
+  table.svc{min-width:700px;table-layout:fixed;}
+  table.svc th:nth-child(1),table.svc td:nth-child(1){width:14%;}
+  table.svc th:nth-child(2),table.svc td:nth-child(2){width:33%;}
+  table.svc th:nth-child(3),table.svc td:nth-child(3){width:24%;}
+  table.svc th:nth-child(4),table.svc td:nth-child(4){width:29%;}
+  table.svc td{font-size:13px;line-height:1.55;}
+  table.to td:first-child{width:24%;white-space:nowrap;}
+  table.to td{font-size:13.5px;}
+  .q2{font-weight:400;color:var(--ink-3);font-size:11.5px;display:block;}
+  .step.ret .n{background:var(--good);}
+  table.gl tr:target td{background:var(--accent-soft);}
+  ul.refs{list-style:none;padding-left:0;}
+  ul.refs li{margin-bottom:10px;padding-left:16px;position:relative;font-size:14.5px;}
+  ul.refs li::before{content:"\2197";position:absolute;left:0;color:var(--ink-3);
+    font-family:var(--f-mono);font-size:12px;}
+  .rw{font-style:italic;color:var(--ink-2);}
+  .foot{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);
+    font-family:var(--f-mono);font-size:12px;color:var(--ink-3);}
+  /* ---- figures: hand-authored inline SVG, themed by these variables ---- */
+  figure.fig{margin:0 0 26px;background:var(--surface);border:1px solid var(--line);
+    border-radius:6px;padding:20px 20px 14px;overflow-x:auto;}
+  figure.fig svg{display:block;width:100%;height:auto;}
+  figure.fig figcaption{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);
+    margin-top:16px;letter-spacing:.04em;line-height:1.5;}
+  svg text{font-family:var(--f-body);}
+  svg .t-hd{font-family:var(--f-mono);font-size:9.5px;font-weight:600;letter-spacing:.11em;
+    text-transform:uppercase;fill:var(--ink-3);}
+  svg .t-lb{font-size:12.5px;font-weight:600;fill:var(--ink);}
+  svg .t-sm{font-size:11.5px;fill:var(--ink-2);}
+  svg .t-xs{font-size:10.5px;fill:var(--ink-3);}
+  svg .t-mn{font-family:var(--f-mono);font-size:10.5px;fill:var(--ink-2);}
+  svg .t-ac{font-size:11.5px;font-weight:600;fill:var(--accent);}
+  svg .t-fl{font-size:11.5px;font-weight:600;fill:var(--flag);}
+  svg .t-gd{font-size:11.5px;font-weight:600;fill:var(--good);}
+  svg .bx{fill:var(--surface);stroke:var(--line-strong);stroke-width:1.1;}
+  svg .bx2{fill:var(--surface-2);stroke:var(--line);stroke-width:1;}
+  svg .bx-ac{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.2;}
+  svg .bx-fl{fill:var(--flag-soft);stroke:var(--flag);stroke-width:1.2;}
+  svg .bx-gd{fill:var(--good-soft);stroke:var(--good);stroke-width:1.2;}
+  svg .lane{fill:none;stroke:var(--line);stroke-width:1;}
+  svg .zone{fill:none;stroke:var(--line-strong);stroke-width:1.2;stroke-dasharray:7 5;}
+  svg .ln{stroke:var(--line-strong);stroke-width:1.4;fill:none;}
+  svg .ln-ac{stroke:var(--accent);stroke-width:1.6;fill:none;}
+  svg .ln-fl{stroke:var(--flag);stroke-width:1.6;fill:none;}
+  svg .ln-gd{stroke:var(--good);stroke-width:1.6;fill:none;}
+  svg .ln-hair{stroke:var(--line);stroke-width:1;fill:none;}
+  svg .ln-d{stroke-dasharray:5 4;}
+  svg .mk{fill:var(--line-strong);} svg .mk-ac{fill:var(--accent);}
+  svg .mk-fl{fill:var(--flag);}    svg .mk-gd{fill:var(--good);}
+  svg .bdg{fill:var(--accent);stroke:none;}
+  svg .bdgt{font-family:var(--f-mono);font-size:9.5px;font-weight:600;fill:var(--bg);}
+  /* ---- calculation panel (figure 4) ---- */
+  .calc{background:var(--surface);border:1px solid var(--line);border-radius:6px;
+    padding:6px 22px 18px;margin:0 0 26px;}
+  .calc .blk{padding:16px 0;border-bottom:1px solid var(--line);}
+  .calc .blk:last-child{border-bottom:none;}
+  .calc .q{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 9px;}
+  .calc .m{font-family:var(--f-mono);font-size:12.5px;line-height:1.7;color:var(--ink);
+    margin:0 0 9px;white-space:pre-wrap;}
+  .calc .m .u{color:var(--ink-3);}
+  .calc .res{font-size:14px;font-weight:600;margin:0 0 8px;color:var(--ink);}
+  .calc .so{font-size:13.5px;color:var(--ink-2);margin:0;padding-left:16px;
+    border-left:2px solid var(--accent);}
+  .calc .so b{color:var(--accent-ink);}
+  @media (max-width:620px){ pre{font-size:10.6px;} .toc li{grid-template-columns:24px 1fr;} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+  @media print{ .bnav,.top{display:none;} body{background:#fff;} .page{max-width:none;} }
+</style>
+
+<div class="page">
+
+<nav class="bnav" aria-label="Book set">
+  <a href="index.html">AWS contents</a>
+  <span class="on">00 · Start here</span>
+  <a href="01-Service-Choices.html">01 · Service choices</a>
+  <a href="02-Landing-Zone.html">02 · Landing zone</a>
+  <span class="soon" title="not written yet">03 · Operate & prove</span>
+  <span class="soon" title="not written yet">90 · Say this</span>
+</nav>
+
+<p class="eyebrow">Book 00 · start here · read this before anything else</p>
+<h1>AWS for Interviews: the whole picture</h1>
+<p class="standfirst">
+  Sixteen services grouped into six jobs. A real-time API built end to end. Event-driven architecture
+  built twice &mdash; once for events arriving from outside your organisation, once for events from
+  inside &mdash; with the security at every hop. Ten trade-offs. <b>Three to four hours, start to
+  finish, and nothing assumes you have used any of it before.</b>
+</p>
+
+<div class="note"><p>
+  <b>What this book is, and what it is not.</b> It is a single, self-contained read. You do not need
+  another document open beside it, and you do not need to have done the exercises. Everything is
+  explained where it appears. Where a subject has more depth than an interview needs, there is a
+  pointer to the book that covers it &mdash; <b>you can safely ignore every one of those pointers on
+  the first read.</b>
+</p></div>
+
+<div class="note"><p>
+  <b>One term cleared up immediately, because it has been used at you without explanation.</b>
+  A <b>landing zone</b> is just the AWS setup that exists <i>before</i> any application does &mdash;
+  which AWS accounts you have, how their networks connect, and what rules stop people doing damage.
+  Think of it as the building, the wiring and the locks. The applications are the tenants who move in
+  later. <a href="#s6">Section 6</a> explains it properly in about ten minutes, and that is all you
+  need for an interview.
+</p></div>
+
+<div class="toc" id="toc">
+  <p class="hd">What's in this book &middot; everything below is clickable</p>
+  <ol>
+    <li><a class="t" href="#s1">Six jobs, sixteen services</a><span class="p">Every AWS system does six things. Learn the six jobs, then the two or three services that do each one. This is the whole vocabulary you need.</span></li>
+    <li><a class="t" href="#s2">A real-time API, built end to end</a><span class="p">What "real-time" actually means, where every millisecond goes, the full request path with security at each hop, and the capacity arithmetic.</span></li>
+    <li><a class="t" href="#s3">Event-driven architecture &mdash; events from <i>outside</i> your organisation</a><span class="p">A partner sends you events. The full design, the three different identities involved, and why you never hand a partner a Kafka client.</span></li>
+    <li><a class="t" href="#s4">Event-driven architecture &mdash; events from <i>inside</i> your organisation</a><span class="p">Your own services publishing to each other. The outbox pattern, topic authorization, private connectivity, and what goes wrong.</span></li>
+    <li><a class="t" href="#s5">Ten trade-offs, with what changes your mind</a><span class="p">The decisions that come up in nearly every interview, each in three lines.</span></li>
+    <li><a class="t" href="#s6">Landing zone, explained in ten minutes</a><span class="p">Accounts, networks and guardrails at the depth an interview actually needs. Enough to hold a conversation without bluffing.</span></li>
+    <li><a class="t" href="#s7">The job description, line by line</a><span class="p">Every AWS-related line from a real Solution Architect advert, with where it is covered and what to say.</span></li>
+    <li><a class="t" href="#s8">Every answer on one page</a><span class="p">The compressed versions, all together. For the morning of an interview, once the rest has landed.</span></li>
+    <li><a class="t" href="#sg">Glossary</a><span class="p">Every term used here, in ordinary language, with why it matters.</span></li>
+  </ol>
+</div>
+
+<!-- ==================================================================== -->
+<h2 id="s1"><span class="num">SECTION 1</span>Six jobs, sixteen services</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<p>
+  There are hundreds of AWS services. You need sixteen, and the way to hold them is not as a list but
+  as <b>six jobs that every system has to do</b>. Once you know the six jobs, any question becomes
+  "which job is this, and which of the two or three candidates fits?"
+</p>
+
+<figure class="fig">
+<svg viewBox="0 0 880 384" role="img" aria-label="Six jobs every AWS system does, and the services that do each one" style="min-width:620px">
+<defs><marker id="f1a" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker><marker id="f1b" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-ac"/></marker><marker id="f1c" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-fl"/></marker><marker id="f1d" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-gd"/></marker></defs><circle cx="20" cy="34" r="12" class="bdg"/><text x="20" y="37.4" class="bdgt" text-anchor="middle">1</text><text x="44" y="38.5" class="t-lb" text-anchor="start">LET TRAFFIC IN</text><rect x="272" y="21.5" width="135.474" height="26" rx="13" class="bx-ac"/><text x="339.737" y="38.1" class="t-ac" text-anchor="middle">CloudFront + WAF</text><rect x="415.474" y="21.5" width="103.978" height="26" rx="13" class="bx-ac"/><text x="467.463" y="38.1" class="t-ac" text-anchor="middle">API Gateway</text><rect x="527.452" y="21.5" width="50.003" height="26" rx="13" class="bx-ac"/><text x="552.453" y="38.1" class="t-ac" text-anchor="middle">ALB</text><line x1="0" y1="62" x2="880" y2="62" class="ln-hair"/><circle cx="20" cy="90" r="12" class="bdg"/><text x="20" y="93.4" class="bdgt" text-anchor="middle">2</text><text x="44" y="94.5" class="t-lb" text-anchor="start">RUN MY CODE</text><rect x="272" y="77.5" width="73.879" height="26" rx="13" class="bx-ac"/><text x="308.94" y="94.1" class="t-ac" text-anchor="middle">Lambda</text><rect x="353.879" y="77.5" width="100.295" height="26" rx="13" class="bx-ac"/><text x="404.026" y="94.1" class="t-ac" text-anchor="middle">ECS Fargate</text><line x1="0" y1="118" x2="880" y2="118" class="ln-hair"/><circle cx="20" cy="146" r="12" class="bdg"/><text x="20" y="149.4" class="bdgt" text-anchor="middle">3</text><text x="44" y="150.5" class="t-lb" text-anchor="start">STORE STATE</text><rect x="272" y="133.5" width="64.5445" height="26" rx="13" class="bx-ac"/><text x="304.272" y="150.1" class="t-ac" text-anchor="middle">Aurora</text><rect x="344.544" y="133.5" width="89.881" height="26" rx="13" class="bx-ac"/><text x="389.485" y="150.1" class="t-ac" text-anchor="middle">DynamoDB</text><rect x="442.425" y="133.5" width="98.39" height="26" rx="13" class="bx-ac"/><text x="491.62" y="150.1" class="t-ac" text-anchor="middle">ElastiCache</text><rect x="548.815" y="133.5" width="42.002" height="26" rx="13" class="bx-ac"/><text x="569.816" y="150.1" class="t-ac" text-anchor="middle">S3</text><line x1="0" y1="174" x2="880" y2="174" class="ln-hair"/><circle cx="20" cy="202" r="12" class="bdg"/><text x="20" y="205.4" class="bdgt" text-anchor="middle">4</text><text x="44" y="206.5" class="t-lb" text-anchor="start">MOVE EVENTS</text><rect x="272" y="189.5" width="50.003" height="26" rx="13" class="bx-ac"/><text x="297.002" y="206.1" class="t-ac" text-anchor="middle">SQS</text><rect x="330.003" y="189.5" width="50.003" height="26" rx="13" class="bx-ac"/><text x="355.005" y="206.1" class="t-ac" text-anchor="middle">SNS</text><rect x="388.006" y="189.5" width="98.39" height="26" rx="13" class="bx-ac"/><text x="437.201" y="206.1" class="t-ac" text-anchor="middle">EventBridge</text><rect x="494.396" y="189.5" width="120.424" height="26" rx="13" class="bx-ac"/><text x="554.608" y="206.1" class="t-ac" text-anchor="middle">Kinesis or MSK</text><line x1="0" y1="230" x2="880" y2="230" class="ln-hair"/><circle cx="20" cy="258" r="12" class="bdg"/><text x="20" y="261.4" class="bdgt" text-anchor="middle">5</text><text x="44" y="262.5" class="t-lb" text-anchor="start">PROVE WHO YOU ARE</text><rect x="272" y="245.5" width="50.384" height="26" rx="13" class="bx-ac"/><text x="297.192" y="262.1" class="t-ac" text-anchor="middle">IAM</text><rect x="330.384" y="245.5" width="71.593" height="26" rx="13" class="bx-ac"/><text x="366.18" y="262.1" class="t-ac" text-anchor="middle">Cognito</text><rect x="409.977" y="245.5" width="172.05" height="26" rx="13" class="bx-ac"/><text x="496.002" y="262.1" class="t-ac" text-anchor="middle">KMS + Secrets Manager</text><line x1="0" y1="286" x2="880" y2="286" class="ln-hair"/><circle cx="20" cy="314" r="12" class="bdg"/><text x="20" y="317.4" class="bdgt" text-anchor="middle">6</text><text x="44" y="318.5" class="t-lb" text-anchor="start">KNOW WHAT HAPPENED</text><rect x="272" y="301.5" width="97.374" height="26" rx="13" class="bx-ac"/><text x="320.687" y="318.1" class="t-ac" text-anchor="middle">CloudWatch</text><rect x="377.374" y="301.5" width="63.1475" height="26" rx="13" class="bx-ac"/><text x="408.948" y="318.1" class="t-ac" text-anchor="middle">X-Ray</text><line x1="0" y1="350" x2="880" y2="350" class="ln-hair"/><text x="0" y="374" class="t-xs" text-anchor="start">Everything else in AWS is a specialised version of one of these six.</text>
+</svg>
+<figcaption>figure 1 — the map. If you remember nothing else, remember the six jobs.</figcaption>
+</figure>
+
+<div class="note"><p>
+  <b>How to read the last column in the tables below.</b> "What you give up" means exactly that
+  &mdash; the thing you lose by choosing this service, and what that loss costs you in practice.
+  Every service in AWS is good at something and bad at something else, and <b>a candidate who names
+  a service without naming what it costs has said nothing.</b> The last column is the half most
+  people never learn.
+</p></div>
+
+<h3>Job 1 &mdash; Let traffic in</h3>
+
+<div class="tw"><table class="svc">
+  <thead><tr><th>Service</th><th>What it is, plainly</th><th>Use it when</th><th>What you give up</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><b>CloudFront<br>+ WAF</b></td>
+      <td>CloudFront is a network of servers around the world that sits in front of your system, so users connect to something close to them. WAF is a filter that sits on it and blocks obviously bad requests &mdash; known attack patterns, floods from one address, traffic from countries you don't serve.</td>
+      <td>Users are spread out geographically, or you want a filter and a single place to terminate encryption before traffic reaches your Region.</td>
+      <td class="sw">You add a caching layer, so you now have to decide how long each thing may be served stale. And WAF only inspects <i>traffic</i> &mdash; it can block a known attack pattern or a flood, but it cannot tell whether this particular user is allowed to see this particular record. <b>That check stays in your code, always.</b></td>
+    </tr>
+    <tr>
+      <td><b>API Gateway</b></td>
+      <td>A managed front door for APIs. It checks the caller's token, applies a rate limit per customer, validates the request shape, and only then passes it on.</td>
+      <td>The caller is <b>one you do not control</b> &mdash; a partner, a mobile app, the public.</td>
+      <td class="sw">One more stop on the way in, which adds a few milliseconds to every request. You also pay per request, so on a high-volume internal API the bill grows faster than you'd expect.</td>
+    </tr>
+    <tr>
+      <td><b>ALB</b><br><span class="q2">Application Load Balancer</span></td>
+      <td>Spreads incoming requests across your running containers, and routes by path or hostname.</td>
+      <td>The caller is <b>one you control</b> &mdash; another of your own services &mdash; or you already check the caller's identity yourself.</td>
+      <td class="sw">It only spreads traffic across your containers. It will not cap how fast a caller can hit you, will not check the request is well-formed, and has no per-customer keys. <b>If you need any of that, you write it yourself.</b></td>
+    </tr>
+  </tbody>
+</table></div>
+
+<div class="note">
+  <p><b>The three things API Gateway does that ALB does not.</b> They are named constantly and rarely explained.</p>
+  <p>
+    <b>Rate limiting</b> &mdash; a cap on how many requests one caller may send in a period, say 100
+    a second. Past the cap, further requests are refused with a "too many requests" response. It
+    protects you from a partner whose retry loop has gone wrong, and from one noisy customer
+    starving everyone else.
+  </p>
+  <p>
+    <b>API keys</b> &mdash; an identifier each caller sends with every request so you can tell them
+    apart, count their usage and bill them. <b>An API key is identification, not security.</b> It
+    says <i>which</i> customer this is; it does not prove they are who they claim, and it decides
+    nothing about what they may see. Proving identity is the token's job.
+  </p>
+  <p>
+    <b>Request validation</b> &mdash; checking the shape of the request before your code ever runs:
+    required fields present, numbers actually numbers, body not oversized. It means malformed input
+    is rejected at the door instead of becoming an exception somewhere deep in your service.
+  </p>
+</div>
+
+<div class="say"><p>
+  <b>The distinction to say out loud.</b> "API Gateway when the caller is one I don't control,
+  because I want throttling, token validation and request validation without writing them. ALB when
+  the caller is one of my own services, because I won't spend a hop and a per-request charge on
+  features I don't need."
+</p></div>
+
+<div class="warn"><p>
+  <b>Do not say "inside the network" when you mean "trusted".</b> ALB versus API Gateway
+  <b>is not about inside or outside the network &mdash; it is about whether you control the
+  caller.</b> An internal service can be compromised, misconfigured or simply buggy, and treating
+  the internal network as trusted is the assumption that turns one breach into a bad afternoon.
+  Choosing ALB means you have decided to enforce those controls somewhere else, not that you have
+  decided they are unnecessary.
+</p></div>
+
+<h3>Job 2 &mdash; Run my code</h3>
+
+<div class="tw"><table class="svc">
+  <thead><tr><th>Service</th><th>What it is, plainly</th><th>Use it when</th><th>What you give up</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><b>Lambda</b></td>
+      <td>You give AWS a function. It runs when something triggers it and costs nothing in between.</td>
+      <td>Nobody is waiting for the answer, <b>and</b> the work is idle most of the day. A nightly file arriving. An event needing enrichment.</td>
+      <td class="sw">After a quiet spell the first request waits while AWS starts a fresh copy of your code &mdash; for Java that is seconds, and a customer feels it. It also stops at 15 minutes, and nothing survives between calls, so a database connection is opened fresh every time instead of being reused.</td>
+    </tr>
+    <tr>
+      <td><b>ECS Fargate</b></td>
+      <td>You give AWS a container. It runs continuously. You never touch a server.</td>
+      <td>A long-running service with steady traffic and a latency target. <b>The default for a Spring Boot application, and the right answer far more often than it is given.</b></td>
+      <td class="sw">You pay for it even when it is doing nothing. And adding capacity is slow: from load rising to a new container actually serving traffic is <b>two to five minutes</b>, so a sudden spike hits you well before the extra capacity arrives.</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<p>
+  Two more you should be able to name without deep-diving: <b>EKS</b> is managed Kubernetes, correct
+  when the organisation already runs Kubernetes and expensive when it does not, because it needs a
+  platform team permanently. <b>EC2</b> is a plain virtual machine, correct when you need the operating
+  system itself, a GPU, or a software licence tied to a host.
+</p>
+
+<div class="say"><p>
+  <b>The distinction to say out loud.</b> "Two questions decide compute: <i>is anyone waiting for the
+  answer</i>, and <i>is it idle most of the day</i>. Lambda when nobody is waiting and it's mostly
+  idle. Fargate when a customer is waiting, because a cold start on a payment screen is a complaint,
+  not a trade-off."
+</p></div>
+
+<h3>Job 3 &mdash; Store state</h3>
+
+<div class="tw"><table class="svc">
+  <thead><tr><th>Service</th><th>What it is, plainly</th><th>Use it when</th><th>What you give up</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><b>Aurora<br>PostgreSQL</b></td>
+      <td>A normal relational database, run by AWS, with automatic backups and read-only copies. Tables, joins, transactions, SQL.</td>
+      <td>You need transactions across rows, referential integrity, or the ability to answer a question nobody has asked yet. <b>Every ledger starts here.</b></td>
+      <td class="sw">Only one machine accepts writes. You can add read-only copies to take more reading, but the only way to take more <i>writing</i> is a bigger machine &mdash; and eventually there is no bigger machine.</td>
+    </tr>
+    <tr>
+      <td><b>DynamoDB</b></td>
+      <td>A key-value store. You give it a key, it gives you back a record, in single-digit milliseconds, whether you have a thousand records or a billion.</td>
+      <td>You can write down <b>every</b> query today and in eighteen months. Idempotency keys, session state, feature lookups.</td>
+      <td class="sw">You shape the table around the questions you already know you'll ask. A question you didn't plan for is expensive: read the entire table, add a new index, or restructure the data. Reporting and ad-hoc analysis cannot run here at all.</td>
+    </tr>
+    <tr>
+      <td><b>ElastiCache</b></td>
+      <td>Memory you can share between your servers. Reading from it takes microseconds instead of milliseconds.</td>
+      <td>The same small piece of data is read far more often than it changes &mdash; a fraud score, a rate-limit counter, a session.</td>
+      <td class="sw">It can drop your data at any moment, so it can never be the only copy. Every item needs an expiry, every read needs code for "it wasn't there", and a value you forgot to clear turns up later as a customer seeing something wrong.</td>
+    </tr>
+    <tr>
+      <td><b>S3</b></td>
+      <td>Somewhere to put files. Cheap, effectively unlimited, and extremely durable.</td>
+      <td>Anything that is really a file &mdash; statements, settlement files, documents, backups, the raw layer of a data platform.</td>
+      <td class="sw">It holds whole files, not rows. You cannot change two files as a single all-or-nothing update, and answering "find me the records where X" needs a separate query tool sitting on top.</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<div class="warn"><p>
+  <b>The most common wrong answer in interviews.</b> Choosing DynamoDB because the volume sounds
+  large. <b>Volume is not the test &mdash; knowing every query is the test.</b> A ledger whose access
+  patterns are still being discovered belongs in Aurora at any volume, and you move the parts that
+  stabilise later.
+</p></div>
+
+<h3>Job 4 &mdash; Move events</h3>
+
+<p>
+  This family produces more bad answers than any other, because four services sound interchangeable
+  and are not. One question separates them: <b>does anyone need to read this again later?</b>
+</p>
+
+<div class="tw"><table class="svc">
+  <thead><tr><th>Service</th><th>What it is, plainly</th><th>Use it when</th><th>What you give up</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><b>SQS</b></td>
+      <td>A to-do list. A worker takes an item, does it, says done, and the item is deleted.</td>
+      <td>Work needs doing once, by one worker, and nobody needs the history. Retries and a failure queue come free.</td>
+      <td class="sw">Once a worker finishes an item it is deleted &mdash; no history to go back to, and no second reader can ever see it. Messages can also arrive out of order, unless you pick a FIFO queue, and even then order only holds within one group you nominate.</td>
+    </tr>
+    <tr>
+      <td><b>SNS</b></td>
+      <td>A megaphone. One message, delivered immediately to everyone subscribed.</td>
+      <td>Several systems all need to know the same thing right now, and one of them failing must not affect the others.</td>
+      <td class="sw">It stores nothing. A subscriber that happened to be restarting simply never received the message, and there is no way for it to ask again.</td>
+    </tr>
+    <tr>
+      <td><b>EventBridge</b></td>
+      <td>A sorting office. It looks <i>inside</i> the event and decides where it should go, based on rules you write.</td>
+      <td>Loosely-coupled services where the routing rule should live in the bus, not hard-coded in the producer.</td>
+      <td class="sw">It decides where an event goes and then forgets it. No history, no guaranteed order, and you pay for every event that passes through.</td>
+    </tr>
+    <tr>
+      <td><b>Kinesis</b><br>or <b>MSK</b></td>
+      <td>A diary. Every event is written down and kept for a set period &mdash; seven days, a year &mdash; and any number of readers go through it at their own pace, each with their own bookmark.</td>
+      <td>Anyone might need to read it again: a new consumer next year, a bug fix that needs reprocessing, an auditor. <b>MSK is Kafka</b>; Kinesis is the AWS-native equivalent.</td>
+      <td class="sw">Order only holds inside one lane, called a <i>partition</i>. So the field you route by decides two things at once: what stays in order, and how many consumers can work in parallel. It is hard to change later, and that decision is now yours.</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<figure class="fig">
+<svg viewBox="0 0 880 360" role="img" aria-label="Decision tree: whether anyone needs to re-read an event decides which AWS messaging service fits" style="min-width:640px">
+<defs><marker id="f2a" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker><marker id="f2b" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-ac"/></marker><marker id="f2c" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-fl"/></marker><marker id="f2d" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-gd"/></marker></defs><rect x="250" y="10" width="380" height="42" rx="6" class="bx-ac"/><text x="440" y="36" class="t-lb" text-anchor="middle">Does anyone need to read this again later?</text><path d="M 400 52 L 400 70 L 200 70 L 200 92" class="ln" marker-end="url(#f2a)"/><path d="M 480 52 L 480 70 L 680 70 L 680 92" class="ln-ac" marker-end="url(#f2b)"/><text x="292" y="64" class="t-hd" text-anchor="middle">NO</text><text x="588" y="64" class="t-hd" text-anchor="middle">YES</text><line x1="460" y1="100" x2="460" y2="292" class="ln-hair ln-d"/><text x="14" y="112" class="t-hd" text-anchor="start">NOBODY RE-READS IT</text><text x="14" y="155" class="t-sm" text-anchor="start">One consumer, done once</text><line x1="222" y1="151" x2="244" y2="151" class="ln" marker-end="url(#f2a)"/><rect x="252" y="138" width="50.003" height="26" rx="13" class="bx-ac"/><text x="277.002" y="154.6" class="t-ac" text-anchor="middle">SQS</text><text x="14" y="203" class="t-sm" text-anchor="start">Several, all right now</text><line x1="222" y1="199" x2="244" y2="199" class="ln" marker-end="url(#f2a)"/><rect x="252" y="186" width="182.083" height="26" rx="13" class="bx-ac"/><text x="343.041" y="202.6" class="t-ac" text-anchor="middle">SNS + an SQS queue each</text><text x="14" y="251" class="t-sm" text-anchor="start">Route on the event's content</text><line x1="222" y1="247" x2="244" y2="247" class="ln" marker-end="url(#f2a)"/><rect x="252" y="234" width="98.39" height="26" rx="13" class="bx-ac"/><text x="301.195" y="250.6" class="t-ac" text-anchor="middle">EventBridge</text><text x="488" y="112" class="t-hd" text-anchor="start">SOMEONE RE-READS IT</text><rect x="488" y="126" width="384" height="50" rx="5" class="bx2"/><text x="504" y="147" class="t-sm" text-anchor="start">Do you need Kafka specifically —</text><text x="504" y="164" class="t-sm" text-anchor="start">existing clients, connectors, tooling?</text><path d="M 580 176 L 580 200 L 552 200 L 552 218" class="ln" marker-end="url(#f2a)"/><path d="M 780 176 L 780 200 L 812 200 L 812 218" class="ln" marker-end="url(#f2a)"/><text x="616" y="196" class="t-xs" text-anchor="middle">no</text><text x="746" y="196" class="t-xs" text-anchor="middle">yes</text><rect x="516" y="222" width="71.593" height="26" rx="13" class="bx-ac"/><text x="551.797" y="238.6" class="t-ac" text-anchor="middle">Kinesis</text><rect x="786" y="222" width="53.686" height="26" rx="13" class="bx-ac"/><text x="812.843" y="238.6" class="t-ac" text-anchor="middle">MSK</text><rect x="0" y="296" width="880" height="56" rx="5" class="bx-fl"/><text x="18" y="320" class="t-fl" text-anchor="start">Is it actually a multi-step business process that can be undone?</text><text x="18" y="338" class="t-sm" text-anchor="start">Then it is Step Functions, and it was never a messaging problem at all.</text>
+</svg>
+<figcaption>figure 2 — start from "does anyone re-read this", not from the service names</figcaption>
+</figure>
+
+<div class="warn"><p>
+  <b>Say this and you will impress a panel.</b> "This doesn't need a log &mdash; one producer, one
+  consumer, no replay. SQS." <b>Being able to rule Kafka out is a stronger signal than knowing
+  Kafka</b>, because reaching for Kafka where SQS fits is the most common over-engineering mistake in
+  the industry.
+</p></div>
+
+<h3>Job 5 &mdash; Prove who you are</h3>
+
+<div class="tw"><table class="svc">
+  <thead><tr><th>Service</th><th>What it is, plainly</th><th>Use it when</th><th>What you give up</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><b>IAM</b></td>
+      <td>How <b>your software</b> proves what it is to AWS. A container is given a <i>role</i>, and credentials arrive automatically and expire automatically.</td>
+      <td>Always. This is how every piece of your software talks to every AWS service.</td>
+      <td class="sw">Nothing, used properly. One hard rule: <b>never put a long-lived access key in an application.</b> An access key is a password that never expires, and it is where most cloud breaches start.</td>
+    </tr>
+    <tr>
+      <td><b>Cognito</b></td>
+      <td>How <b>your customers</b> sign in. Sign-up, sign-in, password reset, and it issues a token your API can check.</td>
+      <td>You have end users and don't already have an identity system for them.</td>
+      <td class="sw">It only handles your customers. Your staff need a different service (IAM Identity Center), and your software needs IAM &mdash; so you end up running <b>three separate identity systems</b> and having to keep straight which is which.</td>
+    </tr>
+    <tr>
+      <td><b>KMS +<br>Secrets Manager</b></td>
+      <td>KMS holds encryption keys and records every single use of them. Secrets Manager holds passwords and rotates them on a schedule.</td>
+      <td>Any data an auditor cares about, and any credential your application needs.</td>
+      <td class="sw">Turning encryption on is the easy part, and it is not the part anyone asks about. The work is deciding <b>who may decrypt</b> and keeping <b>the record of who did</b> &mdash; and that is a key policy plus CloudTrail, not a checkbox.</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<h3>Job 6 &mdash; Know what happened</h3>
+
+<div class="tw"><table class="svc">
+  <thead><tr><th>Service</th><th>What it is, plainly</th><th>The architect's point</th></tr></thead>
+  <tbody>
+    <tr><td><b>CloudWatch</b></td><td>Metrics, logs and alarms.</td><td>Alarm on things customers feel &mdash; error rate and latency against your target. Alarming on CPU produces noise and misses real outages.</td></tr>
+    <tr><td><b>X-Ray</b></td><td>Follows one request across several services and shows where the time went.</td><td>Without it, "the payment took nine seconds" has no answer. The request id must cross every boundary, including queues, or the trail stops exactly where the problem is.</td></tr>
+    <tr><td><b>CloudTrail</b></td><td>Records every AWS API call: who, what, when.</td><td>This is the evidence a regulator asks for. On in every account from day one, and written somewhere nobody can delete it.</td></tr>
+  </tbody>
+</table></div>
+
+<div class="keyq">
+  <p class="hd">If you are asked how many AWS services you know</p>
+  <p>
+    "About sixteen properly, grouped by the job they do, and I can argue each against its
+    alternatives. Past that I know what exists and I'd look it up &mdash; which is what I'd do on the
+    job anyway."
+  </p>
+  <p>
+    <b>That answer is stronger than a list of ninety names.</b> A panel is measuring judgement, not
+    recall, and a candidate who names a service without naming what it costs has said nothing.
+  </p>
+</div>
+
+<!-- ==================================================================== -->
+<h2 id="s2"><span class="num">SECTION 2</span>A real-time API, built end to end</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<h3>First, what "real-time" actually means</h3>
+
+<p>
+  The phrase is used for two completely different things, and mixing them up is an early credibility
+  loss.
+</p>
+
+<div class="tw"><table>
+  <thead><tr><th>&nbsp;</th><th>Real-time <b>API</b></th><th>Real-time <b>streaming</b></th></tr></thead>
+  <tbody>
+    <tr><td><b>Shape</b></td><td>Someone asks a question and waits for the answer.</td><td>Events flow continuously and are processed as they arrive.</td></tr>
+    <tr><td><b>Example</b></td><td>"Is this card transaction fraudulent?" &mdash; the terminal is waiting.</td><td>"Update the fraud model's view of this customer" &mdash; nobody is waiting.</td></tr>
+    <tr><td><b>Measured by</b></td><td>Response time, at a percentile. "p99 under 100 milliseconds."</td><td>Lag &mdash; how far behind the consumer is.</td></tr>
+    <tr><td><b>Built from</b></td><td>API Gateway or ALB &rarr; Fargate &rarr; cache &rarr; database.</td><td>Kinesis or MSK &rarr; consumers. <a href="#s4">Section 4</a>.</td></tr>
+  </tbody>
+</table></div>
+
+<p>
+  When someone says "real-time API", they mean the first one, and they mean it has a
+  <b>latency budget</b>: a number of milliseconds inside which the whole thing must finish, measured
+  at a percentile rather than an average.
+</p>
+
+<div class="note"><p>
+  <b>Why percentiles, not averages.</b> "Average response time 40 milliseconds" can hide the fact that
+  one request in a hundred takes four seconds. <b>p99 means 99 out of 100 requests finish inside the
+  number.</b> At a million requests a day, the slowest one percent is ten thousand unhappy customers,
+  so that is the number the business actually feels. Always state your target as a percentile.
+</p></div>
+
+<h3>The scenario we will build</h3>
+
+<div class="note"><p>
+  <b>Card fraud decisioning.</b> When a card is swiped anywhere in Australia, the payment switch calls
+  your API and asks: approve or decline? It will wait <b>100 milliseconds</b> and no longer &mdash;
+  after that it times out and applies its own default. Peak is <b>350 requests per second</b>, and it
+  runs 24 hours a day. Getting it wrong costs money in both directions: a wrong decline is an angry
+  customer, a wrong approve is a loss.
+</p></div>
+
+<h3>Where the 100 milliseconds goes</h3>
+
+<p>
+  This is the single most useful habit in a latency-sensitive design: <b>spend the budget on paper
+  before you draw anything.</b> It tells you immediately which options are available to you.
+</p>
+
+<div class="tw"><table>
+  <thead><tr><th>Step</th><th>Budget</th><th>Why</th></tr></thead>
+  <tbody>
+    <tr><td>Network in from the switch</td><td>~10 ms</td><td>Not yours to control. Assume it and move on.</td></tr>
+    <tr><td>Load balancer</td><td>~2 ms</td><td>An ALB adds very little. An API Gateway would add more &mdash; which is one reason it is not used here.</td></tr>
+    <tr><td>Your service: parse, validate, authorise</td><td>~5 ms</td><td>Cheap, and it must happen.</td></tr>
+    <tr><td><b>Fetch the customer's features</b></td><td><b>~15 ms</b></td><td>The expensive step. From cache it is about 1 ms; from the database, 15 to 25 ms. <b>This is where the design happens.</b></td></tr>
+    <tr><td>Score the transaction</td><td>~20 ms</td><td>A model evaluation. In-process is fastest; a separate endpoint adds a network hop.</td></tr>
+    <tr><td>Write the decision</td><td>~0 ms</td><td>Zero, because <b>you do not write on the critical path.</b> You emit it and move on &mdash; see below.</td></tr>
+    <tr><td>Response back</td><td>~10 ms</td><td>Same as inbound.</td></tr>
+    <tr><td><b>Total</b></td><td><b>~62 ms</b></td><td><b>Leaving ~38 ms of headroom.</b> You need it: garbage collection pauses, a slow cache node, a retry.</td></tr>
+  </tbody>
+</table></div>
+
+<div class="warn"><p>
+  <b>The move that wins this design.</b> Notice the "write the decision" row costs zero. The decision
+  <i>must</i> be recorded &mdash; for disputes, for audit, for training the model &mdash; but
+  <b>nobody is waiting for that write.</b> So it goes onto a stream and happens afterwards. Everything
+  that is not the decision comes off the path. That sentence is the answer to this whole question.
+</p></div>
+
+<h3>The design</h3>
+
+<figure class="fig">
+<svg viewBox="0 0 880 534" role="img" aria-label="A real-time fraud decision travelling from the bank's payment switch through the public, private and isolated subnets of one AWS account and back" style="min-width:720px">
+<defs><marker id="f3a" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker><marker id="f3b" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-ac"/></marker><marker id="f3c" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-fl"/></marker><marker id="f3d" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-gd"/></marker></defs><rect x="40" y="8" width="300" height="40" rx="5" class="bx"/><text x="56" y="26" class="t-hd" text-anchor="start">PAYMENT SWITCH</text><text x="56" y="41" class="t-xs" text-anchor="start">inside the bank's own network</text><line x1="196" y1="48" x2="196" y2="94" class="ln-ac" marker-end="url(#f3b)"/><line x1="240" y1="94" x2="240" y2="48" class="ln-gd" marker-end="url(#f3d)"/><circle cx="282" cy="62" r="10" class="bdg"/><text x="282" y="65.4" class="bdgt" text-anchor="middle">1</text><text x="300" y="66" class="t-sm" text-anchor="start">mTLS over private connectivity — never the public internet</text><circle cx="282" cy="86" r="10" class="bdg"/><text x="282" y="89.4" class="bdgt" text-anchor="middle">9</text><text x="300" y="90" class="t-gd" text-anchor="start">the approve / decline answer returns by the same path</text><rect x="10" y="100" width="860" height="420" rx="8" class="zone"/><text x="26" y="122" class="t-hd" text-anchor="start">AWS ACCOUNT  fraud-prod   ·   VPC 10.30.0.0/16   ·   three availability zones</text><rect x="26" y="136" width="828" height="68" rx="6" class="lane"/><text x="40" y="154" class="t-hd" text-anchor="start">PUBLIC SUBNETS</text><rect x="26" y="216" width="828" height="190" rx="6" class="lane"/><text x="40" y="234" class="t-hd" text-anchor="start">PRIVATE SUBNETS</text><rect x="26" y="418" width="828" height="76" rx="6" class="lane"/><text x="40" y="436" class="t-hd" text-anchor="start">ISOLATED SUBNETS</text><rect x="150" y="148" width="190" height="40" rx="5" class="bx"/><circle cx="168" cy="168" r="10" class="bdg"/><text x="168" y="171.4" class="bdgt" text-anchor="middle">2</text><text x="186" y="172" class="t-lb" text-anchor="start">ALB</text><text x="356" y="166" class="t-xs" text-anchor="start">not API Gateway — the caller is one we control,</text><text x="356" y="180" class="t-xs" text-anchor="start">and a per-request charge buys nothing here</text><line x1="245" y1="188" x2="245" y2="240" class="ln" marker-end="url(#f3a)"/><rect x="150" y="240" width="200" height="52" rx="5" class="bx-ac"/><circle cx="168" cy="258" r="10" class="bdg"/><text x="168" y="261.4" class="bdgt" text-anchor="middle">3</text><text x="186" y="262" class="t-lb" text-anchor="start">Fraud service</text><text x="168" y="282" class="t-xs" text-anchor="start">ECS Fargate · always warm</text><line x1="350" y1="266" x2="400" y2="266" class="ln" marker-end="url(#f3a)"/><text x="375" y="258" class="t-xs" text-anchor="middle">1 ms</text><rect x="404" y="240" width="170" height="52" rx="5" class="bx"/><circle cx="422" cy="258" r="10" class="bdg"/><text x="422" y="261.4" class="bdgt" text-anchor="middle">4</text><text x="440" y="262" class="t-lb" text-anchor="start">ElastiCache</text><text x="422" y="282" class="t-xs" text-anchor="start">customer features</text><path d="M 489 292 L 489 320" class="ln" marker-end="url(#f3a)"/><text x="497" y="312" class="t-xs" text-anchor="start">on a miss, ~8 ms</text><rect x="404" y="324" width="170" height="44" rx="5" class="bx"/><circle cx="422" cy="346" r="10" class="bdg"/><text x="422" y="349.4" class="bdgt" text-anchor="middle">5</text><text x="440" y="350" class="t-lb" text-anchor="start">DynamoDB</text><rect x="618" y="240" width="150" height="52" rx="5" class="bx"/><circle cx="636" cy="258" r="10" class="bdg"/><text x="636" y="261.4" class="bdgt" text-anchor="middle">6</text><text x="654" y="262" class="t-lb" text-anchor="start">Scoring model</text><text x="636" y="282" class="t-xs" text-anchor="start">in-process, no hop</text><line x1="574" y1="266" x2="614" y2="266" class="ln" marker-end="url(#f3a)"/><line x1="693" y1="292" x2="693" y2="334" class="ln-ac" marker-end="url(#f3b)"/><circle cx="693" cy="312" r="10" class="bdg"/><text x="693" y="315.4" class="bdgt" text-anchor="middle">7</text><text x="712" y="316" class="t-xs" text-anchor="start">emit it, do not wait</text><rect x="618" y="338" width="200" height="40" rx="5" class="bx-ac"/><text x="718" y="363" class="t-ac" text-anchor="middle">Kinesis — fire and forget</text><rect x="150" y="430" width="230" height="50" rx="5" class="bx"/><circle cx="168" cy="448" r="10" class="bdg"/><text x="168" y="451.4" class="bdgt" text-anchor="middle">8</text><text x="186" y="452" class="t-lb" text-anchor="start">Aurora PostgreSQL</text><text x="168" y="471" class="t-xs" text-anchor="start">cases, disputes, audit</text><path d="M 718 378 L 718 456 L 388 456" class="ln-ac ln-d" marker-end="url(#f3b)"/><text x="410" y="448" class="t-xs" text-anchor="start">written later by a consumer — never on the request path</text>
+</svg>
+<figcaption>figure 3 — numbers match the walkthrough below</figcaption>
+</figure>
+
+<div class="steps">
+  <div class="step"><div class="n">1</div><div>
+    <span class="where">THE PAYMENT SWITCH</span>
+    <p>The caller is inside the bank, over private connectivity rather than the public internet, and it presents a client certificate (<b>mutual TLS</b>) so you know which machine is calling.</p>
+    <span class="risk">Note what mTLS does and does not do: it authenticates the <i>connection</i>, not the request. It tells you the switch is calling. It says nothing about which customer or which card, and it is not authorisation.</span></div></div>
+
+  <div class="step"><div class="n">2</div><div>
+    <span class="where">ALB, NOT API GATEWAY</span>
+    <p>This is the first real decision. The caller is internal and trusted, there is no partner to rate-limit, and every millisecond is spoken for. API Gateway's throttling, API keys and usage plans buy you nothing here and cost you latency and per-request charges.</p>
+    <span class="risk">Reverse this for an external caller. <a href="#s3">Section 3</a> uses API Gateway for exactly that reason.</span></div></div>
+
+  <div class="step"><div class="n">3</div><div>
+    <span class="where">FRAUD SERVICE · ECS FARGATE</span>
+    <p>Fargate, not Lambda, and the reason is one word: <b>cold start</b>. A 100 ms budget leaves no room for AWS to start a fresh copy of a Java application, and the traffic never drops to zero, so Lambda's "pay nothing when idle" saves nothing here.</p>
+    <span class="risk">The container runs in a private subnet with no inbound route from the internet. It gets its permissions from an IAM role — there is no access key anywhere in the image or the configuration.</span></div></div>
+
+  <div class="step"><div class="n">4</div><div>
+    <span class="where">ELASTICACHE — THE HOT PATH</span>
+    <p>The features the model needs — how many transactions this card made in the last hour, the customer's usual merchant categories, their typical amount — are read on every single request and change slowly. In memory, that read is about a millisecond.</p>
+    <span class="risk">Every cached value needs an expiry, and every read needs a plan for a miss. A cache that silently returns yesterday's velocity counter will approve a fraud pattern it was built to catch.</span></div></div>
+
+  <div class="step"><div class="n">5</div><div>
+    <span class="where">DYNAMODB — WHEN THE CACHE MISSES</span>
+    <p>The durable feature store. One key — the card or customer identifier — one record, single-digit milliseconds, at any volume. This is DynamoDB's best possible fit: <b>you know the only query, and it will never change.</b></p>
+    <span class="risk">If the cache is empty after a deployment, every request goes here at once. Size for that, and warm the cache deliberately rather than hoping.</span></div></div>
+
+  <div class="step"><div class="n">6</div><div>
+    <span class="where">SCORING, IN-PROCESS</span>
+    <p>The model runs inside the same container. A separate endpoint would be cleaner to operate and would add a network hop you cannot afford.</p>
+    <span class="risk">The cost is that shipping a new model means shipping a new container. That is a real operational trade-off and you should name it rather than pretend it away.</span></div></div>
+
+  <div class="step"><div class="n">7</div><div>
+    <span class="where">EMIT THE DECISION — FIRE AND FORGET</span>
+    <p>The decision goes onto a Kinesis stream and the service moves on without waiting for anything downstream. Case management, the dispute system, the analytics platform and the model training pipeline all read that stream at their own pace.</p>
+    <span class="risk">This is the design move. Writing to Aurora here would add 20 ms and, worse, would mean a database slowdown becomes a fraud-decisioning outage.</span></div></div>
+
+  <div class="step"><div class="n">8</div><div>
+    <span class="where">AURORA · ISOLATED SUBNET</span>
+    <p>A separate consumer reads the stream and writes decisions into Aurora, where analysts and the dispute process need joins and ad-hoc queries. It sits in a subnet with no route out to the internet at all.</p>
+    <span class="risk">That last point is a real control: a compromised database host cannot call an attacker's server, because there is no route for it to use.</span></div></div>
+
+  <div class="step ret"><div class="n">9</div><div>
+    <span class="where">↩ BACK TO THE SWITCH</span>
+    <p>Approve or decline, in roughly 62 milliseconds, with 38 to spare.</p></div></div>
+</div>
+
+<h3>The capacity arithmetic, in five minutes</h3>
+
+<p>
+  Interviewers ask for this and most candidates either skip it or drown in it. Keep it to three
+  numbers and state your assumptions out loud.
+</p>
+
+<div class="calc">
+
+  <div class="blk">
+    <p class="q">How much concurrency?</p>
+    <p class="m">concurrency <span class="u">=</span> throughput <span class="u">×</span> how long each request takes
+            <span class="u">=</span> 350 per second <span class="u">×</span> 0.062 seconds</p>
+    <p class="res">&asymp; 22 requests in flight at any one moment</p>
+  </div>
+
+  <div class="blk">
+    <p class="q">How many containers?</p>
+    <p class="m">22 concurrent <span class="u">÷</span> 50 each container handles comfortably <span class="u">=</span> 1 container</p>
+    <p class="res">Real answer: 3 &mdash; one per availability zone</p>
+    <p class="so"><b>Resilience set that number, not throughput.</b> One container cannot survive
+      losing a zone, and at three you are running at about a third of capacity, which is the headroom
+      that absorbs a spike. Say this out loud in an interview: it is the difference between arithmetic
+      and design.</p>
+  </div>
+
+  <div class="blk">
+    <p class="q">How many database connections?</p>
+    <p class="m">only cache misses reach DynamoDB, at a 90% hit rate
+  350/s <span class="u">×</span> 10% <span class="u">=</span> 35 reads per second, at ~8 ms each
+  concurrency <span class="u">=</span> 35 <span class="u">×</span> 0.008</p>
+    <p class="res">&asymp; 0.3 &mdash; trivial</p>
+    <p class="so"><b>The cache is doing the heavy lifting.</b> If the hit rate falls to 50% that
+      becomes 175 reads a second &mdash; five times the load, from one number moving. So the cache hit
+      rate is worth alarming on, and it is the figure to quote when someone asks what you would
+      monitor.</p>
+  </div>
+
+  <div class="blk">
+    <p class="q">And in two years?</p>
+    <p class="m">3&times; growth <span class="u">→</span> 1,050 per second <span class="u">→</span> ~65 concurrent</p>
+    <p class="res">Still small</p>
+    <p class="so"><b>The first bottleneck is not throughput at all.</b> It is the cache hit rate and
+      the tail latency of the scoring step. Naming the bottleneck the numbers did <i>not</i> reveal is
+      the move that separates a senior answer from a correct one.</p>
+  </div>
+
+</div>
+<p class="cap">figure 4 &mdash; the shape of the answer matters more than the precision</p>
+
+<div class="say"><p>
+  <b>The line that lands here.</b> "Throughput isn't my constraint at this scale &mdash; three
+  containers cover it and I only have three because I want one per availability zone. My constraints
+  are the cache hit rate and the tail latency of the scoring step, and those are what I'd measure and
+  alarm on."
+</p></div>
+
+<h3>Security, at every hop</h3>
+
+<div class="tw"><table>
+  <thead><tr><th>Hop</th><th>Who is proving what</th><th>How</th></tr></thead>
+  <tbody>
+    <tr><td>Switch &rarr; ALB</td><td>The calling <b>machine</b></td><td>Mutual TLS, over private connectivity. Authenticates the connection only.</td></tr>
+    <tr><td>ALB &rarr; service</td><td>Network reachability</td><td>Security groups referencing each other, so only the ALB can reach the service's port.</td></tr>
+    <tr><td>Service &rarr; cache and database</td><td>The <b>workload</b></td><td>An IAM role attached to the Fargate task. Credentials arrive and expire automatically. No keys anywhere.</td></tr>
+    <tr><td>Data at rest</td><td>Who may decrypt</td><td>KMS, with a key policy naming which roles can decrypt, and CloudTrail recording every use.</td></tr>
+    <tr><td>Any secret still needed</td><td>Rotation</td><td>Secrets Manager. Better still: IAM database authentication, so there is no password to rotate at all.</td></tr>
+    <tr><td>Everything</td><td>What happened</td><td>CloudTrail in every account, written to a log account nobody can delete from.</td></tr>
+  </tbody>
+</table></div>
+
+<div class="warn"><p>
+  <b>The sentence that separates an architect from an enthusiast.</b> mTLS, a security group and a
+  private subnet all tell you <i>where a request came from</i>. <b>None of them decides whether this
+  caller may see this record.</b> That check &mdash; called object-level authorization &mdash; happens
+  in your code, on every query, or it does not happen. It is the most common serious API vulnerability
+  in the industry.
+</p></div>
+
+<h3>What breaks as this grows, and what you do</h3>
+
+<div class="tw"><table>
+  <thead><tr><th>What breaks</th><th>What you see</th><th>What you do</th></tr></thead>
+  <tbody>
+    <tr><td>Cache hit rate falls</td><td>p99 climbs, database load jumps</td><td>Warm the cache on deployment; check the expiry is not too aggressive; alarm on hit rate as a first-class metric.</td></tr>
+    <tr><td>A garbage collection pause</td><td>p99 fine, p99.9 spikes</td><td>Size the heap below the container limit, tune the collector, and add a container so each one works less.</td></tr>
+    <tr><td>The Kinesis write slows</td><td>Response time climbs for no visible reason</td><td>It should never have been able to. Put a timeout on it and drop the event rather than block the decision &mdash; then alarm on dropped events.</td></tr>
+    <tr><td>One availability zone fails</td><td>A third of capacity gone</td><td>Already handled: three containers, three zones, cache and database replicated across zones. This is why the answer was three.</td></tr>
+    <tr><td>The whole Region fails</td><td>Everything gone</td><td>A different conversation. State your recovery targets &mdash; how long you may be down, how much data you may lose &mdash; before proposing a second Region, because active-active for this is expensive and mostly a data problem.</td></tr>
+  </tbody>
+</table></div>
+
+<div class="say"><p>
+  <b>The 60-second version, for an interview.</b> "Latency is the product here, so I start by spending
+  the budget on paper. The switch is internal, so ALB rather than API Gateway &mdash; I won't pay a hop
+  for throttling I don't need. Fargate rather than Lambda, because a cold start doesn't fit in 100
+  milliseconds. Features come from ElastiCache with DynamoDB behind it, because that read is the
+  expensive step and I know the only query. The decision is emitted to a stream and written to Aurora
+  by a separate consumer, so a database slowdown can never become a decisioning outage. Three
+  containers across three zones &mdash; resilience sets that number, not throughput. And my real
+  constraints are cache hit rate and the tail of the scoring step, which is what I'd alarm on."
+</p></div>
+
+<!-- ==================================================================== -->
+<h2 id="s3"><span class="num">SECTION 3</span>Event-driven &mdash; events from <i>outside</i> your organisation</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<h3>What event-driven means, plainly</h3>
+
+<p>
+  In a request-driven system, service A calls service B and waits. A knows B's address, A knows B's
+  contract, and when B is down, A is broken.
+</p>
+
+<p>
+  In an event-driven system, A announces <b>something that happened</b> &mdash;
+  <code>payment.completed</code> &mdash; and stops caring. B, C and D read it if they are interested.
+  A does not know they exist. B can be down for an hour and catch up afterwards.
+</p>
+
+<figure class="fig">
+<svg viewBox="0 0 880 320" role="img" aria-label="The same four downstream systems, reached by direct calls on the left and by one published event on the right" style="min-width:680px">
+<defs><marker id="f5a" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker><marker id="f5b" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-ac"/></marker><marker id="f5c" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-fl"/></marker><marker id="f5d" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-gd"/></marker></defs><line x1="440" y1="8" x2="440" y2="316" class="ln-hair ln-d"/><text x="0" y="18" class="t-hd" text-anchor="start">REQUEST-DRIVEN</text><rect x="0" y="34" width="120" height="40" rx="5" class="bx"/><text x="60" y="59" class="t-lb" text-anchor="middle">Payments</text><rect x="250" y="30" width="120" height="34" rx="5" class="bx2"/><text x="310" y="52" class="t-sm" text-anchor="middle">Fraud</text><path d="M 120 54 C 180 54 190 47 244 47" class="ln" marker-end="url(#f5a)"/><rect x="250" y="76" width="120" height="34" rx="5" class="bx2"/><text x="310" y="98" class="t-sm" text-anchor="middle">Ledger</text><path d="M 120 54 C 180 54 190 93 244 93" class="ln" marker-end="url(#f5a)"/><rect x="250" y="122" width="120" height="34" rx="5" class="bx2"/><text x="310" y="144" class="t-sm" text-anchor="middle">Notify</text><path d="M 120 54 C 180 54 190 139 244 139" class="ln" marker-end="url(#f5a)"/><rect x="250" y="168" width="120" height="34" rx="5" class="bx2"/><text x="310" y="190" class="t-sm" text-anchor="middle">Analytics</text><path d="M 120 54 C 180 54 190 185 244 185" class="ln" marker-end="url(#f5a)"/><text x="160" y="24" class="t-xs" text-anchor="middle">calls · waits</text><text x="0" y="254" class="t-sm" text-anchor="start">Payments knows about four systems.</text><text x="0" y="274" class="t-sm" text-anchor="start">A fifth means a code change and a coordinated release.</text><text x="0" y="298" class="t-fl" text-anchor="start">Payments is down whenever any one of them is slow.</text><text x="470" y="18" class="t-hd" text-anchor="start">EVENT-DRIVEN</text><rect x="470" y="34" width="120" height="40" rx="5" class="bx"/><text x="530" y="59" class="t-lb" text-anchor="middle">Payments</text><line x1="590" y1="54" x2="654" y2="54" class="ln-ac" marker-end="url(#f5b)"/><text x="622" y="42" class="t-xs" text-anchor="middle">publishes</text><rect x="660" y="32" width="200" height="44" rx="5" class="bx-ac"/><text x="760" y="52" class="t-ac" text-anchor="middle">payment.completed</text><text x="760" y="68" class="t-xs" text-anchor="middle">on the stream</text><path d="M 760 76 L 760 106 L 673 106 L 673 138" class="ln-ac" marker-end="url(#f5b)"/><rect x="640" y="142" width="66" height="32" rx="5" class="bx2"/><text x="673" y="163" class="t-sm" text-anchor="middle">Fraud</text><path d="M 760 76 L 760 106 L 751 106 L 751 138" class="ln-ac" marker-end="url(#f5b)"/><rect x="718" y="142" width="66" height="32" rx="5" class="bx2"/><text x="751" y="163" class="t-sm" text-anchor="middle">Ledger</text><path d="M 760 76 L 760 106 L 829 106 L 829 138" class="ln-ac" marker-end="url(#f5b)"/><rect x="796" y="142" width="66" height="32" rx="5" class="bx2"/><text x="829" y="163" class="t-sm" text-anchor="middle">Notify</text><text x="470" y="254" class="t-sm" text-anchor="start">Payments knows about nothing.</text><text x="470" y="274" class="t-sm" text-anchor="start">A fifth team subscribes. Payments never finds out.</text><text x="470" y="298" class="t-gd" text-anchor="start">Notify can be down an hour and catch up. Nobody noticed.</text>
+</svg>
+<figcaption>figure 5 — the trade you are making is an immediate answer, in exchange for independence</figcaption>
+</figure>
+
+<p>
+  That is the whole idea. Banks use it because their systems are owned by different teams on
+  different release cycles, and because regulators like a durable record of what happened.
+</p>
+
+<div class="note"><p>
+  <b>What it costs, which you must say too.</b> You lose the immediate answer &mdash; the publisher
+  does not know whether anything worked. You gain a schema that several teams now depend on, so it has
+  to be governed. And <b>every message can arrive twice</b>, which is discussed below and is not
+  optional to handle.
+</p></div>
+
+<h3>The scenario</h3>
+
+<div class="note"><p>
+  <b>A payments partner sends you events.</b> A fintech that originates payments on your rails needs
+  to tell you about each one. Peak 2,000 events per second. Their events must reach six internal
+  consumers. You must be able to prove, two years later, exactly what they sent and when. Three more
+  partners join next year.
+</p></div>
+
+<h3>The question that decides the whole design</h3>
+
+<p>
+  <b>Do you give the partner a Kafka client and let them publish directly to your topic?</b>
+</p>
+
+<p>
+  It is tempting. It is fewer moving parts, it is lower latency, and the partner's engineers will ask
+  for it. <b>The answer is no</b>, and being able to say why in three sentences is a strong interview
+  moment.
+</p>
+
+<div class="tw"><table>
+  <thead><tr><th>Give the partner Kafka directly</th><th>Put an API in front</th></tr></thead>
+  <tbody>
+    <tr><td>They need network access into your estate.</td><td>They call an HTTPS endpoint. No network access at all.</td></tr>
+    <tr><td>A malformed message lands in your topic and every consumer has to deal with it.</td><td>Rejected at the edge, with a 400 and a reason. Your topic stays clean.</td></tr>
+    <tr><td>Throttling a misbehaving partner means Kafka quotas, and the bad traffic has already arrived.</td><td>A usage plan per partner. The flood stops outside.</td></tr>
+    <tr><td>Their credential is a Kafka principal &mdash; a thing your identity team does not manage.</td><td>An OAuth client, issued and revoked by your normal process.</td></tr>
+    <tr><td>Changing your topic layout is now a breaking change for an external company.</td><td>The API is the contract. The topics stay yours to reshape.</td></tr>
+    <tr><td>Every new partner is a networking project.</td><td>Every new partner is a client registration.</td></tr>
+  </tbody>
+</table></div>
+
+<div class="say"><p>
+  <b>Say this out loud.</b> "I'd never expose Kafka to a partner. I'd put a controlled API in front of
+  it. That gives me authentication I already manage, validation before anything reaches my topic,
+  per-partner throttling, and it keeps my topic design as an internal concern rather than a contract
+  with an external company. <b>The API is the boundary; the log is internal plumbing.</b>"
+</p></div>
+
+<h3>The design</h3>
+
+<figure class="fig">
+<svg viewBox="0 0 940 614" role="img" aria-label="A partner's event crossing from the public internet into an ingress account, then into a separate streaming account over PrivateLink" style="min-width:720px">
+<defs><marker id="f6a" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker><marker id="f6b" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-ac"/></marker><marker id="f6c" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-fl"/></marker><marker id="f6d" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-gd"/></marker></defs><rect x="40" y="8" width="320" height="44" rx="5" class="bx-fl"/><text x="56" y="27" class="t-hd" text-anchor="start">PARTNER</text><text x="56" y="43" class="t-xs" text-anchor="start">out on the public internet — controlled by someone else</text><line x1="200" y1="52" x2="200" y2="96" class="ln-ac" marker-end="url(#f6b)"/><circle cx="224" cy="66" r="10" class="bdg"/><text x="224" y="69.4" class="bdgt" text-anchor="middle">1</text><text x="242" y="62" class="t-sm" text-anchor="start">OAuth client credentials → a short-lived token</text><text x="242" y="78" class="t-mn" text-anchor="start">POST /events  with an Idempotency-Key header</text><rect x="10" y="104" width="860" height="236" rx="8" class="zone"/><text x="26" y="126" class="t-hd" text-anchor="start">AWS ACCOUNT  partner-ingress</text><text x="250" y="126" class="t-xs" text-anchor="start">deliberately holds nothing worth stealing</text><rect x="30" y="142" width="180" height="52" rx="5" class="bx"/><circle cx="48" cy="160" r="10" class="bdg"/><text x="48" y="163.4" class="bdgt" text-anchor="middle">2</text><text x="66" y="164" class="t-lb" text-anchor="start">CloudFront + WAF</text><text x="48" y="184" class="t-xs" text-anchor="start">floods, bad patterns</text><line x1="210" y1="168" x2="240" y2="168" class="ln" marker-end="url(#f6a)"/><rect x="244" y="142" width="216" height="52" rx="5" class="bx"/><circle cx="262" cy="160" r="10" class="bdg"/><text x="262" y="163.4" class="bdgt" text-anchor="middle">3</text><text x="280" y="164" class="t-lb" text-anchor="start">API Gateway</text><text x="262" y="184" class="t-xs" text-anchor="start">token · throttle · schema</text><line x1="460" y1="168" x2="490" y2="168" class="ln" marker-end="url(#f6a)"/><rect x="494" y="142" width="220" height="52" rx="5" class="bx-ac"/><circle cx="512" cy="160" r="10" class="bdg"/><text x="512" y="163.4" class="bdgt" text-anchor="middle">4</text><text x="530" y="164" class="t-lb" text-anchor="start">Ingestion service</text><text x="512" y="184" class="t-xs" text-anchor="start">Fargate · its own IAM role</text><path d="M 604 194 L 604 226" class="ln" marker-end="url(#f6a)"/><rect x="494" y="230" width="220" height="46" rx="5" class="bx"/><circle cx="512" cy="252" r="10" class="bdg"/><text x="512" y="255.4" class="bdgt" text-anchor="middle">5</text><text x="530" y="256" class="t-sm" text-anchor="start">DynamoDB — idempotency key</text><text x="726" y="242" class="t-xs" text-anchor="start">a conditional write, so</text><text x="726" y="256" class="t-xs" text-anchor="start">the same event sent</text><text x="726" y="270" class="t-xs" text-anchor="start">twice is stored once</text><path d="M 510 194 L 510 214 L 400 214 L 400 360" class="ln-ac" marker-end="url(#f6b)"/><circle cx="400" cy="268" r="10" class="bdg"/><text x="400" y="271.4" class="bdgt" text-anchor="middle">6</text><rect x="470" y="288" width="390" height="46" rx="5" class="bx-fl"/><circle cx="492" cy="311" r="10" class="bdg"/><text x="492" y="314.4" class="bdgt" text-anchor="middle">7</text><text x="512" y="307" class="t-fl" text-anchor="start">PrivateLink — one endpoint, one direction.</text><text x="512" y="324" class="t-xs" text-anchor="start">The two accounts' networks are never joined.</text><rect x="10" y="350" width="860" height="252" rx="8" class="zone"/><text x="26" y="372" class="t-hd" text-anchor="start">AWS ACCOUNT  streaming</text><rect x="30" y="386" width="250" height="56" rx="5" class="bx-ac"/><circle cx="48" cy="406" r="10" class="bdg"/><text x="48" y="409.4" class="bdgt" text-anchor="middle">8</text><text x="66" y="410" class="t-lb" text-anchor="start">MSK / Kinesis</text><text x="48" y="430" class="t-xs" text-anchor="start">partitioned by payment id</text><text x="30" y="462" class="t-xs" text-anchor="start">a schema registry enforces</text><text x="30" y="476" class="t-xs" text-anchor="start">compatibility between versions</text><line x1="306" y1="414" x2="306" y2="574" class="ln-ac"/><line x1="280" y1="414" x2="306" y2="414" class="ln-ac"/><line x1="306" y1="410" x2="324" y2="410" class="ln-ac" marker-end="url(#f6b)"/><rect x="330" y="394" width="150" height="32" rx="5" class="bx2"/><text x="405" y="415" class="t-sm" text-anchor="middle">fraud</text><line x1="306" y1="454" x2="494" y2="454" class="ln-ac" marker-end="url(#f6b)"/><rect x="500" y="438" width="150" height="32" rx="5" class="bx2"/><text x="575" y="459" class="t-sm" text-anchor="middle">notification</text><line x1="306" y1="498" x2="324" y2="498" class="ln-ac" marker-end="url(#f6b)"/><rect x="330" y="482" width="150" height="32" rx="5" class="bx2"/><text x="405" y="503" class="t-sm" text-anchor="middle">ledger</text><line x1="306" y1="542" x2="494" y2="542" class="ln-ac" marker-end="url(#f6b)"/><rect x="500" y="526" width="150" height="32" rx="5" class="bx2"/><text x="575" y="547" class="t-sm" text-anchor="middle">analytics</text><line x1="306" y1="574" x2="668" y2="574" class="ln-ac" marker-end="url(#f6b)"/><circle cx="692" cy="574" r="10" class="bdg"/><text x="692" y="577.4" class="bdgt" text-anchor="middle">9</text><rect x="712" y="558" width="200" height="32" rx="5" class="bx"/><text x="812" y="579" class="t-sm" text-anchor="middle">S3 archive · 7 years</text><path d="M 714 168 L 916 168 L 916 30 L 366 30" class="ln-gd" marker-end="url(#f6d)"/><circle cx="614" cy="30" r="11" class="bdg"/><text x="614" y="33.4" class="bdgt" text-anchor="middle">10</text><text x="634" y="54" class="t-gd" text-anchor="start">202 Accepted, returned immediately</text>
+</svg>
+<figcaption>figure 6 — the partner never sees the log, and the two accounts never join networks</figcaption>
+</figure>
+
+<div class="steps">
+  <div class="step"><div class="n">1</div><div>
+    <span class="where">THE PARTNER</span>
+    <p>Their system exchanges a client id and secret for a short-lived token — this is the <b>OAuth client credentials</b> flow, which is what a <i>system</i> uses when there is no human to log in. The token carries scopes and an expiry.</p>
+    <span class="risk">Why not just an API key? A key identifies a caller but carries no scopes, no expiry and no clean revocation story. In practice you use both — the key for the usage plan, the token for identity.</span></div></div>
+
+  <div class="step"><div class="n">2</div><div>
+    <span class="where">CLOUDFRONT + WAF</span>
+    <p>Blocks known attack patterns, rate-limits by source address, and terminates encryption before traffic reaches the Region.</p>
+    <span class="risk">WAF reduces noise. It has never made an authorisation decision and never will.</span></div></div>
+
+  <div class="step"><div class="n">3</div><div>
+    <span class="where">API GATEWAY</span>
+    <p>Validates the token, applies <i>this partner's</i> throttle, and checks the body against a schema. A malformed event is rejected here with a 400 explaining why.</p>
+    <span class="risk">This is the difference between a bad partner release being their incident and it being yours.</span></div></div>
+
+  <div class="step"><div class="n">4</div><div>
+    <span class="where">INGESTION SERVICE — WHERE IDENTITY CHANGES HANDS</span>
+    <p><b>The most important step in this design.</b> The partner's OAuth identity stops here. Everything downstream runs under the ingestion service's AWS IAM role. The service must therefore carry the partner's identity forward <i>as data on the event</i>, because AWS has no idea who the partner is.</p>
+    <span class="risk">Get this wrong and you have a <b>confused deputy</b> — a powerful internal service acting on a request without remembering whose request it was. Tenant attribution is lost, and every downstream consumer now trusts an event it cannot attribute.</span></div></div>
+
+  <div class="step"><div class="n">5</div><div>
+    <span class="where">DYNAMODB — IDEMPOTENCY</span>
+    <p>The partner's <code>Idempotency-Key</code> is written with a conditional write: <i>create this only if it does not already exist</i>. If it exists, you return the stored response instead of processing again.</p>
+    <span class="risk">Their network will time out and they will retry. Without this, one payment instruction becomes two payments — which in banking is a remediation programme, not a bug.</span></div></div>
+
+  <div class="step"><div class="n">6</div><div>
+    <span class="where">WRITE TO THE LOG</span>
+    <p>Only now does the event enter the stream, validated, attributed, and de-duplicated.</p></div></div>
+
+  <div class="step"><div class="n">7</div><div>
+    <span class="where">PRIVATELINK BETWEEN ACCOUNTS</span>
+    <p>The ingestion account reaches exactly one endpoint in the streaming account. The two networks are never joined.</p>
+    <span class="risk">If you peered the networks instead, you would be telling a security review that an internet-facing account has a route into the account holding the event backbone. Those are very different conversations.</span></div></div>
+
+  <div class="step"><div class="n">8</div><div>
+    <span class="where">THE LOG · PARTITIONED BY PAYMENT ID</span>
+    <p>Order is only guaranteed within a partition, so the field you partition by is also your parallelism limit. Payment id keeps each payment's events in order while letting different payments process simultaneously.</p>
+    <span class="risk">A <b>schema registry</b> enforces backward compatibility, which is what lets six consumers upgrade independently instead of in lockstep.</span></div></div>
+
+  <div class="step"><div class="n">9</div><div>
+    <span class="where">ARCHIVE TO S3</span>
+    <p>Seven-year retention belongs in object storage, not broker storage, at roughly a tenth of the cost. Written to a bucket nobody can modify or delete from.</p>
+    <span class="risk">"Prove what they sent two years ago" is a requirement, and this is the only affordable way to meet it.</span></div></div>
+
+  <div class="step ret"><div class="n">10</div><div>
+    <span class="where">↩ 202 ACCEPTED</span>
+    <p>The partner gets an immediate acknowledgement meaning <i>received and durably stored</i> — not <i>processed</i>. Being precise about that distinction in an interview is worth a lot.</p></div></div>
+</div>
+
+<h3>The three identities &mdash; the thing panels probe hardest</h3>
+
+<p>
+  One partner event involves <b>three completely different identities</b>, issued by three different
+  systems, living for three different lengths of time. Candidates who blur them get found out quickly.
+</p>
+
+<div class="tw"><table>
+  <thead><tr><th>Identity</th><th>Who issues it</th><th>Lives for</th><th>What it proves</th><th>Where it stops</th></tr></thead>
+  <tbody>
+    <tr><td><b>Partner OAuth client</b></td><td>Your authorisation server</td><td>Minutes</td><td>Which partner organisation is calling</td><td>At API Gateway and the ingestion service. It goes no further.</td></tr>
+    <tr><td><b>Ingestion service IAM role</b></td><td>AWS</td><td>An hour, rotated automatically</td><td>Which of <i>your</i> workloads is acting</td><td>Inside AWS only. It says nothing about the partner.</td></tr>
+    <tr><td><b>Stream principal</b></td><td>MSK via IAM, or a Kafka credential</td><td>Varies</td><td>Which client may write to which topic</td><td>At the broker. It authorises the topic, not the business action.</td></tr>
+  </tbody>
+</table></div>
+
+<div class="warn"><p>
+  <b>The consequence, and the sentence to remember.</b> Because the partner's identity stops at the
+  edge, the <b>tenant must travel on the event as data</b> — and every consumer must use it. Otherwise
+  the ledger consumer processes an event with no idea which partner it came from, and you have both
+  lost attribution and created a path where one partner's event could affect another's data.
+</p></div>
+
+<div class="say"><p>
+  <b>Say this out loud.</b> "There are three identities here and they're not interchangeable: the
+  partner's OAuth client at my edge, my ingestion service's IAM role inside AWS, and the stream
+  principal at the broker. Different issuers, different lifetimes, different enforcement points. The
+  partner's identity stops at the edge, so tenant has to travel on the event and every consumer has to
+  honour it &mdash; otherwise I've built a confused deputy."
+</p></div>
+
+<!-- ==================================================================== -->
+<h2 id="s4"><span class="num">SECTION 4</span>Event-driven &mdash; events from <i>inside</i> your organisation</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<p>
+  Now the other direction. Your own payments service needs to publish
+  <code>payment.completed</code> so that fraud, the ledger, notifications and analytics can react.
+  Everything is inside your own AWS organisation.
+</p>
+
+<p>
+  It sounds easier. In one specific way it is much harder, and that is where the interesting question
+  lives.
+</p>
+
+<h3>The hard part: the database and the broker are two different systems</h3>
+
+<p>
+  Your payments service does two things: it writes a row to its database, and it publishes an event.
+  There is no way to make those one atomic operation, because they are two separate systems. So one
+  of two bad things can happen.
+</p>
+
+<figure class="fig">
+<svg viewBox="0 0 880 258" role="img" aria-label="Both orderings of save-then-publish lose data when the process crashes between the two steps" style="min-width:660px">
+<defs><marker id="f7a" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker><marker id="f7b" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-ac"/></marker><marker id="f7c" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-fl"/></marker><marker id="f7d" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-gd"/></marker></defs><line x1="440" y1="6" x2="440" y2="250" class="ln-hair ln-d"/><text x="0" y="16" class="t-hd" text-anchor="start">NAÏVE ORDER 1 — database first</text><rect x="0" y="28" width="370" height="34" rx="5" class="bx-gd"/><text x="14" y="50" class="t-sm" text-anchor="start">save to the database</text><text x="354" y="50" class="t-gd" text-anchor="end">✓ done</text><rect x="0" y="72" width="370" height="26" rx="4" class="bx-fl"/><text x="185" y="90" class="t-fl" text-anchor="middle">◆  the process crashes here  ◆</text><rect x="0" y="108" width="370" height="34" rx="5" class="bx2"/><text x="14" y="130" class="t-sm" text-anchor="start">publish the event</text><text x="354" y="130" class="t-fl" text-anchor="end">✗ never happens</text><text x="0" y="172" class="t-sm" text-anchor="start">The payment exists. Nobody downstream</text><text x="0" y="190" class="t-sm" text-anchor="start">ever hears about it. Silent divergence,</text><text x="0" y="208" class="t-sm" text-anchor="start">found weeks later in reconciliation.</text><text x="470" y="16" class="t-hd" text-anchor="start">NAÏVE ORDER 2 — event first</text><rect x="470" y="28" width="370" height="34" rx="5" class="bx-gd"/><text x="484" y="50" class="t-sm" text-anchor="start">publish the event</text><text x="824" y="50" class="t-gd" text-anchor="end">✓ done</text><rect x="470" y="72" width="370" height="26" rx="4" class="bx-fl"/><text x="655" y="90" class="t-fl" text-anchor="middle">◆  the process crashes here  ◆</text><rect x="470" y="108" width="370" height="34" rx="5" class="bx2"/><text x="484" y="130" class="t-sm" text-anchor="start">save to the database</text><text x="824" y="130" class="t-fl" text-anchor="end">✗ never happens</text><text x="470" y="172" class="t-sm" text-anchor="start">Consumers act on a payment that does</text><text x="470" y="190" class="t-sm" text-anchor="start">not exist. Worse: they may already have</text><text x="470" y="208" class="t-sm" text-anchor="start">notified the customer.</text><text x="440" y="244" class="t-lb" text-anchor="middle">Neither order is safe, because two systems cannot be changed as one.</text>
+</svg>
+<figcaption>figure 7 — there is no safe order, which is why a pattern is needed</figcaption>
+</figure>
+
+<h3>The answer: the transactional outbox</h3>
+
+<p>
+  Write the business row <b>and</b> a "message to be sent" row <b>in the same database
+  transaction</b>. Either both exist or neither does — that is what a transaction guarantees. Then a
+  separate process reads the outbox table and publishes.
+</p>
+
+<figure class="fig">
+<svg viewBox="0 0 880 398" role="img" aria-label="The outbox pattern: the event row is written in the same transaction as the business row, and a relay publishes it afterwards" style="min-width:680px">
+<defs><marker id="f8a" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker><marker id="f8b" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-ac"/></marker><marker id="f8c" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-fl"/></marker><marker id="f8d" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-gd"/></marker></defs><rect x="150" y="8" width="460" height="106" rx="6" class="bx-gd"/><text x="168" y="30" class="t-hd" text-anchor="start">INSIDE ONE DATABASE TRANSACTION</text><text x="168" y="52" class="t-mn" text-anchor="start">INSERT INTO ledger_entries (…)</text><text x="168" y="71" class="t-mn" text-anchor="start">INSERT INTO outbox (event_type, payload)</text><text x="168" y="90" class="t-mn" text-anchor="start">COMMIT</text><text x="592" y="90" class="t-gd" text-anchor="end">both, or neither</text><line x1="380" y1="114" x2="380" y2="144" class="ln" marker-end="url(#f8a)"/><rect x="150" y="148" width="460" height="96" rx="6" class="bx"/><text x="168" y="170" class="t-hd" text-anchor="start">RELAY — A SEPARATE PROCESS</text><text x="168" y="192" class="t-sm" text-anchor="start">read the unpublished rows</text><text x="168" y="210" class="t-sm" text-anchor="start">publish each to the stream</text><text x="168" y="228" class="t-sm" text-anchor="start">mark it published</text><line x1="380" y1="244" x2="380" y2="274" class="ln-ac" marker-end="url(#f8b)"/><rect x="268" y="278" width="224" height="42" rx="6" class="bx-ac"/><text x="380" y="304" class="t-ac" text-anchor="middle">MSK / Kinesis</text><path d="M 380 320 L 380 338 L 181 338 L 181 356" class="ln-ac" marker-end="url(#f8b)"/><rect x="148" y="360" width="66" height="28" rx="5" class="bx2"/><text x="181" y="379" class="t-xs" text-anchor="middle">fraud</text><path d="M 380 320 L 380 338 L 259 338 L 259 356" class="ln-ac" marker-end="url(#f8b)"/><rect x="226" y="360" width="66" height="28" rx="5" class="bx2"/><text x="259" y="379" class="t-xs" text-anchor="middle">ledger</text><path d="M 380 320 L 380 338 L 337 338 L 337 356" class="ln-ac" marker-end="url(#f8b)"/><rect x="304" y="360" width="66" height="28" rx="5" class="bx2"/><text x="337" y="379" class="t-xs" text-anchor="middle">notify</text><path d="M 380 320 L 380 338 L 415 338 L 415 356" class="ln-ac" marker-end="url(#f8b)"/><rect x="382" y="360" width="66" height="28" rx="5" class="bx2"/><text x="415" y="379" class="t-xs" text-anchor="middle">analytics</text><path d="M 380 320 L 380 338 L 493 338 L 493 356" class="ln-ac" marker-end="url(#f8b)"/><rect x="460" y="360" width="66" height="28" rx="5" class="bx2"/><text x="493" y="379" class="t-xs" text-anchor="middle">archive</text><path d="M 380 320 L 380 338 L 571 338 L 571 356" class="ln-ac" marker-end="url(#f8b)"/><rect x="538" y="360" width="66" height="28" rx="5" class="bx2"/><text x="571" y="379" class="t-xs" text-anchor="middle">…</text><rect x="628" y="148" width="252" height="112" rx="6" class="bx-fl"/><text x="644" y="170" class="t-hd" text-anchor="start">AT-LEAST-ONCE, ALWAYS</text><text x="644" y="190" class="t-sm" text-anchor="start">The relay may publish, crash before</text><text x="644" y="207" class="t-sm" text-anchor="start">marking, and publish the same event</text><text x="644" y="224" class="t-sm" text-anchor="start">again on restart.</text><text x="644" y="244" class="t-fl" text-anchor="start">Consumers must be idempotent.</text>
+</svg>
+<figcaption>figure 8 — the outbox makes the database the single source of truth for what happened</figcaption>
+</figure>
+
+<div class="warn"><p>
+  <b>The honest sentence about exactly-once.</b> The outbox does <i>not</i> give you exactly-once
+  delivery. Nothing does. The relay can publish an event and crash before recording that it did, so it
+  publishes again. What you get is <b>at-least-once delivery with no lost events</b>, and
+  <b>exactly-once <i>effect</i></b> is then built in the consumer — a unique key, a conditional write,
+  or a natural business identifier the consumer checks before acting.
+</p>
+<p>
+  Saying "Kafka gives you exactly-once" is a common and costly answer. Saying "delivery is
+  at-least-once, so exactly-once has to be an effect I build" marks you out immediately.
+</p></div>
+
+<h3>Security for internal events &mdash; and why "internal" is not a security model</h3>
+
+<p>
+  The temptation with internal events is to relax, because it is all inside your own network. That
+  instinct is precisely what zero trust exists to correct. The network tells you where a request came
+  from; it tells you nothing about whether it should be allowed.
+</p>
+
+<div class="tw"><table>
+  <thead><tr><th>Question</th><th>Answer for an internal producer or consumer</th></tr></thead>
+  <tbody>
+    <tr><td><b>Who is this workload?</b></td><td>An IAM role on the Fargate task. With MSK you can use <b>IAM authentication</b>, which means the same identity that reads S3 also writes to the topic &mdash; one identity system, one audit trail. The alternatives are SASL/SCRAM credentials or mutual TLS certificates.</td></tr>
+    <tr><td><b>What may it do?</b></td><td>Authorisation is <b>per topic and per consumer group</b>, not per cluster. The payments service may write to <code>payments.*</code> and nothing else. The fraud consumer may read that topic, in its own consumer group, and write nowhere.</td></tr>
+    <tr><td><b>How does it reach the broker?</b></td><td>Privately. MSK brokers sit as network interfaces in your own subnets; nothing is exposed to the internet. Cross-account access goes over PrivateLink rather than joining networks.</td></tr>
+    <tr><td><b>Is the data protected?</b></td><td>Encrypted in transit between clients and brokers and between brokers, and at rest with KMS &mdash; with a key policy naming who may decrypt and CloudTrail recording every use.</td></tr>
+    <tr><td><b>Who did what?</b></td><td>CloudTrail for the AWS control plane, broker logs for produce and consume activity, and the S3 archive as the durable record of the events themselves.</td></tr>
+    <tr><td><b>What if a consumer is compromised?</b></td><td>It can read the topics its role allows and nothing else. It cannot write. It is in its own AWS account, so the blast radius stops at that account boundary.</td></tr>
+    <tr><td><b>What about sensitive fields?</b></td><td>Do not put a full card number or personal data in an event that six teams read. Publish a reference and let the entitled consumer fetch the detail, or encrypt the field so only holders of that KMS key can read it.</td></tr>
+  </tbody>
+</table></div>
+
+<div class="say"><p>
+  <b>Say this out loud.</b> "Internal doesn't mean trusted. Each producer and consumer has its own IAM
+  role, authorisation is per topic and per consumer group rather than per cluster, connectivity is
+  private, and sensitive fields don't travel in an event six teams can read. <b>Being on my network is
+  not a permission.</b>"
+</p></div>
+
+<h3>Outside versus inside, side by side</h3>
+
+<div class="tw"><table>
+  <thead><tr><th>&nbsp;</th><th>Events from outside</th><th>Events from inside</th></tr></thead>
+  <tbody>
+    <tr><td><b>Entry point</b></td><td>API Gateway. Never direct broker access.</td><td>The service writes to the broker directly, from a private subnet.</td></tr>
+    <tr><td><b>Identity</b></td><td>OAuth client credentials, then handed over to an IAM role.</td><td>IAM role throughout. One identity system.</td></tr>
+    <tr><td><b>Validation</b></td><td>At the edge, before anything enters your estate.</td><td>Schema registry, enforced at publish time.</td></tr>
+    <tr><td><b>Throttling</b></td><td>Per partner, at the gateway.</td><td>Broker quotas, and consumer lag as the real signal.</td></tr>
+    <tr><td><b>Atomicity problem</b></td><td>None &mdash; the event <i>is</i> the request.</td><td><b>Real.</b> This is what the outbox solves.</td></tr>
+    <tr><td><b>Duplicates</b></td><td>Idempotency key from the partner.</td><td>At-least-once from the relay. The consumer handles it.</td></tr>
+    <tr><td><b>Biggest risk</b></td><td>Losing tenant attribution at the identity handover.</td><td>Publishing an event for a transaction that did not commit.</td></tr>
+  </tbody>
+</table></div>
+
+<h3>The four things that go wrong, and what you say about each</h3>
+
+<div class="tw"><table>
+  <thead><tr><th>Problem</th><th>What it looks like</th><th>The answer</th></tr></thead>
+  <tbody>
+    <tr><td><b>Duplicates</b></td><td>The same event processed twice.</td><td>Expected, not exceptional. Consumers are idempotent by design &mdash; a unique key, a conditional write, or a natural business identifier.</td></tr>
+    <tr><td><b>Out of order</b></td><td>A credit processed before its debit.</td><td>Order exists only within a partition. Partition by the thing that must stay ordered &mdash; usually account or payment id &mdash; and accept that a very busy key cannot be parallelised.</td></tr>
+    <tr><td><b>Poison event</b></td><td>One message crashes the consumer every time, blocking everything behind it.</td><td>A retry limit, then move it to a dead-letter queue so the queue drains and a human can look at it. Alarm on anything arriving there.</td></tr>
+    <tr><td><b>Consumer falls behind</b></td><td>Lag grows. Customers see stale data.</td><td>Lag is your primary event-driven metric &mdash; alarm on it, not on CPU. Fixes: more consumers up to the partition count, faster processing, or more partitions. Note the ceiling: <b>you cannot have more active consumers in a group than partitions.</b></td></tr>
+  </tbody>
+</table></div>
+
+<div class="say"><p>
+  <b>The 60-second version, for an interview.</b> "For partner events I put a controlled API in front
+  &mdash; OAuth, per-partner throttling, schema validation and an idempotency key &mdash; and only
+  validated, attributed events reach the log. The partner never gets broker access, and their identity
+  stops at the edge, so tenant travels on the event. For internal events the atomicity problem is
+  real, so producers use a transactional outbox: the business row and the outbox row commit together
+  and a relay publishes afterwards. That gives me at-least-once with no lost events, so every consumer
+  is idempotent. Authorisation is per topic and per consumer group, connectivity is private, and my
+  primary metric is consumer lag."
+</p></div>
+
+<!-- ==================================================================== -->
+<h2 id="s5"><span class="num">SECTION 5</span>Ten trade-offs, with what changes your mind</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<p>
+  Each one in three parts: <b>what decides it</b>, <b>the default answer</b>, and <b>what would change
+  your mind</b>. That third part is what a panel is really listening for, because it is the difference
+  between a decision and a preference.
+</p>
+
+<div class="tw"><table class="to">
+  <thead><tr><th>Decision</th><th>What decides it &middot; the default &middot; what changes your mind</th></tr></thead>
+  <tbody>
+    <tr><td><b>1. Lambda or Fargate</b></td><td><b>Decides it:</b> is anyone waiting, and is it idle most of the day.<br><b>Default:</b> Fargate for anything a customer waits on.<br><b>Changes your mind:</b> nobody waiting and long idle periods &rarr; Lambda, and the cold start costs nothing.</td></tr>
+    <tr><td><b>2. Aurora or DynamoDB</b></td><td><b>Decides it:</b> can you write down every query, today and in eighteen months.<br><b>Default:</b> Aurora, because new questions keep arriving.<br><b>Changes your mind:</b> one key, one lookup, never changing &rarr; DynamoDB. Volume alone never changes it.</td></tr>
+    <tr><td><b>3. API Gateway or ALB</b></td><td><b>Decides it:</b> is the caller inside or outside your trust boundary.<br><b>Default:</b> API Gateway externally, ALB internally.<br><b>Changes your mind:</b> a tight latency budget on an internal path &rarr; ALB even if you would like the gateway's features.</td></tr>
+    <tr><td><b>4. Queue or log</b><br>(SQS or Kafka)</td><td><b>Decides it:</b> will anyone need to read this again.<br><b>Default:</b> SQS, because it is far simpler.<br><b>Changes your mind:</b> replay, several independent consumers, or an audit requirement &rarr; a log.</td></tr>
+    <tr><td><b>5. Synchronous or asynchronous</b></td><td><b>Decides it:</b> is a human waiting, and does the caller need the answer to continue.<br><b>Default:</b> asynchronous, because it decouples.<br><b>Changes your mind:</b> a customer standing at a terminal &rarr; synchronous, because a queued answer is no answer.</td></tr>
+    <tr><td><b>6. Cache, read replica, or CDN</b></td><td><b>Decides it:</b> three different problems &mdash; the same query repeated, read load on the primary, or distance.<br><b>Default:</b> name which problem you have first.<br><b>Changes your mind:</b> reads must be current and analytical &rarr; a replica, not a cache.</td></tr>
+    <tr><td><b>7. Multi-AZ or multi-Region</b></td><td><b>Decides it:</b> how long you may be down, how much data you may lose, and what the business will pay.<br><b>Default:</b> multi-AZ, which covers the overwhelming majority of failures.<br><b>Changes your mind:</b> a stated recovery target a single Region cannot meet &rarr; multi-Region, and be honest that it is mostly a data problem.</td></tr>
+    <tr><td><b>8. Managed or self-managed</b><br>(MSK or Confluent, Fargate or EKS)</td><td><b>Decides it:</b> who carries the pager, and whether the vendor boundary is acceptable.<br><b>Default:</b> managed, unless you have the team.<br><b>Changes your mind:</b> a regulator asking whose account holds the data &rarr; keep it in yours.</td></tr>
+    <tr><td><b>9. Orchestration or choreography</b></td><td><b>Decides it:</b> will someone ask "where is payment 4471?"<br><b>Default:</b> orchestration for money &mdash; Step Functions, with state you can query.<br><b>Changes your mind:</b> independent teams who must not queue behind a central component &rarr; choreography.</td></tr>
+    <tr><td><b>10. Where authorization lives</b></td><td><b>Decides it:</b> nothing. There is only one answer.<br><b>Default:</b> <b>in your code, per object, on every query.</b><br><b>Changes your mind:</b> nothing does. No firewall, WAF, security group or gateway has ever decided whether a caller may see a record.</td></tr>
+  </tbody>
+</table></div>
+
+<!-- ==================================================================== -->
+<h2 id="s6"><span class="num">SECTION 6</span>Landing zone, explained in ten minutes</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<p>
+  This is the term you said you would not know what to say about. Here is everything an interview
+  actually needs.
+</p>
+
+<h3>What it is</h3>
+
+<p>
+  A <b>landing zone</b> is the AWS setup that exists before any application does. Three things:
+</p>
+
+<ol>
+  <li><b>Which AWS accounts you have</b>, and how they are grouped.</li>
+  <li><b>How their networks connect</b> &mdash; to each other, to your data centre, to the internet.</li>
+  <li><b>What rules stop people doing damage</b>, applied centrally.</li>
+</ol>
+
+<p>
+  The building, the wiring and the locks. The applications move in afterwards.
+</p>
+
+<h3>Why more than one account</h3>
+
+<p>
+  Because <b>the AWS account is the only real wall</b>. Everything else &mdash; security groups, IAM
+  policies, separate networks &mdash; is a wall inside the same building. Five specific consequences:
+</p>
+
+<ul>
+  <li><b>Blast radius.</b> A compromise or a mistake stops at the account edge.</li>
+  <li><b>Limits are per account.</b> A load test in one team's account cannot exhaust the capacity another team's payment service needs.</li>
+  <li><b>Billing separates itself</b>, with no tagging discipline required.</li>
+  <li><b>Permissions become sentences you can verify</b> &mdash; "admin in dev, read-only in prod" &mdash; instead of hundreds of lines of conditions.</li>
+  <li><b>The hard ceiling only attaches here.</b> A service control policy, the one thing that can say "nobody in here may do this, ever", attaches to an account or a group of accounts.</li>
+</ul>
+
+<figure class="fig">
+<svg viewBox="0 0 880 432" role="img" aria-label="The standard AWS Organizations structure: organisational units, the accounts inside them, and the management account that runs nothing" style="min-width:660px">
+<defs><marker id="f9a" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker><marker id="f9b" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-ac"/></marker><marker id="f9c" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-fl"/></marker><marker id="f9d" viewBox="0 0 10 10" refX="9.2" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk-gd"/></marker></defs><rect x="0" y="10" width="120" height="32" rx="5" class="bx-ac"/><text x="60" y="31" class="t-ac" text-anchor="middle">ROOT</text><line x1="24" y1="42" x2="24" y2="402" class="ln-hair"/><line x1="74" y1="232" x2="74" y2="294" class="ln-hair"/><line x1="24" y1="82" x2="36" y2="82" class="ln-hair"/><rect x="40" y="66" width="103.788" height="32" rx="5" class="bx"/><text x="91.894" y="87" class="t-lb" text-anchor="middle">Security OU</text><rect x="290" y="69" width="95.54" height="26" rx="13" class="bx2"/><text x="337.77" y="85.6" class="t-sm" text-anchor="middle">Log Archive</text><rect x="393.54" y="69" width="56.256" height="26" rx="13" class="bx2"/><text x="421.668" y="85.6" class="t-sm" text-anchor="middle">Audit</text><text x="290" y="114" class="t-xs" text-anchor="start">every log, write-once   ·   read-only, for the security team</text><line x1="24" y1="142" x2="36" y2="142" class="ln-hair"/><rect x="40" y="126" width="136.986" height="32" rx="5" class="bx"/><text x="108.493" y="147" class="t-lb" text-anchor="middle">Infrastructure OU</text><rect x="290" y="129" width="74.251" height="26" rx="13" class="bx2"/><text x="327.125" y="145.6" class="t-sm" text-anchor="middle">Network</text><rect x="372.251" y="129" width="120.367" height="26" rx="13" class="bx2"/><text x="432.434" y="145.6" class="t-sm" text-anchor="middle">Shared Services</text><text x="290" y="174" class="t-xs" text-anchor="start">the shared network, DNS and egress   ·   CI/CD and registries</text><line x1="24" y1="202" x2="36" y2="202" class="ln-hair"/><rect x="40" y="186" width="117.384" height="32" rx="5" class="bx"/><text x="98.692" y="207" class="t-lb" text-anchor="middle">Workloads OU</text><text x="290" y="207" class="t-xs" text-anchor="start">one account per workload, per environment — the blast radius</text><line x1="74" y1="248" x2="86" y2="248" class="ln-hair"/><rect x="90" y="232" width="79.368" height="32" rx="5" class="bx"/><text x="129.684" y="253" class="t-lb" text-anchor="middle">Prod OU</text><rect x="290" y="235" width="113.962" height="26" rx="13" class="bx2"/><text x="346.981" y="251.6" class="t-sm" text-anchor="middle">payments-prod</text><rect x="411.962" y="235" width="86.939" height="26" rx="13" class="bx2"/><text x="455.431" y="251.6" class="t-sm" text-anchor="middle">fraud-prod</text><line x1="74" y1="294" x2="86" y2="294" class="ln-hair"/><rect x="90" y="278" width="102.336" height="32" rx="5" class="bx"/><text x="141.168" y="299" class="t-lb" text-anchor="middle">NonProd OU</text><rect x="290" y="281" width="109.448" height="26" rx="13" class="bx2"/><text x="344.724" y="297.6" class="t-sm" text-anchor="middle">payments-dev</text><rect x="407.448" y="281" width="111.705" height="26" rx="13" class="bx2"/><text x="463.3" y="297.6" class="t-sm" text-anchor="middle">payments-test</text><line x1="24" y1="346" x2="36" y2="346" class="ln-hair"/><rect x="40" y="330" width="103.788" height="32" rx="5" class="bx"/><text x="91.894" y="351" class="t-lb" text-anchor="middle">Sandbox OU</text><text x="290" y="351" class="t-xs" text-anchor="start">experiments, spend limits, no route to production</text><line x1="24" y1="402" x2="36" y2="402" class="ln-hair"/><rect x="40" y="386" width="250" height="32" rx="5" class="bx-fl"/><text x="165" y="407" class="t-fl" text-anchor="middle">management account</text><text x="306" y="407" class="t-sm" text-anchor="start">billing and administration ONLY — nothing runs here</text>
+</svg>
+<figcaption>figure 9 — the standard shape; AWS Control Tower creates most of this for you</figcaption>
+</figure>
+
+<h3>Four facts that answer most landing-zone questions</h3>
+
+<p>
+  <b>1. Nothing runs in the management account.</b> Service control policies do not apply to it, so
+  anything running there sits outside your strongest control. It is also the account that can alter
+  the organisation itself.
+</p>
+
+<p>
+  <b>2. A service control policy only ever subtracts.</b> It never grants anything. An action succeeds
+  only if an IAM policy allows it <i>and</i> no policy denies it. It does apply to a member account's
+  root user, which is what makes it a real ceiling.
+</p>
+
+<p>
+  <b>3. Preventive and detective are different.</b> A service control policy is preventive &mdash; the
+  API call fails. AWS Config is detective &mdash; the thing gets created and you find out afterwards.
+  Offering Config as the answer to "how would you stop that?" means "I would find out later".
+</p>
+
+<p>
+  <b>4. A subnet is public because of its route table</b>, not a setting. Public subnets have a route
+  to the internet gateway and hold load balancers. Private subnets route outward through a NAT gateway
+  and hold your containers. Isolated subnets have no outward route at all and hold your database
+  &mdash; so a compromised database host cannot call an attacker's server.
+</p>
+
+<h3>Four connectivity answers</h3>
+
+<div class="tw"><table>
+  <thead><tr><th>Need</th><th>Answer</th><th>The catch</th></tr></thead>
+  <tbody>
+    <tr><td>Two networks talk</td><td>VPC peering</td><td>Not transitive. Fine for two, unworkable at ten.</td></tr>
+    <tr><td>Many networks talk</td><td>Transit Gateway</td><td>A hub. Its route tables are where you enforce "prod and non-prod never meet".</td></tr>
+    <tr><td>Expose one service, not your network</td><td>PrivateLink</td><td>One-way. Overlapping address ranges stop mattering. <b>This is the one to reach for with partners and other business units.</b></td></tr>
+    <tr><td>Reach the data centre</td><td>Direct Connect, with a VPN backup</td><td><b>Direct Connect is private, not encrypted.</b> If the requirement says encrypted in transit, you still need TLS or a VPN over it. This is a favourite interview trap.</td></tr>
+  </tbody>
+</table></div>
+
+<div class="say"><p>
+  <b>The 45-second version.</b> "A landing zone is the account structure, network and guardrails that
+  exist before any application. I'd use multiple accounts because the account is the only real
+  isolation boundary &mdash; blast radius, quotas, billing and IAM all separate in one move. Organise
+  the organisational units by the policy you want to apply, not by the org chart, because
+  reorganisations happen and guardrails don't. Nothing runs in the management account, because service
+  control policies don't apply to it. And I'd start with Control Tower rather than building it by
+  hand."
+</p></div>
+
+<p>
+  That is genuinely enough for an interview.
+  <a class="xb" href="02-Landing-Zone.html">Book 02 · Landing zone</a> has the depth &mdash; address planning, endpoints,
+  DNS, shared services, the worked bank design and ten more questions &mdash; for when you want it.
+  <b>You do not need it today.</b>
+</p>
+
+<!-- ==================================================================== -->
+<h2 id="s7"><span class="num">SECTION 7</span>The job description, line by line</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<p>
+  These are the AWS-related lines from a real Solution Architect advert. For each: where it is covered
+  here, and the shape of the answer.
+</p>
+
+<div class="tw"><table>
+  <thead><tr><th>The advert says</th><th>Covered in</th><th>What to say</th></tr></thead>
+  <tbody>
+    <tr><td>"Cloud architecture (AWS)"</td><td><a href="#s1">§1</a></td><td>Sixteen services grouped by the six jobs, each argued against its alternative. Lead with the job, then the service.</td></tr>
+    <tr><td>"Microservices &amp; API architecture"</td><td><a href="#s2">§2</a></td><td>The real-time API design: entry point, compute, cache, store, and where authorization lives. Name the latency budget unprompted.</td></tr>
+    <tr><td>"Enterprise integration patterns"</td><td><a href="#s3">§3</a>, <a href="#s4">§4</a></td><td>Queue, topic, bus and log as four different jobs. Outbox for atomicity. Idempotency for duplicates. Saga with compensation instead of distributed transactions.</td></tr>
+    <tr><td>"Security and identity management"</td><td><a href="#s3">§3</a>, <a href="#s6">§6</a></td><td>The three identities. Roles never keys. Object-level authorization in code. KMS answering "who may decrypt and who did".</td></tr>
+    <tr><td>"Scalability, resilience, performance"</td><td><a href="#s2">§2</a>, <a href="#s5">§5</a></td><td>Percentiles not averages. Multi-AZ by default, multi-Region only against a stated recovery target. Capacity arithmetic with assumptions stated.</td></tr>
+    <tr><td>"Operational excellence"</td><td><a href="#s1">§1</a>, <a href="#s4">§4</a></td><td>Alarm on customer-visible outcomes. Consumer lag as the primary event metric. Trace ids crossing every boundary including queues.</td></tr>
+    <tr><td>"Solution governance and architecture reviews"</td><td><a href="#s5">§5</a>, <a href="#s6">§6</a></td><td>Present a decision as: what I chose, what I rejected, and what would change my mind. Guardrails as preventive versus detective.</td></tr>
+    <tr><td>"Containerization (Docker, Kubernetes)"</td><td><b>Partly</b> &mdash; <a href="#s1">§1</a></td><td>Fargate versus EKS and when each is right. <b>Kubernetes at depth is not covered yet</b> &mdash; that is Book 06. If a role leans on it, say so honestly rather than bluffing.</td></tr>
+    <tr><td>"DevOps and CI/CD"</td><td><b>Not covered</b></td><td>Book 06. A genuine gap today. Do not claim depth here.</td></tr>
+    <tr><td>"Data architecture and analytics platforms"</td><td><b>Partly</b> &mdash; <a href="#s1">§1</a></td><td>Operational stores are covered. Warehouses, lakehouses and data platforms are Book 07 and are not covered yet.</td></tr>
+    <tr><td>"Azure or GCP"</td><td><b>Not covered</b></td><td>Book 05. Everything in <a href="#s5">§5</a> transfers &mdash; the trade-offs are the same, only the service names change &mdash; and saying exactly that is a credible answer.</td></tr>
+  </tbody>
+</table></div>
+
+<div class="note"><p>
+  <b>How to handle the three you cannot answer.</b> "I haven't worked at depth in that area, here's
+  what I do know and how I'd approach it" is a survivable answer. <b>Bluffing is not</b> &mdash; one
+  follow-up question exposes it and it costs you the credibility you earned everywhere else. The three
+  honest gaps today are Kubernetes at depth, CI/CD pipelines, and analytics platforms.
+</p></div>
+
+<!-- ==================================================================== -->
+<h2 id="s8"><span class="num">SECTION 8</span>Every answer on one page</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<p>
+  Read this last, and read it again the morning of an interview. It is only useful once the sections
+  above have landed &mdash; on its own it is a list of assertions.
+</p>
+
+<div class="say"><p><b>How many AWS services do you know?</b> "About sixteen properly, grouped by the job they do, and I can argue each against its alternatives. Past that I know what exists and I'd look it up &mdash; which is what I'd do on the job anyway."</p></div>
+
+<div class="say"><p><b>Lambda or Fargate?</b> "Two questions: is anyone waiting for the answer, and is it idle most of the day. Lambda when nobody's waiting and it's mostly idle. Fargate when a customer is waiting &mdash; a cold start on a payment screen is a complaint, not a trade-off."</p></div>
+
+<div class="say"><p><b>Aurora or DynamoDB?</b> "Can I write down every query today and in eighteen months? If yes, DynamoDB and I model for them. If no, Aurora, at any volume. Volume isn't the test &mdash; knowing every query is the test."</p></div>
+
+<div class="say"><p><b>API Gateway or ALB?</b> "API Gateway when the caller is outside my boundary, for throttling, token validation and request validation I'd otherwise write. ALB when the caller is one of my own services, because I won't spend a hop on features I don't need."</p></div>
+
+<div class="say"><p><b>SQS or Kafka?</b> "Does anyone need to read this again &mdash; replay, a new consumer next year, an auditor? If no, it's a queue. If yes, it's a log. Reaching for Kafka where SQS fits is the most common over-engineering mistake there is."</p></div>
+
+<div class="say"><p><b>Design a real-time API.</b> "Latency is the product, so I spend the budget on paper first. Internal caller means ALB, not API Gateway. Fargate not Lambda, because a cold start doesn't fit in 100 milliseconds. Cache in front of a key-value store for the expensive read. Everything that isn't the decision comes off the path &mdash; I emit and move on. Three containers across three zones, because resilience set that number rather than throughput."</p></div>
+
+<div class="say"><p><b>A partner wants to send us events.</b> "I'd never expose the broker. A controlled API in front gives me OAuth, per-partner throttling and schema validation, and keeps my topic design internal rather than a contract with another company. Their identity stops at my edge, so tenant travels on the event and every consumer honours it &mdash; otherwise I've built a confused deputy."</p></div>
+
+<div class="say"><p><b>The three identities.</b> "Partner OAuth client at the edge, my ingestion service's IAM role inside AWS, and the stream principal at the broker. Different issuers, different lifetimes, different enforcement points. They are not interchangeable and collapsing them is how tenant attribution gets lost."</p></div>
+
+<div class="say"><p><b>How do you publish events reliably from a service?</b> "A transactional outbox. The business row and the outbox row commit in the same database transaction, so either both exist or neither does, and a relay publishes afterwards. That gives me at-least-once with no lost events &mdash; so every consumer is idempotent."</p></div>
+
+<div class="say"><p><b>Doesn't Kafka give you exactly-once?</b> "Delivery is at-least-once. Exactly-once has to be an <i>effect</i> I build &mdash; a conditional write on a stable key, with the result stored so a retry returns the same answer."</p></div>
+
+<div class="say"><p><b>How do you secure internal events?</b> "Internal doesn't mean trusted. Each producer and consumer has its own IAM role, authorisation is per topic and per consumer group rather than per cluster, connectivity is private, and sensitive fields don't travel in an event six teams read. Being on my network is not a permission."</p></div>
+
+<div class="say"><p><b>What's your primary metric for an event-driven system?</b> "Consumer lag. Not CPU. Lag tells me whether the business is falling behind, and the ceiling on fixing it is the partition count &mdash; I can't have more active consumers in a group than partitions."</p></div>
+
+<div class="say"><p><b>What is a landing zone?</b> "The account structure, network and guardrails that exist before any application. Multiple accounts because the account is the only real isolation boundary. Organisational units named after the policy that applies, not the org chart. Nothing in the management account, because service control policies don't apply to it. Control Tower rather than building it by hand."</p></div>
+
+<div class="say"><p><b>How do you stop deployments outside Australia?</b> "A service control policy denying every Region except the approved ones. That's preventive &mdash; the API call fails. I wouldn't answer with AWS Config, because Config is detective and only tells me afterwards."</p></div>
+
+<div class="say"><p><b>Is Direct Connect encrypted?</b> "No. It's private, which isn't the same thing. If the control says encrypted in transit, I need a VPN over it, MACsec, or end-to-end TLS at the application &mdash; which I'd want anyway."</p></div>
+
+<div class="say"><p><b>Where does authorization live?</b> "In my code, per object, on every query. No firewall, WAF, security group or gateway has ever decided whether a caller may see a record. Authentication tells me who is calling; object-level authorization tells me which rows they may see."</p></div>
+
+<div class="say"><p><b>How do you present a design decision?</b> "What I chose, what I rejected, and what would change my mind. If I can't answer the third, I haven't made a decision &mdash; I've stated a preference."</p></div>
+
+<!-- ==================================================================== -->
+<h2 id="sg"><span class="num">GLOSSARY</span>Every term used here, in ordinary language</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<div class="tw"><table class="gl">
+  <tbody>
+    <tr id="g-p99"><td><b>p99 / percentile</b></td><td>"p99 is 100 ms" means 99 of every 100 requests finish within 100 ms. Averages hide disasters; percentiles do not. <b>Why it matters:</b> at a million requests a day, the slowest 1% is ten thousand unhappy customers.</td></tr>
+    <tr id="g-cold"><td><b>Cold start</b></td><td>With Lambda your code is not running until something calls it. If no warm copy exists, AWS must start one first, and that request waits. For Java it is seconds. <b>Why it matters:</b> invisible on a nightly job, a complaint on a payment screen.</td></tr>
+    <tr id="g-crit"><td><b>Critical path</b></td><td>The chain of steps somebody is actually waiting on. Recording a decision afterwards is <i>off</i> the critical path. <b>Why it matters:</b> you are allowed to be slow off it, and that is where the cheap options live.</td></tr>
+    <tr id="g-conc"><td><b>Concurrency</b></td><td>How many requests are in flight at the same moment. It equals throughput multiplied by how long each takes. <b>Why it matters:</b> it is how you size containers, threads and connection pools without guessing.</td></tr>
+    <tr id="g-idem"><td><b>Idempotent</b></td><td>Doing it twice has the same effect as doing it once. Setting a balance to $750 is; subtracting $250 is not. <b>Why it matters:</b> every messaging system delivers at least once, so duplicates will happen.</td></tr>
+    <tr id="g-alo"><td><b>At-least-once delivery</b></td><td>If the sender gets no acknowledgement it sends again, so you may receive a message twice but you will not lose it. <b>Why it matters:</b> "exactly once" is not something you buy &mdash; it is an effect you build.</td></tr>
+    <tr id="g-key"><td><b>Idempotency key</b></td><td>A unique identifier the caller puts on a request. You record it and store the response; if it arrives again you return the stored response. <b>Why it matters:</b> it is how a partner safely retries a payment after a timeout.</td></tr>
+    <tr id="g-outbox"><td><b>Transactional outbox</b></td><td>Write the business row and a "message to send" row in the same database transaction, then publish from a separate process. <b>Why it matters:</b> it is the only honest way to make "save and publish" atomic.</td></tr>
+    <tr id="g-part"><td><b>Partition</b></td><td>A stream is split into lanes; order is guaranteed only within a lane, and one consumer handles a lane at a time. <b>Why it matters:</b> the field you partition by decides both what stays in order and how much runs in parallel.</td></tr>
+    <tr id="g-lag"><td><b>Consumer lag</b></td><td>How far behind a consumer is &mdash; how many events it has not read yet. <b>Why it matters:</b> it is the primary health metric for anything event-driven, far more useful than CPU.</td></tr>
+    <tr id="g-dlq"><td><b>Dead-letter queue</b></td><td>Where a message goes after failing too many times, so it stops blocking everything behind it. <b>Why it matters:</b> without one you either lose bad messages silently or retry them forever.</td></tr>
+    <tr id="g-cg"><td><b>Consumer group</b></td><td>Copies of the same application sharing the work of a stream, each group keeping its own position. <b>Why it matters:</b> it is how six teams read the same events independently.</td></tr>
+    <tr id="g-oauth"><td><b>OAuth client credentials</b></td><td>The flow a <i>system</i> uses to get a short-lived token, as opposed to a person logging in. <b>Why it matters:</b> it gives you expiry, scopes and revocation, which a plain API key does not.</td></tr>
+    <tr id="g-mtls"><td><b>mTLS</b></td><td>Normal TLS proves the server's identity; mutual TLS makes the client prove its identity too. <b>Why it matters:</b> it authenticates the <i>connection</i>, not the request &mdash; it tells you which machine, not which customer, and it is not authorization.</td></tr>
+    <tr id="g-obj"><td><b>Object-level authorization</b></td><td>Checking that <i>this</i> caller may see <i>this specific record</i>, not just that they are logged in. <b>Why it matters:</b> no AWS service performs this check. Your code does, on every query, or nobody does.</td></tr>
+    <tr id="g-conf"><td><b>Confused deputy</b></td><td>A trusted service tricked into using its own high privileges for a caller who should not have them. <b>Why it matters:</b> it is what happens when an ingestion service forgets whose request it is acting on.</td></tr>
+    <tr id="g-iam"><td><b>IAM role</b></td><td>How a piece of software proves what it is to AWS. Credentials arrive automatically and expire automatically. <b>Why it matters:</b> the alternative is a long-lived access key, which is a password that never expires.</td></tr>
+    <tr id="g-scp2"><td><b>Service control policy</b></td><td>An organisation-wide rule setting the maximum permissions for an account. It only subtracts, never grants. <b>Why it matters:</b> it is preventive &mdash; the API call fails &mdash; unlike AWS Config, which only reports afterwards.</td></tr>
+    <tr id="g-priv"><td><b>PrivateLink</b></td><td>Exposes one service to a consumer, one-way, without joining the two networks. <b>Why it matters:</b> "we published one endpoint" is a far easier security conversation than "we joined our networks".</td></tr>
+    <tr id="g-lz2"><td><b>Landing zone</b></td><td>The accounts, networks and guardrails that exist before any application does. <b>Why it matters:</b> in an enterprise engagement it is usually the first thing you are asked to design.</td></tr>
+    <tr id="g-rto"><td><b>RTO and RPO</b></td><td>RTO is how long you may be <i>down</i>. RPO is how much recent <i>data</i> you may lose. Both are durations, of different things. <b>Why it matters:</b> people mix them up constantly, and cross-Region replication is asynchronous, so your RPO is never zero across Regions.</td></tr>
+    <tr id="g-blast2"><td><b>Blast radius</b></td><td>How much breaks, and how many customers notice, when one thing fails. <b>Why it matters:</b> it is the first and best argument for more than one AWS account.</td></tr>
+  </tbody>
+</table></div>
+
+<!-- ==================================================================== -->
+<h2 id="sr"><span class="num">REFERENCES</span>Where to read further</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<p>
+  Official sources only, checked on <b>21 September 2026</b>. You do not need any of these to finish
+  this book &mdash; they are for when a topic catches your interest.
+</p>
+
+<ul class="refs">
+  <li><a href="https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html">AWS Well-Architected Framework</a> &mdash; six pillars: operational excellence, security, reliability, performance, cost, sustainability. <span class="rw">Interviewers use these as scaffolding, and they give you a ready-made structure for reviewing someone else's design.</span></li>
+  <li><a href="https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/">AWS Builders' Library &mdash; Timeouts, retries and backoff with jitter</a> &mdash; <span class="rw">the best short read on this list. Written by people who learned it expensively.</span></li>
+  <li><a href="https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/organizing-your-aws-environment.html">Organizing Your AWS Environment Using Multiple Accounts</a> &mdash; the definitive document behind <a href="#s6">Section 6</a>.</li>
+  <li><a href="https://docs.aws.amazon.com/msk/latest/developerguide/iam-access-control.html">Amazon MSK &mdash; IAM access control</a> &mdash; how one identity system covers both AWS and your Kafka topics.</li>
+  <li><a href="https://microservices.io/patterns/data/transactional-outbox.html">Transactional outbox pattern</a> &mdash; the pattern in <a href="#s4">Section 4</a>, in its original form.</li>
+  <li><a href="https://sre.google/sre-book/monitoring-distributed-systems/">Google SRE Book &mdash; Monitoring distributed systems</a> &mdash; <span class="rw">the four golden signals, and why you alarm on symptoms rather than causes.</span></li>
+  <li><a href="https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/">OWASP &mdash; Broken Object Level Authorization</a> &mdash; the number one API vulnerability, and the reason for trade-off 10.</li>
+</ul>
+
+<div class="keyq">
+  <p class="hd">When you finish</p>
+  <p>
+    Come back and we start the exercises &mdash; beginning with the one that matters most and has
+    never been assessed: <b>a timed whiteboard walkthrough</b>. Twenty minutes, out loud, with a
+    drawing. Everything in this book is written so that exercise is possible.
+  </p>
+  <p>
+    If any sentence here was unclear, that is a defect in the writing rather than in you. Flag it and
+    it gets fixed.
+  </p>
+</div>
+
+
+<p class="foot">Book 00 · AWS for Interviews: the whole picture · updated Tue 22 Sep 2026 (Melbourne) · AWS facts checked against official AWS documentation on that date · <a href="index.html">AWS contents</a></p>
+
+</div>
+</html>

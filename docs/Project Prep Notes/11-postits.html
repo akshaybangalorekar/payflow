@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Post-its | Westpac TL Interview Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SF Mono', Consolas, monospace;
+  --bg: #14181d; --surface: #1b2129; --surface2: #20262f;
+  --border: rgba(255,255,255,0.10); --border-bright: rgba(255,255,255,0.22);
+  --text: #e6edf3; --dim: #93a1ad;
+  --navy: #7ba7d4; --navy-dim: rgba(123,167,212,0.12);
+  --terra: #f08c56; --terra-dim: rgba(240,140,86,0.12);
+  --sage: #9cc84a; --sage-dim: rgba(156,200,74,0.12);
+  --gold: #e3a04b; --red: #ef7070; --red-dim: rgba(239,112,112,0.10);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; font-family: var(--font-body); color: var(--text); background: var(--bg);
+  background-image: linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 56px 56px; background-attachment: fixed;
+  overflow-wrap: break-word;
+}
+.wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px 80px; }
+nav.top {
+  position: sticky; top: 0; z-index: 50; background: var(--surface);
+  border-bottom: 1px solid var(--border); padding: 10px 18px;
+  display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center;
+}
+nav.top .brand { font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--navy); letter-spacing: 1px; text-transform: uppercase; margin-right: 10px; }
+nav.top a { font-family: var(--font-mono); font-size: 11.5px; color: var(--dim); text-decoration: none; padding: 3px 8px; border-radius: 5px; }
+nav.top a:hover { background: var(--navy-dim); color: var(--text); }
+nav.top a.on { background: var(--navy); color: var(--surface); }
+header.hero { padding: 44px 0 10px; }
+.kicker { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--terra); margin-bottom: 10px; }
+h1 { font-size: clamp(26px, 4vw, 38px); line-height: 1.15; margin: 0 0 10px; color: var(--navy); letter-spacing: -0.5px; }
+.sub { font-size: 16.5px; color: var(--dim); max-width: 70ch; line-height: 1.6; margin: 0; }
+section { margin-top: 46px; }
+.section-label {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--navy); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+.section-label::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--terra); }
+h2 { font-size: 21px; margin: 34px 0 8px; color: var(--navy); }
+h3 { font-size: 16.5px; margin: 22px 0 6px; color: var(--text); }
+p { line-height: 1.65; font-size: 15px; margin: 8px 0; }
+.ve-card { background: var(--surface); border: 1px solid var(--border); border-radius: 11px; padding: 18px 20px; }
+.ve-card--elev { background: var(--surface2); box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+.ve-card--hero { background: linear-gradient(120deg, var(--navy-dim), var(--surface) 60%); border-color: var(--border-bright); }
+.say {
+  border-left: 4px solid var(--terra); background: var(--terra-dim); border-radius: 0 9px 9px 0;
+  padding: 13px 16px; margin: 16px 0; font-size: 14.5px; line-height: 1.6;
+}
+.say .lbl { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--terra); display: block; margin-bottom: 5px; }
+.note { border-left: 4px solid var(--sage); background: var(--sage-dim); border-radius: 0 9px 9px 0; padding: 12px 16px; margin: 16px 0; font-size: 14.5px; line-height: 1.6; }
+.note .lbl { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--sage); display: block; margin-bottom: 5px; }
+.warn { border-left: 4px solid var(--gold); background: rgba(180,83,9,0.08); border-radius: 0 9px 9px 0; padding: 12px 16px; margin: 16px 0; font-size: 14px; line-height: 1.6; }
+.warn .lbl { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 5px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+@media (max-width: 820px) { .grid2 { grid-template-columns: 1fr; } }
+.grid2 > *, .grid3 > * { min-width: 0; }
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 18px 0; }
+.kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.kpi .v { font-size: 26px; font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; }
+.kpi .l { font-family: var(--font-mono); font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; color: var(--dim); margin-top: 4px; }
+.table-wrap { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin: 14px 0; }
+.table-scroll { overflow-x: auto; }
+table.dt { width: 100%; border-collapse: collapse; font-size: 13.5px; line-height: 1.5; }
+table.dt th { background: var(--surface2); font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--dim); text-align: left; padding: 10px 14px; border-bottom: 2px solid var(--border-bright); white-space: nowrap; }
+table.dt td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+table.dt tbody tr:nth-child(even) { background: var(--navy-dim); }
+table.dt tbody tr:last-child td { border-bottom: none; }
+table.dt code, p code, li code, .say code, .note code { font-family: var(--font-mono); font-size: 12px; background: var(--navy-dim); color: var(--navy); padding: 1px 5px; border-radius: 4px; }
+.tag { font-family: var(--font-mono); font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 5px; background: var(--navy-dim); color: var(--navy); white-space: nowrap; display: inline-block; }
+.tag--terra { background: var(--terra-dim); color: var(--terra); }
+.tag--sage { background: var(--sage-dim); color: var(--sage); }
+.tag--red { background: var(--red-dim); color: var(--red); }
+ul.nl, ol.nl { list-style: none; padding: 0; margin: 8px 0; }
+ul.nl li, ol.nl li { padding-left: 16px; position: relative; line-height: 1.65; font-size: 14.5px; margin: 5px 0; }
+ul.nl li::before { content: '\203A'; position: absolute; left: 0; color: var(--terra); font-weight: 700; }
+ol.nl { counter-reset: it; }
+ol.nl li { counter-increment: it; padding-left: 26px; }
+ol.nl li::before { content: counter(it) "."; position: absolute; left: 0; color: var(--terra); font-weight: 700; font-family: var(--font-mono); font-size: 13px; }
+.fig { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 18px 12px; margin: 20px 0; }
+.fig svg { width: 100%; height: auto; display: block; }
+.fig .cap { font-family: var(--font-mono); font-size: 11px; color: var(--dim); text-align: center; margin-top: 12px; }
+details.col { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin: 12px 0; }
+details.col summary { padding: 12px 18px; background: var(--surface); font-family: var(--font-mono); font-size: 12px; font-weight: 600; cursor: pointer; list-style: none; color: var(--text); }
+details.col summary::-webkit-details-marker { display: none; }
+details.col summary::before { content: '\25B8'; font-size: 10px; color: var(--dim); margin-right: 8px; display: inline-block; transition: transform .15s ease; }
+details.col[open] summary::before { transform: rotate(90deg); }
+details.col .bd { padding: 4px 18px 16px; border-top: 1px solid var(--border); font-size: 14px; line-height: 1.6; }
+footer.pn { display: flex; justify-content: space-between; gap: 12px; margin-top: 56px; border-top: 1px solid var(--border); padding-top: 18px; }
+footer.pn a { font-family: var(--font-mono); font-size: 12px; color: var(--navy); text-decoration: none; }
+footer.pn a:hover { text-decoration: underline; }
+.lead { font-size: 17px; line-height: 1.65; color: var(--text); max-width: 75ch; }
+a { color: var(--navy); }
+a.navcard { text-decoration: none; color: inherit; display: block; transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
+a.navcard:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.35); border-color: var(--terra); }
+a.navcard h3 { color: var(--navy); }
+a.navcard .pill { margin-bottom: 0; }
+.pill { font-family: var(--font-mono); font-size: 10px; padding: 2px 8px; border-radius: 99px; border: 1px solid var(--border-bright); color: var(--dim); }
+</style>
+<style>
+svg text { font-family: var(--font-body); }
+svg .h  { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 1.4px; fill: var(--dim); }
+svg .t  { font-size: 13px; font-weight: 600; fill: var(--text); }
+svg .s  { font-size: 11.5px; fill: var(--dim); }
+svg .a  { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .9px; fill: var(--navy); }
+svg .o  { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .9px; fill: var(--terra); }
+svg .g  { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .9px; fill: var(--sage); }
+svg .bx  { fill: var(--surface2); stroke: var(--border-bright); stroke-width: 1.1; }
+svg .bxn { fill: var(--navy-dim);  stroke: var(--navy);  stroke-width: 1.1; }
+svg .bxt { fill: var(--terra-dim); stroke: var(--terra); stroke-width: 1.1; }
+svg .bxs { fill: var(--sage-dim);  stroke: var(--sage);  stroke-width: 1.1; }
+svg .ln  { stroke: var(--border-bright); stroke-width: 1.5; fill: none; }
+svg .lnn { stroke: var(--navy);  stroke-width: 1.6; fill: none; }
+svg .lnt { stroke: var(--terra); stroke-width: 1.6; fill: none; }
+svg .lns { stroke: var(--sage);  stroke-width: 1.6; fill: none; }
+svg .mk  { fill: var(--border-bright); }
+svg .mkn { fill: var(--navy); }
+svg .mkt { fill: var(--terra); }
+svg .mks { fill: var(--sage); }
+.fig { overflow-x: auto; }
+.fig svg { min-width: 720px; }
+@media (max-width: 780px) { .fig svg { min-width: 680px; } }
+
+/* ── post-it wall ─────────────────────────────────────────────────────── */
+.pi-legend { display: flex; flex-wrap: wrap; gap: 9px; margin: 10px 0 4px; }
+.pi-key { font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; letter-spacing: 1px;
+  text-transform: uppercase; padding: 6px 12px; border-radius: 4px; color: #17202b; }
+.pk-gold{background:#f2d27c;} .pk-violet{background:#c8b6ec;} .pk-navy{background:#a6c8ee;}
+.pk-terra{background:#f4bd99;} .pk-teal{background:#a0dcd4;} .pk-sage{background:#c2e08c;}
+.pk-red{background:#f1a8a8;} .pk-slate{background:#bcc7d6;}
+
+.pi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 20px; margin: 16px 0 6px; }
+.pi { border-radius: 3px; padding: 22px 22px 24px; min-height: 210px; display: flex; flex-direction: column;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.38); position: relative; }
+.pi .n { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; opacity: .62; margin-bottom: 14px; }
+.pi .line { font-size: 17px; line-height: 1.52; font-weight: 500; }
+.pi .line strong { font-weight: 700; }
+.pi .sub { font-size: 13px; line-height: 1.55; margin-top: auto; padding-top: 16px; opacity: .86;
+  border-top: 1px solid rgba(0,0,0,0.20); }
+.pi em { font-style: italic; }
+.pi--gold  { background:#f2d27c; color:#3a2f0e; }
+.pi--violet{ background:#c8b6ec; color:#2c1f46; }
+.pi--navy  { background:#a6c8ee; color:#11283e; }
+.pi--terra { background:#f4bd99; color:#472312; }
+.pi--teal  { background:#a0dcd4; color:#0f3739; }
+.pi--sage  { background:#c2e08c; color:#26380e; }
+.pi--red   { background:#f1a8a8; color:#481414; }
+.pi--slate { background:#bcc7d6; color:#1c2532; }
+@media print {
+  body { background: #fff; }
+  .pi-grid { grid-template-columns: 1fr 1fr; }
+  .pi { box-shadow: none; border: 1px solid #999; break-inside: avoid; }
+  nav.top, footer.pn { display: none; }
+}
+</style>
+</head>
+<body>
+<nav class="top"><span class="brand">Westpac TL Role</span><a href="index.html">Start Here</a><a href="01-role-and-initiatives.html">The Role</a><a href="02-banking-story.html">My Banking Story</a><a href="03-design-patterns.html">Design Patterns</a><a href="04-integration-patterns.html">Integration Patterns</a><a href="05-things-i-dont-know.html">Honest Gaps</a><a href="06-panel-and-questions.html">Panel and Questions</a><a href="07-revision.html">Revision</a><a href="08-payments-primer.html">Payments Primer</a><a href="09-followups.html">Follow-ups</a><a href="10-nab-deep-dive.html">NAB Deep Dive</a><a href="11-postits.html" class="on">Post-its</a></nav>
+<div class="wrap">
+
+<header class="hero">
+<div class="kicker">Page 11 &middot; copy these onto real post-its</div>
+<h1>The post-it wall</h1>
+<p class="sub">The lines that actually have to come out of your mouth on Thursday. <strong>One card here is one post-it.</strong>
+Each is sized so you can hand-write it without cramming &mdash; a heading, one line to say, and a short note about when to
+say it. Colour-coded so you can group them on a wall or a desk.</p>
+</header>
+
+<div class="note"><div class="lbl">How to use this page</div>
+<p><strong>Do not write all of them.</strong> Start with the eight below, in the colour they are listed under. If you have
+time and paper left, work down the wall. <strong>Write the big line in your own handwriting and skip the small print</strong>
+&mdash; the small print is there so you remember what the card is for, not so you copy it.</p></div>
+
+<section>
+<div class="section-label">If you only write eight</div>
+<div class="ve-card ve-card--hero">
+<ol class="nl">
+<li><strong>"The cloud realisation I can design and defend, but I haven't operated it at that scale &mdash; I'll flag which is which as we go."</strong></li>
+<li><strong>"Synchronous because a payment is waiting on it. Asynchronous because nothing else is."</strong></li>
+<li><strong>"A timeout is a business decision with a loss rate, not an error."</strong></li>
+<li><strong>"Authorisation is a promise. Clearing is the confirmation. Settlement is the money moving."</strong></li>
+<li><strong>"The network runs the machinery. The issuer owns the decision."</strong></li>
+<li><strong>"The gateway can tell you which client is calling. It can never tell you whose record this is."</strong></li>
+<li><strong>350 TPS &middot; p99 ~100ms &middot; under 0.1% timeouts &middot; A$0.70 per A$1,000.</strong></li>
+<li><strong>"I don't know that one &mdash; but structurally it has to sit either with the scheme or with the issuer."</strong></li>
+</ol>
+</div>
+</section>
+
+<section>
+<div class="section-label">The colour code</div>
+<div class="pi-legend">
+<span class="pi-key pk-gold">open with this</span>
+<span class="pi-key pk-violet">the numbers</span>
+<span class="pi-key pk-navy">architecture</span>
+<span class="pi-key pk-terra">payments</span>
+<span class="pi-key pk-teal">security &amp; governance</span>
+<span class="pi-key pk-sage">honesty</span>
+<span class="pi-key pk-red">never say</span>
+<span class="pi-key pk-slate">ask them</span>
+</div>
+</section>
+
+<!-- ════════════════════════════════════ GOLD -->
+<section>
+<div class="section-label">Open with this</div>
+<div class="pi-grid">
+
+<div class="pi pi--gold">
+<div class="n">the framing, first two minutes</div>
+<div class="line">"My hands-on delivery is API and integration architecture in payments. The cloud realisation I can design and defend, but I haven't operated it at that scale &mdash; and I'll flag which is which as we go."</div>
+<div class="sub">Volunteering the boundary early buys you credibility on everything after it.</div>
+</div>
+
+<div class="pi pi--gold">
+<div class="n">tell me about yourself &mdash; three beats, then stop</div>
+<div class="line">Twenty-two years. Seventeen in carrier-grade telecom. Five in Australian banking &mdash; card fraud, tokenisation, disputes, then a collections platform consolidation.</div>
+<div class="sub">Ninety seconds. Then stop talking and let them choose the thread.</div>
+</div>
+
+<div class="pi pi--gold">
+<div class="n">why this role</div>
+<div class="line">"Two of your four initiatives are things I've designed for on the issuing side, and the third is a platform replacement, which is what I spent last year on."</div>
+<div class="sub">Specific beats enthusiastic. Say it in one breath.</div>
+</div>
+
+<div class="pi pi--gold">
+<div class="n">the two halves &mdash; use it every technical answer</div>
+<div class="line">"That part I lived. This next part is how I'd build it on AWS &mdash; design reasoning, not something I've operated."</div>
+<div class="sub">This single habit protects every other claim you make.</div>
+</div>
+
+</div>
+</section>
+
+<!-- ════════════════════════════════════ VIOLET -->
+<section>
+<div class="section-label">The numbers</div>
+<div class="pi-grid">
+
+<div class="pi pi--violet">
+<div class="n">the only set you use</div>
+<div class="line">350 TPS sustained &middot; p99 ~100 ms &middot; under 0.1% timeouts &middot; fraud loss under A$0.70 per A$1,000.</div>
+<div class="sub">Your notes hold two other sets. Never mix them &mdash; that is how you sound like you are quoting someone else's platform.</div>
+</div>
+
+<div class="pi pi--violet">
+<div class="n">the arithmetic they may ask for</div>
+<div class="line">Concurrency = throughput &times; latency. 350 a second at 100 ms is <strong>35 in flight.</strong> So three instances across three zones &mdash; for the failure domain, not the throughput.</div>
+<div class="sub">Say which number you'd want to measure rather than assume. That is the senior move.</div>
+</div>
+
+<div class="pi pi--violet">
+<div class="n">what was set at the edge and the gateway</div>
+<div class="line">Roughly 2,000 requests per 5 minutes from one source &middot; 32 KB body cap &middot; 500 a second per partner, burst 1,000 &middot; 5,000 a second for the whole stage.</div>
+<div class="sub">Say "roughly". A rounded real number beats a precise invented one.</div>
+</div>
+
+<div class="pi pi--violet">
+<div class="n">partition arithmetic</div>
+<div class="line">700 a second, one consumer handles a couple of hundred &rarr; about four. <strong>So start at twelve</strong>, because the count is effectively fixed and it caps your consumers.</div>
+<div class="sub">Doing the division out loud is worth more than the answer.</div>
+</div>
+
+</div>
+</section>
+
+<!-- ════════════════════════════════════ NAVY -->
+<section>
+<div class="section-label">Architecture</div>
+<div class="pi-grid">
+
+<div class="pi pi--navy">
+<div class="n">the split, and the root of every answer</div>
+<div class="line">"Synchronous because a payment is waiting on it. Asynchronous because nothing else is."</div>
+<div class="sub">If you get lost mid-answer, come back to this sentence.</div>
+</div>
+
+<div class="pi pi--navy">
+<div class="n">why the events exist at all</div>
+<div class="line">"The events feed the state that the fast path reads."</div>
+<div class="sub">The counters are precomputed and looked up, never calculated inside the budget.</div>
+</div>
+
+<div class="pi pi--navy">
+<div class="n">timeouts</div>
+<div class="line">"A timeout is a business decision with a loss rate, not an error. The caller owns it, and it has to resolve to a decision &mdash; never to an error page."</div>
+<div class="sub">If you did not decide it in advance, you delegated it to whoever deployed last.</div>
+</div>
+
+<div class="pi pi--navy">
+<div class="n">degradation</div>
+<div class="line">"Fewer signals means stricter decisions. Degraded mode tightens &mdash; it does not relax."</div>
+<div class="sub">Otherwise you have published a recipe: knock over the vendor, get everything approved.</div>
+</div>
+
+<div class="pi pi--navy">
+<div class="n">an incident, first five minutes</div>
+<div class="line">"If the latency is dependency-driven, scaling makes it worse. Stabilise first, scale second."</div>
+<div class="sub">Shed load, degrade the optional signals, cap vendor concurrency. Then scale.</div>
+</div>
+
+<div class="pi pi--navy">
+<div class="n">streams</div>
+<div class="line">"Key by the account, because ordering only exists inside a partition &mdash; and the account is the thing that never changes."</div>
+<div class="sub">Not the payee, not the channel, not whoever is handling the case.</div>
+</div>
+
+<div class="pi pi--navy">
+<div class="n">delivery guarantees</div>
+<div class="line">"At-least-once delivery plus idempotent processing. Exactly-once stops the moment you write outside the broker."</div>
+<div class="sub">Anyone promising exactly-once across systems is describing something narrower than it sounds.</div>
+</div>
+
+<div class="pi pi--navy">
+<div class="n">the shape of every design answer</div>
+<div class="line">The constraint. Two real options. The choice, in one sentence. <strong>What it cost, and what would make you revisit it.</strong></div>
+<div class="sub">Almost nobody offers the fourth beat. It is the highest-scoring clause available to you.</div>
+</div>
+
+</div>
+</section>
+
+<!-- ════════════════════════════════════ TERRA -->
+<section>
+<div class="section-label">Payments</div>
+<div class="pi-grid">
+
+<div class="pi pi--terra">
+<div class="n">the three stages</div>
+<div class="line">"Authorisation is a promise. Clearing is the confirmation. Settlement is the money moving."</div>
+<div class="sub">A hold is not a charge. It expires if nobody clears it.</div>
+</div>
+
+<div class="pi pi--terra">
+<div class="n">who is who</div>
+<div class="line">"The acquirer is the merchant's bank. The issuer is the customer's bank. <strong>The decision is always the issuer's.</strong>"</div>
+<div class="sub">The acquirer <em>acquires</em> the merchant. That is how you remember it.</div>
+</div>
+
+<div class="pi pi--terra">
+<div class="n">tokens</div>
+<div class="line">"The token is domain restricted and it outlives the card. The issuer owns the provisioning decision even though the wallet holds the token."</div>
+<div class="sub">A stolen token is a key to a door that only opens for one lock.</div>
+</div>
+
+<div class="pi pi--terra">
+<div class="n">the sentence that covers wallets and 3DS at once</div>
+<div class="line">"The network runs the machinery. The issuer owns the decision."</div>
+<div class="sub">Say this first in any wallet or authentication question. It frames everything after it.</div>
+</div>
+
+<div class="pi pi--terra">
+<div class="n">disputes</div>
+<div class="line">"Allocation is automated liability assignment. Collaboration is an evidence exchange."</div>
+<div class="sub">And every arrow has a deadline &mdash; miss one and liability lands regardless of merit.</div>
+</div>
+
+<div class="pi pi--terra">
+<div class="n">3-D secure, in one line</div>
+<div class="line">"Low risk goes through invisibly. High risk gets challenged. Every challenge costs sales, so the bank wants to authenticate <em>well</em>, not <em>often</em>."</div>
+<div class="sub">That tension is the whole design.</div>
+</div>
+
+<div class="pi pi--terra">
+<div class="n">your own wallet line</div>
+<div class="line">"Three wallets, three separate identity checks, one issuer-side orchestration model &mdash; and the design had to carry <em>which wallet vouched for this</em>."</div>
+<div class="sub">This is the strongest sentence you own on the GPAY initiative.</div>
+</div>
+
+</div>
+</section>
+
+<!-- ════════════════════════════════════ TEAL -->
+<section>
+<div class="section-label">Security &amp; governance</div>
+<div class="pi-grid">
+
+<div class="pi pi--teal">
+<div class="n">the distinction they will test</div>
+<div class="line">"mTLS says who is on the connection. OAuth says what the software may do. <strong>Neither says whose record this is.</strong>"</div>
+<div class="sub">That third check lives in the service, on every read.</div>
+</div>
+
+<div class="pi pi--teal">
+<div class="n">object-level authorization</div>
+<div class="line">"The gateway can tell you which client is calling. It can never tell you whose record this is."</div>
+<div class="sub">Never query by the identifier alone &mdash; always by the identifier <em>and</em> the caller's own scope.</div>
+</div>
+
+<div class="pi pi--teal">
+<div class="n">design assurance</div>
+<div class="line">"Not 'did you follow the rules'. <strong>Is this safe to build, and can you defend it to the people who'll have to run it.</strong>"</div>
+<div class="sub">Four things in any design: the constraint, the rejected option, the failure behaviour, who is on the hook at 3am.</div>
+</div>
+
+<div class="pi pi--teal">
+<div class="n">vendor products</div>
+<div class="line">"You can't assure the inside, so you assure the boundary." SLA, versioning notice, behaviour when they are down, who owns the data.</div>
+<div class="sub">Without a boundary layer, their next release becomes your outage.</div>
+</div>
+
+<div class="pi pi--teal">
+<div class="n">release readiness</div>
+<div class="line">"That we know how we'd undo it &mdash; and that we decided the abort condition <em>before</em> go-live night."</div>
+<div class="sub">The abort condition is the part people skip, and it is the part that saves the night.</div>
+</div>
+
+</div>
+</section>
+
+<!-- ════════════════════════════════════ SAGE -->
+<section>
+<div class="section-label">Honesty &mdash; the answers that survive a follow-up</div>
+<div class="pi-grid">
+
+<div class="pi pi--sage">
+<div class="n">the security pattern</div>
+<div class="line">"I didn't originate it &mdash; there was already a reference design in the bank. What I owned was making it real for a specific estate, and that turned out to be the harder half."</div>
+<div class="sub">Claiming authorship does not survive a follow-up. This does.</div>
+</div>
+
+<div class="pi pi--sage">
+<div class="n">which broker</div>
+<div class="line">"I'd choose on the estate rather than on merit &mdash; whichever the platform team already runs well."</div>
+<div class="sub">Your resume does not name one. Do not invent one, and do not claim hands-on Kafka or MSK.</div>
+</div>
+
+<div class="pi pi--sage">
+<div class="n">containers and cloud platforms</div>
+<div class="line">"I design for it. I haven't operated it. I'd rather say that now than have you find it in week three."</div>
+<div class="sub">Kubernetes, OpenShift, Azure, Terraform. Short, calm, then move on.</div>
+</div>
+
+<div class="pi pi--sage">
+<div class="n">java</div>
+<div class="line">"About eight years of core Java, a while ago. I read it and review it; I don't write it daily. If you want someone who'll out-code your team, that isn't me."</div>
+<div class="sub">Then finish on what you <em>will</em> do: argue with the team about a design and understand their answer.</div>
+</div>
+
+<div class="pi pi--sage">
+<div class="n">when you don't know</div>
+<div class="line">"I don't know that specific one &mdash; but structurally it has to sit either with the scheme or with the issuer, and given it affects liability I'd expect it to be a scheme rule."</div>
+<div class="sub">Reasoning out loud from a model you clearly hold beats a guess, every time.</div>
+</div>
+
+<div class="pi pi--sage">
+<div class="n">ITTR</div>
+<div class="line">"I've read it as a technology refresh replacement &mdash; but I'd rather you tell me the actual scope than have me guess."</div>
+<div class="sub">There is no public definition of it. Asking is the correct answer.</div>
+</div>
+
+</div>
+</section>
+
+<!-- ════════════════════════════════════ RED -->
+<section>
+<div class="section-label">Never say</div>
+<div class="pi-grid">
+
+<div class="pi pi--red">
+<div class="n">never</div>
+<div class="line">"We ran it on MSK."</div>
+<div class="sub">The next question is your partition count and your consumer rebalancing story, and the interview ends there.</div>
+</div>
+
+<div class="pi pi--red">
+<div class="n">never</div>
+<div class="line">Your old employers' internal programme and system names.</div>
+<div class="sub">Say "the collections platform", "the legacy card ledger", "the integration platform", "the credit bureau feed".</div>
+</div>
+
+<div class="pi pi--red">
+<div class="n">never</div>
+<div class="line">Specific fraud rules, thresholds or detection signals.</div>
+<div class="sub">That is exploitable information about a live bank. Describe the <em>shape</em> of the decision, never the values.</div>
+</div>
+
+<div class="pi pi--red">
+<div class="n">never</div>
+<div class="line">"Nothing &mdash; I'd do it the same way again."</div>
+<div class="sub">Have one real thing you'd change. Yours: build the reconciliation and drift reporting <em>before</em> any data moves.</div>
+</div>
+
+<div class="pi pi--red">
+<div class="n">check this before Thursday</div>
+<div class="line">The CBA Centre of Excellence claim.</div>
+<div class="sub">If you cannot defend it for three minutes, drop it and lead with Westpac and NAB. One soft claim costs you the hard ones.</div>
+</div>
+
+</div>
+</section>
+
+<!-- ════════════════════════════════════ SLATE -->
+<section>
+<div class="section-label">Ask them</div>
+<div class="pi-grid">
+
+<div class="pi pi--slate">
+<div class="n">ask</div>
+<div class="line">"What's actually in scope for the ITTR replacement &mdash; the platform, the infrastructure underneath it, or both?"</div>
+<div class="sub">You need this answer, and asking it proves you know the difference.</div>
+</div>
+
+<div class="pi pi--slate">
+<div class="n">ask</div>
+<div class="line">"Is the VCAS work replacing an existing 3DS solution, and is the integration direct or through the processor?"</div>
+<div class="sub">Only somebody who has worked the issuing side asks this. Use it right after you admit you haven't integrated VCAS.</div>
+</div>
+
+<div class="pi pi--slate">
+<div class="n">ask</div>
+<div class="line">"How much of the estate is vendor product versus built in-house?"</div>
+<div class="sub">It changes what solution design means day to day, and they will know that you know.</div>
+</div>
+
+<div class="pi pi--slate">
+<div class="n">ask</div>
+<div class="line">"Who signs off a design here, and what does that forum actually look like?"</div>
+<div class="sub">Design assurance is a third of this role. Ask how it really works.</div>
+</div>
+
+</div>
+</section>
+
+<section>
+<div class="warn"><div class="lbl">Thursday morning</div>
+<p><strong>Take the eight.</strong> Read them in the car park, put them in your pocket, and do not open anything else.
+You will walk in with eight sentences instead of eleven pages, and that is the right trade.</p></div>
+</section>
+
+
+<footer class="pn"><a href="10-nab-deep-dive.html">&larr; NAB Deep Dive</a><a href="index.html">Back to Start &rarr;</a></footer>
+</div>
+</body>
+</html>

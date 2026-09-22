@@ -1,0 +1,1348 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The AWS Landing Zone · Book 02</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f6f7; --surface:#ffffff; --surface-2:#eceff1;
+    --line:#dde2e5; --line-strong:#c3ccd1;
+    --ink:#12181c; --ink-2:#5a666e; --ink-3:#85939c;
+    --accent:#0f6466; --accent-ink:#0b4f51; --accent-soft:rgba(15,100,102,.09);
+    --flag:#8f5400; --flag-soft:rgba(143,84,0,.10);
+    --good:#2c6b38; --good-soft:rgba(44,107,56,.10);
+    --f-display:'Bricolage Grotesque','Archivo',system-ui,sans-serif;
+    --f-body:'Archivo',system-ui,-apple-system,sans-serif;
+    --f-mono:'IBM Plex Mono','SF Mono',Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+    --bg:#0e1316; --surface:#161d21; --surface-2:#1d262b;
+    --line:#27333a; --line-strong:#3a4950;
+    --ink:#e7edf0; --ink-2:#9aa8b1; --ink-3:#74838d;
+    --accent:#57b6ae; --accent-ink:#8ad3cb; --accent-soft:rgba(87,182,174,.12);
+    --flag:#d9a03f; --flag-soft:rgba(217,160,63,.13);
+    --good:#6cbd7c; --good-soft:rgba(108,189,124,.13);
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0e1316; --surface:#161d21; --surface-2:#1d262b;
+    --line:#27333a; --line-strong:#3a4950;
+    --ink:#e7edf0; --ink-2:#9aa8b1; --ink-3:#74838d;
+    --accent:#57b6ae; --accent-ink:#8ad3cb; --accent-soft:rgba(87,182,174,.12);
+    --flag:#d9a03f; --flag-soft:rgba(217,160,63,.13);
+    --good:#6cbd7c; --good-soft:rgba(108,189,124,.13);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15.5px;line-height:1.65;margin:0;}
+  .page{max-width:960px;margin:0 auto;padding-inline:20px;padding-block:20px 80px;}
+  a{color:var(--accent-ink);text-decoration-thickness:1px;text-underline-offset:2px;}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px;}
+
+  /* ---- book nav ---- */
+  .bnav{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 30px;padding:9px 10px;
+    background:var(--surface);border:1px solid var(--line);border-radius:6px;
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.02em;}
+  .bnav a,.bnav span{padding:5px 9px;border-radius:4px;text-decoration:none;white-space:nowrap;}
+  .bnav a{color:var(--ink-2);}
+  .bnav a:hover{background:var(--accent-soft);color:var(--accent-ink);}
+  .bnav .on{background:var(--accent);color:#fff;font-weight:600;}
+  .bnav .soon{color:var(--ink-3);opacity:.55;}
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]) .bnav .on{color:#08211f;} }
+
+  .eyebrow{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 10px;}
+  h1{font-family:var(--f-display);font-weight:800;font-size:clamp(30px,5.2vw,46px);line-height:1.05;
+    letter-spacing:-.025em;margin:0 0 14px;text-wrap:balance;}
+  .standfirst{font-size:17px;color:var(--ink-2);margin:0 0 8px;max-width:70ch;}
+  .standfirst b{color:var(--ink);font-weight:600;}
+  h2{font-family:var(--f-display);font-weight:600;font-size:26px;letter-spacing:-.02em;
+    margin:54px 0 4px;text-wrap:balance;scroll-margin-top:16px;}
+  h2 .num{font-family:var(--f-mono);font-size:12.5px;font-weight:600;color:var(--accent);
+    display:block;letter-spacing:.12em;margin-bottom:6px;}
+  h3{font-family:var(--f-display);font-weight:600;font-size:19px;letter-spacing:-.012em;margin:32px 0 6px;}
+  h4{font-family:var(--f-display);font-weight:600;font-size:16.5px;margin:22px 0 4px;}
+  p{margin:0 0 14px;max-width:72ch;}
+  b,strong{font-weight:600;}
+  ul,ol{margin:0 0 14px;padding-left:22px;max-width:72ch;}
+  li{margin-bottom:7px;}
+  code{font-family:var(--f-mono);font-size:.88em;background:var(--surface-2);
+    padding:1px 5px;border-radius:3px;color:var(--accent-ink);}
+  pre{font-family:var(--f-mono);font-size:12.3px;line-height:1.55;background:var(--surface);
+    border:1px solid var(--line);border-radius:5px;padding:18px 20px;overflow-x:auto;margin:0 0 8px;}
+  pre code{background:none;padding:0;color:inherit;font-size:inherit;}
+  .cap{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);margin:0 0 26px;letter-spacing:.04em;}
+  .note{border-left:3px solid var(--accent);background:var(--accent-soft);
+    padding:14px 18px;border-radius:0 5px 5px 0;margin:0 0 18px;}
+  .warn{border-left:3px solid var(--flag);background:var(--flag-soft);
+    padding:14px 18px;border-radius:0 5px 5px 0;margin:0 0 18px;}
+  .note p,.warn p{margin:0;max-width:none;}
+  .note p + p,.warn p + p{margin-top:10px;}
+  .say{border-left:3px solid var(--good);background:var(--good-soft);
+    padding:13px 17px;border-radius:0 5px 5px 0;margin:16px 0 18px;}
+  .say p{margin:0;font-size:14.5px;max-width:none;}
+  .say p + p{margin-top:9px;}
+  .keyq{border:1px solid var(--line-strong);background:var(--surface);border-radius:5px;padding:16px 20px;margin:20px 0;}
+  .keyq .hd{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-3);margin:0 0 8px;}
+  .keyq p{margin:0 0 10px;font-size:15px;max-width:none;}
+  .keyq p:last-child{margin:0;}
+  .tw{overflow-x:auto;border:1px solid var(--line);border-radius:5px;background:var(--surface);margin:0 0 20px;}
+  table{border-collapse:collapse;width:100%;}
+  th{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-3);text-align:left;padding:11px 15px;border-bottom:1px solid var(--line-strong);}
+  td{padding:11px 15px;border-bottom:1px solid var(--line);font-size:13.6px;vertical-align:top;line-height:1.55;}
+  tbody tr:last-child td{border-bottom:none;}
+  td.sw{color:var(--ink-2);border-left:2px solid var(--accent-soft);}
+  td.sw b{color:var(--accent-ink);}
+  td.brief{font-size:13px;color:var(--ink-2);background:var(--surface-2);}
+  .toc{background:var(--surface);border:1px solid var(--line);border-radius:5px;padding:22px 24px;margin:30px 0 8px;}
+  .toc .hd{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-3);margin:0 0 16px;}
+  .toc ol{list-style:none;margin:0;padding:0;counter-reset:toc;display:flex;flex-direction:column;gap:13px;max-width:none;}
+  .toc li{counter-increment:toc;display:grid;grid-template-columns:30px 1fr;gap:10px;margin:0;}
+  .toc li::before{content:counter(toc,decimal-leading-zero);font-family:var(--f-mono);
+    font-size:11px;font-weight:600;color:var(--accent);padding-top:4px;}
+  .toc .t{grid-column:2;font-weight:600;font-size:15px;display:block;text-decoration:none;}
+  .toc .t:hover{text-decoration:underline;}
+  .toc .p{grid-column:2;color:var(--ink-2);font-size:13.5px;display:block;line-height:1.5;}
+  .top{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;margin:0 0 18px;}
+  .top a{color:var(--ink-3);text-decoration:none;}
+  .top a:hover{color:var(--accent);}
+  .xb{display:inline-block;font-family:var(--f-mono);font-size:11.5px;font-weight:600;
+    background:var(--accent-soft);color:var(--accent-ink);padding:2px 7px;border-radius:3px;
+    text-decoration:none;white-space:nowrap;}
+  .xb:hover{background:var(--accent);color:#fff;}
+  .gt{border-bottom:1px dotted var(--ink-3);text-decoration:none;cursor:help;}
+  .steps{margin:0 0 22px;}
+  .step{display:grid;grid-template-columns:30px 1fr;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);}
+  .step:last-child{border-bottom:none;}
+  .step .n{font-family:var(--f-mono);font-size:12px;font-weight:600;color:#fff;background:var(--accent);
+    width:23px;height:23px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-top:2px;}
+  .step .where{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:3px;}
+  .step p{margin:0;font-size:14px;max-width:none;}
+  .step .risk{color:var(--flag);font-size:13.4px;margin-top:5px;display:block;}
+  .ex{border:1px solid var(--line);border-left:3px solid var(--good);background:var(--surface);
+    border-radius:0 5px 5px 0;padding:16px 20px;margin:0 0 16px;}
+  .ex h4{margin:0 0 6px;font-size:16.5px;}
+  .ex .meta{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--good);margin-bottom:9px;}
+  .ex p{margin:0 0 9px;font-size:14px;max-width:none;}
+  .ex p:last-child{margin:0;}
+  .qa{border:1px solid var(--line-strong);border-radius:5px;background:var(--surface);
+    padding:16px 20px;margin:0 0 14px;}
+  .qa .q{font-family:var(--f-display);font-weight:600;font-size:16px;margin:0 0 9px;}
+  .qa p{font-size:14px;margin:0 0 9px;max-width:none;}
+  .qa p:last-child{margin:0;}
+  table.gl td:first-child{width:22%;color:var(--ink);}
+  table.svc{min-width:700px;table-layout:fixed;}
+  table.svc th:nth-child(1),table.svc td:nth-child(1){width:14%;}
+  table.svc th:nth-child(2),table.svc td:nth-child(2){width:33%;}
+  table.svc th:nth-child(3),table.svc td:nth-child(3){width:24%;}
+  table.svc th:nth-child(4),table.svc td:nth-child(4){width:29%;}
+  table.svc td{font-size:13px;line-height:1.55;}
+  table.to td:first-child{width:24%;white-space:nowrap;}
+  table.to td{font-size:13.5px;}
+  .q2{font-weight:400;color:var(--ink-3);font-size:11.5px;display:block;}
+  .step.ret .n{background:var(--good);}
+  table.gl tr:target td{background:var(--accent-soft);}
+  ul.refs{list-style:none;padding-left:0;}
+  ul.refs li{margin-bottom:10px;padding-left:16px;position:relative;font-size:14.5px;}
+  ul.refs li::before{content:"\2197";position:absolute;left:0;color:var(--ink-3);
+    font-family:var(--f-mono);font-size:12px;}
+  .rw{font-style:italic;color:var(--ink-2);}
+  .foot{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);
+    font-family:var(--f-mono);font-size:12px;color:var(--ink-3);}
+  /* ---- figures: hand-authored inline SVG, themed by these variables ---- */
+  figure.fig{margin:0 0 26px;background:var(--surface);border:1px solid var(--line);
+    border-radius:6px;padding:20px 20px 14px;overflow-x:auto;}
+  figure.fig svg{display:block;width:100%;height:auto;}
+  figure.fig figcaption{font-family:var(--f-mono);font-size:11px;color:var(--ink-3);
+    margin-top:16px;letter-spacing:.04em;line-height:1.5;}
+  svg text{font-family:var(--f-body);}
+  svg .t-hd{font-family:var(--f-mono);font-size:9.5px;font-weight:600;letter-spacing:.11em;
+    text-transform:uppercase;fill:var(--ink-3);}
+  svg .t-lb{font-size:12.5px;font-weight:600;fill:var(--ink);}
+  svg .t-sm{font-size:11.5px;fill:var(--ink-2);}
+  svg .t-xs{font-size:10.5px;fill:var(--ink-3);}
+  svg .t-mn{font-family:var(--f-mono);font-size:10.5px;fill:var(--ink-2);}
+  svg .t-ac{font-size:11.5px;font-weight:600;fill:var(--accent);}
+  svg .t-fl{font-size:11.5px;font-weight:600;fill:var(--flag);}
+  svg .t-gd{font-size:11.5px;font-weight:600;fill:var(--good);}
+  svg .bx{fill:var(--surface);stroke:var(--line-strong);stroke-width:1.1;}
+  svg .bx2{fill:var(--surface-2);stroke:var(--line);stroke-width:1;}
+  svg .bx-ac{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.2;}
+  svg .bx-fl{fill:var(--flag-soft);stroke:var(--flag);stroke-width:1.2;}
+  svg .bx-gd{fill:var(--good-soft);stroke:var(--good);stroke-width:1.2;}
+  svg .lane{fill:none;stroke:var(--line);stroke-width:1;}
+  svg .zone{fill:none;stroke:var(--line-strong);stroke-width:1.2;stroke-dasharray:7 5;}
+  svg .ln{stroke:var(--line-strong);stroke-width:1.4;fill:none;}
+  svg .ln-ac{stroke:var(--accent);stroke-width:1.6;fill:none;}
+  svg .ln-fl{stroke:var(--flag);stroke-width:1.6;fill:none;}
+  svg .ln-gd{stroke:var(--good);stroke-width:1.6;fill:none;}
+  svg .ln-hair{stroke:var(--line);stroke-width:1;fill:none;}
+  svg .ln-d{stroke-dasharray:5 4;}
+  svg .mk{fill:var(--line-strong);} svg .mk-ac{fill:var(--accent);}
+  svg .mk-fl{fill:var(--flag);}    svg .mk-gd{fill:var(--good);}
+  svg .bdg{fill:var(--accent);stroke:none;}
+  svg .bdgt{font-family:var(--f-mono);font-size:9.5px;font-weight:600;fill:var(--bg);}
+  /* ---- calculation panel (figure 4) ---- */
+  .calc{background:var(--surface);border:1px solid var(--line);border-radius:6px;
+    padding:6px 22px 18px;margin:0 0 26px;}
+  .calc .blk{padding:16px 0;border-bottom:1px solid var(--line);}
+  .calc .blk:last-child{border-bottom:none;}
+  .calc .q{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 9px;}
+  .calc .m{font-family:var(--f-mono);font-size:12.5px;line-height:1.7;color:var(--ink);
+    margin:0 0 9px;white-space:pre-wrap;}
+  .calc .m .u{color:var(--ink-3);}
+  .calc .res{font-size:14px;font-weight:600;margin:0 0 8px;color:var(--ink);}
+  .calc .so{font-size:13.5px;color:var(--ink-2);margin:0;padding-left:16px;
+    border-left:2px solid var(--accent);}
+  .calc .so b{color:var(--accent-ink);}
+  @media (max-width:620px){ pre{font-size:10.6px;} .toc li{grid-template-columns:24px 1fr;} }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+  @media print{ .bnav,.top{display:none;} body{background:#fff;} .page{max-width:none;} }
+</style>
+
+<div class="page">
+
+<nav class="bnav" aria-label="Book set">
+  <a href="index.html">AWS contents</a>
+  <a href="00-Start-Here.html">00 · Start here</a>
+  <a href="01-Service-Choices.html">01 · Service choices</a>
+  <span class="on">02 · Landing zone</span>
+  <span class="soon" title="not written yet">03 · Operate & prove</span>
+  <span class="soon" title="not written yet">90 · Say this</span>
+</nav>
+
+<p class="eyebrow">Book 02 · the foundation everything else sits on</p>
+<h1>The AWS Landing Zone</h1>
+<p class="standfirst">
+  Accounts, networks and guardrails &mdash; the layer that exists before any of your services do.
+  <b>Book 01 answers "which service, and why".</b> This book answers the question that comes first in
+  every real engagement: <b>where does it all live, who is allowed in, and what stops a mistake in one
+  place from reaching another?</b>
+</p>
+
+<div class="note"><p>
+  <b>Why this book comes first, ahead of the other gaps.</b> It is the named gap in your own progress
+  record (multi-account and multi-VPC networking). It is the heaviest-weighted material in SAA-C03. And
+  in an enterprise engagement it is usually the <i>first</i> thing you are asked to design, before
+  anybody has agreed what the applications are. Nothing here assumes you have built one.
+</p></div>
+
+<div class="toc" id="toc">
+  <p class="hd">What's in this book &middot; everything below is clickable</p>
+  <ol>
+    <li><a class="t" href="#s1">The account is the wall</a><span class="p">Why AWS estates use many accounts instead of one big one, the five reasons, and the honest argument against.</span></li>
+    <li><a class="t" href="#s2">The account structure</a><span class="p">Organizations, organisational units, and a worked structure for a bank. The one rule that stops it rotting.</span></li>
+    <li><a class="t" href="#s3">Guardrails &mdash; what stops people doing damage</a><span class="p">SCPs, IAM policies, permission boundaries and Config, and exactly which of them can prevent versus only report.</span></li>
+    <li><a class="t" href="#s4">Who gets in &mdash; people and workloads</a><span class="p">IAM Identity Center for humans, roles for software, and how cross-account access actually works.</span></li>
+    <li><a class="t" href="#s5">Inside one VPC</a><span class="p">Address planning, the three subnet tiers, route tables, NAT gateways and what makes a subnet "public". The part everyone half-knows.</span></li>
+    <li><a class="t" href="#s6">Reaching AWS services without the internet</a><span class="p">VPC endpoints &mdash; gateway versus interface, what each costs, and the endpoint policy nobody uses but should.</span></li>
+    <li><a class="t" href="#s7">Connecting VPCs to each other</a><span class="p">Peering, Transit Gateway, PrivateLink and VPC Lattice &mdash; four answers to what sounds like one question.</span></li>
+    <li><a class="t" href="#s8">Reaching the data centre</a><span class="p">Direct Connect versus VPN, the resilience pattern a bank will expect, and the encryption trap.</span></li>
+    <li><a class="t" href="#s9">DNS across the estate</a><span class="p">Private hosted zones and resolver endpoints. The thing that works perfectly until someone resolves an on-premises name.</span></li>
+    <li><a class="t" href="#s10">The shared services account</a><span class="p">Central egress, inspection, DNS and shared subnets &mdash; and the centralised-versus-distributed trade-off.</span></li>
+    <li><a class="t" href="#s11">Building it &mdash; Control Tower or your own</a><span class="p">What Control Tower actually does, when it is the right answer, and when it isn't.</span></li>
+    <li><a class="t" href="#s12">Worked design &mdash; PayFlow at bank scale</a><span class="p">One partner request followed from the internet to a database row, naming every boundary it crosses.</span></li>
+    <li><a class="t" href="#s13">Ten interview questions, with model answers</a><span class="p">The ones that actually get asked, and what a strong answer contains rather than just the right service name.</span></li>
+    <li><a class="t" href="#s14">Four exercises</a><span class="p">Design these yourself. What good looks like, no solutions.</span></li>
+    <li><a class="t" href="#sg">Glossary</a><span class="p">Every term in this book, in ordinary language, with why it matters.</span></li>
+    <li><a class="t" href="#sr">References</a><span class="p">Official AWS documentation for everything asserted here, with the date each was checked.</span></li>
+  </ol>
+</div>
+
+<!-- ==================================================================== -->
+<h2 id="s1"><span class="num">SECTION 1</span>The account is the wall</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<p>
+  Start with the thing that makes AWS estates look the way they do.
+</p>
+
+<p>
+  Inside a single AWS account you have plenty of ways to separate things &mdash; security groups,
+  IAM policies, separate VPCs, tags. All of them are <b>walls inside one building</b>. The account
+  itself is <b>a separate building</b>. It is the only boundary where a mistake on one side genuinely
+  cannot reach the other, and that difference is why large organisations end up with dozens or
+  hundreds of accounts rather than one.
+</p>
+
+<h3>The five reasons, in the order they actually matter</h3>
+
+<p>
+  <b>1. Blast radius.</b> If one workload is compromised, or somebody runs a destructive command in
+  the wrong window, the damage stops at the account edge. In one shared account, an
+  over-permissioned role in a test workload can reach production data, because IAM is evaluating
+  everything in the same place.
+</p>
+
+<p>
+  <b>2. Limits are per account.</b> Service quotas &mdash; how many Lambda functions may run at once,
+  how many network interfaces a subnet may hold, how many requests per second an API may take &mdash;
+  are counted per account and per Region. Share an account, and a load test in one team's workload can
+  exhaust the concurrency another team's payment service needs. Separate accounts make that
+  impossible rather than unlikely.
+</p>
+
+<p>
+  <b>3. Billing separates itself.</b> Cost is naturally attributed per account with no tagging
+  discipline required. Anyone who has tried to answer "what does the fraud platform cost us?" from a
+  single account full of untagged resources will recognise why this matters.
+</p>
+
+<p>
+  <b>4. Permissions become simple.</b> "You are an administrator in the development account and
+  read-only in production" is a sentence anybody can verify. The single-account equivalent is several
+  hundred lines of IAM conditions on tags, and nobody can tell you with confidence what it permits.
+</p>
+
+<p>
+  <b>5. The hard ceiling only works at this level.</b> A <a class="gt" href="#g-scp">service control
+  policy</a> &mdash; the only mechanism that can say <i>"nobody in here, not even an administrator,
+  may do this"</i> &mdash; attaches to an account or a group of accounts. You cannot apply one to half
+  an account. If you need a hard stop, you need an account boundary to hang it on.
+</p>
+
+<div class="tw"><table>
+  <thead><tr><th>Boundary</th><th>Stops what</th><th>Honest strength</th></tr></thead>
+  <tbody>
+    <tr><td>Security group</td><td>Network traffic to a resource</td><td>Good, but it is one misconfiguration away from open, and it says nothing about API calls.</td></tr>
+    <tr><td>IAM policy</td><td>API calls by one identity</td><td>Strong when correct. Complex to verify, and one wildcard undoes it.</td></tr>
+    <tr><td>Separate VPC</td><td>Network reachability</td><td>Network only. Both VPCs still share one IAM, one set of quotas, one bill.</td></tr>
+    <tr><td><b>Separate account</b></td><td><b>Network, IAM, quotas, billing, and the blast radius of a compromise</b></td><td><b>The real boundary. Everything above is a wall inside one building.</b></td></tr>
+  </tbody>
+</table></div>
+
+<h3>The argument against, which you must be able to make</h3>
+
+<p>
+  More accounts is more to run. Every new account needs network connectivity, logging configured,
+  roles created for your pipelines, guardrails applied and someone paying attention to it. Done by
+  hand, twelve accounts is a part-time job and sixty is a full-time one.
+</p>
+
+<p>
+  That is not a reason to use one account. It is the reason
+  <a href="#s11">Control Tower and account automation exist</a> &mdash; you make creating a correct
+  account a repeatable, minutes-long operation, and then the count stops mattering. A candidate who
+  says "multi-account, obviously" without acknowledging the operational cost sounds like they have
+  read about it. A candidate who names the cost and then names the automation sounds like they have
+  done it.
+</p>
+
+<div class="say"><p>
+  <b>Say this out loud.</b> "The account is the strongest isolation boundary AWS gives me &mdash; it
+  separates blast radius, service quotas, billing and IAM in one move. Everything smaller is a wall
+  inside the same building. The cost is that accounts have to be created and governed automatically,
+  which is why the landing zone is a platform deliverable rather than a diagram."
+</p></div>
+
+<!-- ==================================================================== -->
+<h2 id="s2"><span class="num">SECTION 2</span>The account structure</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<h3>The three words you need</h3>
+
+<p>
+  <b>AWS Organizations</b> is the service that groups accounts together. One account is nominated as
+  the <b>management account</b> &mdash; it creates the organisation and it is where billing rolls up.
+  Accounts can be arranged into <b><a class="gt" href="#g-ou">organisational units</a></b>, usually
+  shortened to OUs, which are simply folders. Policies attach to the root, to an OU, or to an
+  individual account, and they flow downward.
+</p>
+
+<div class="fig"><pre><code>   ROOT
+    │
+    ├── Security OU ──────────── Log Archive account    ← every log, write-once
+    │                            Audit account          ← read-only access for security
+    │
+    ├── Infrastructure OU ────── Network account        ← the shared network, egress, DNS
+    │                            Shared Services account← CI/CD, registries, golden images
+    │
+    ├── Workloads OU
+    │     ├── Prod OU ────────── payments-prod
+    │     │                      fraud-prod             ← tightest guardrails live here
+    │     │                      partner-api-prod
+    │     └── NonProd OU ─────── payments-dev, payments-test
+    │                            fraud-dev
+    │
+    ├── Sandbox OU ───────────── individual experiment accounts
+    │                            ← spend limits, no connection to the production network
+    │
+    └── (management account)  ── billing and organisation admin ONLY.
+                                 NOTHING runs here.  Reason in §3.</code></pre></div>
+<p class="cap">figure 1 — a structure that survives a reorganisation; AWS's own recommended shape, with a bank's environments added</p>
+
+<p>
+  The Security OU with its Log Archive and Audit accounts is not an invention &mdash; it is what AWS
+  Control Tower creates for you, and it is worth knowing by name because interviewers use it as
+  shorthand for "has this person seen a real landing zone".
+</p>
+
+<h3>The one rule that stops the structure rotting</h3>
+
+<div class="warn"><p>
+  <b>Organise OUs by the policy you want to apply, not by the organisation chart.</b>
+  Teams get reorganised, business units get renamed, and departments merge &mdash; roughly every
+  eighteen months in a large bank. Guardrails do not change nearly that often. If your OUs are named
+  after departments, every reorganisation becomes an account-migration project. If they are named
+  after the rules that apply to them &mdash; production, non-production, sandbox, regulated data
+  &mdash; the structure outlives the org chart.
+</p></div>
+
+<h3>Why nothing runs in the management account</h3>
+
+<p>
+  This one is worth committing to memory, because it is a standard interview question and the reason
+  is specific rather than a matter of taste.
+</p>
+
+<p>
+  <b>Service control policies do not apply to the management account.</b> They restrict the member
+  accounts only. So anything running in the management account sits above your hard ceiling: your
+  strongest preventive control does not protect it. Combine that with the fact that the management
+  account can create accounts, invite accounts and change the organisation itself, and it becomes the
+  single most valuable target in the estate.
+</p>
+
+<p>
+  So it holds the organisation and the billing, and nothing else. Access is restricted to a handful
+  of people, with multi-factor authentication, and the root user's credentials go in a safe.
+</p>
+
+<div class="say"><p>
+  <b>Say this out loud.</b> "No workloads in the management account, because SCPs don't apply to it
+  &mdash; anything running there sits outside the guardrails, and it is also the account that can
+  modify the organisation itself."
+</p></div>
+
+<h3>How many accounts, and what earns one</h3>
+
+<p>
+  There is no formula, but there is a usable test: <b>a workload earns its own account when it needs
+  a different guardrail, a different blast radius, or a different bill.</b> In practice that produces
+  one account per application per environment in most banks, which sounds like a lot until you
+  remember the alternative is one IAM policy that nobody can read.
+</p>
+
+<p>
+  What does <i>not</i> earn an account: a new microservice inside an existing application, a new team
+  working on the same product, or a temporary project. Those are namespaces, not buildings.
+</p>
+
+<!-- ==================================================================== -->
+<h2 id="s3"><span class="num">SECTION 3</span>Guardrails &mdash; what stops people doing damage</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<p>
+  There are four mechanisms that get talked about as though they are the same thing, and they are
+  not. Two of them can stop an action before it happens. One of them limits what someone else may
+  grant. One of them only tells you afterwards. Confusing them is one of the most common ways to fail
+  a security-flavoured architecture interview.
+</p>
+
+<div class="fig"><pre><code>          ┌─────────────────────────────────────────────────┐
+          │  SCP — the CEILING                              │
+          │  "nobody in this account may do X, ever"        │
+          │  Can only REMOVE. Never grants anything.        │
+          │  ┌───────────────────────────────────────────┐  │
+          │  │  PERMISSION BOUNDARY — a ceiling on ONE   │  │
+          │  │  role. Used when you let a team create    │  │
+          │  │  their own roles but not escalate.        │  │
+          │  │  ┌─────────────────────────────────────┐  │  │
+          │  │  │  IAM POLICY — what is actually      │  │  │
+          │  │  │  allowed. This is the only one      │  │  │
+          │  │  │  that GRANTS anything.              │  │  │
+          │  │  └─────────────────────────────────────┘  │  │
+          │  └───────────────────────────────────────────┘  │
+          └─────────────────────────────────────────────────┘
+
+    AWS CONFIG sits OUTSIDE this picture entirely.
+    It watches, and reports what is non-compliant, AFTER the fact.
+    It is a smoke alarm. It is not a fire door.</code></pre></div>
+<p class="cap">figure 2 — an action is permitted only if every layer allows it; Config is not a layer</p>
+
+<p>
+  In words: <b>an API call succeeds only if it is allowed by the identity's own policy, and not
+  denied by the SCP, and within the permission boundary if one applies, and allowed by any policy on
+  the resource itself.</b> A single deny anywhere wins.
+</p>
+
+<h3>What a service control policy actually does</h3>
+
+<p>
+  Four facts, all of which are worth stating precisely because interviewers probe them.
+</p>
+
+<ul>
+  <li><b>An SCP never grants anything.</b> It sets the maximum. If an SCP allows an action and no IAM policy grants it, the action still fails.</li>
+  <li><b>SCPs do not apply to the management account.</b> Covered in <a href="#s2">Section 2</a>, and the reason nothing runs there.</li>
+  <li><b>SCPs do apply to the root user of a member account.</b> This is what makes them genuinely a ceiling &mdash; there is no administrator who can simply switch them off from inside.</li>
+  <li><b>SCPs do not restrict service-linked roles</b> &mdash; the roles AWS services create to work on your behalf. Worth knowing, because it is a common source of "why didn't my deny work?".</li>
+</ul>
+
+<h3>The guardrails a regulated organisation usually starts with</h3>
+
+<div class="tw"><table>
+  <thead><tr><th>Guardrail</th><th>What it prevents</th><th>Why a bank wants it</th></tr></thead>
+  <tbody>
+    <tr><td>Deny leaving the organisation</td><td>An account detaching itself from central governance</td><td>Without it, every other guardrail can be escaped in one API call.</td></tr>
+    <tr><td>Deny disabling CloudTrail, Config or GuardDuty</td><td>Turning off the audit trail</td><td>The first thing an attacker does, and the thing an auditor checks first.</td></tr>
+    <tr><td>Deny all Regions except the approved ones</td><td>Deploying outside the permitted geography</td><td>Data residency is a legal requirement in Australian financial services &mdash; and it shrinks the attack surface at the same time.</td></tr>
+    <tr><td>Deny creating IAM users and access keys</td><td>Long-lived credentials appearing in code</td><td>Forces roles and short-lived credentials. Closes the single most common breach path.</td></tr>
+    <tr><td>Deny deleting or altering log buckets</td><td>Evidence being destroyed</td><td>The Log Archive account exists to be write-once; this is what makes that true.</td></tr>
+    <tr><td>Require encryption on new storage</td><td>Unencrypted data at rest</td><td>Easier to enforce at creation than to remediate afterwards.</td></tr>
+  </tbody>
+</table></div>
+
+<div class="warn"><p>
+  <b>The distinction that gets tested.</b> A service control policy is <b>preventive</b> &mdash; the
+  API call fails. AWS Config is <b>detective</b> &mdash; the resource gets created and Config tells
+  you afterwards that it should not have been. Both are useful and they answer different questions. A
+  candidate who offers Config as the answer to "how would you stop that?" has just said "I would find
+  out about it later".
+</p></div>
+
+<h3>Where permission boundaries fit</h3>
+
+<p>
+  This one is narrower and often misunderstood. A <b>permission boundary</b> is a ceiling you attach
+  to a single IAM role. Its purpose is <b>delegation</b>: you want a development team to create their
+  own roles for their own applications, without being able to create a role more powerful than they
+  are. You give their role permission to create roles, but only roles that carry the boundary. The
+  boundary then caps everything they create.
+</p>
+
+<p>
+  If you are not delegating role creation, you do not need one. Reaching for a permission boundary
+  when the question was about account-level restriction is a sign of half-learned material.
+</p>
+
+<div class="say"><p>
+  <b>Say this out loud.</b> "SCPs are the preventive ceiling and they only ever subtract. IAM policies
+  are the only thing that grants. Permission boundaries cap what a delegated team can create. Config
+  is detective &mdash; it reports after the fact, so I would never offer it as a control that
+  <i>stops</i> something."
+</p></div>
+
+<!-- ==================================================================== -->
+<h2 id="s4"><span class="num">SECTION 4</span>Who gets in &mdash; people and workloads</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<p>
+  Two populations, two mechanisms, and they should never be mixed.
+</p>
+
+<h3>People</h3>
+
+<p>
+  Humans sign in through <b>IAM Identity Center</b>, which federates from whatever directory the
+  organisation already runs &mdash; Microsoft Entra ID in most Australian enterprises, sometimes
+  Okta. The user authenticates once against the corporate directory, then selects an account and a
+  role, and receives temporary credentials that expire.
+</p>
+
+<p>
+  What this buys you: joiners, movers and leavers are handled by the existing HR-driven identity
+  process rather than by someone remembering to delete an AWS user. Multi-factor authentication is
+  already enforced centrally. And there is no long-lived credential anywhere in the chain.
+</p>
+
+<p>
+  <b>Permission sets</b> are the reusable definitions &mdash; "read-only", "database operator",
+  "network administrator" &mdash; which you then assign to a group of people in a set of accounts.
+  One definition, many accounts.
+</p>
+
+<h3>Workloads</h3>
+
+<p>
+  Software never gets a user. It gets an <b>IAM role</b>, and the credentials arrive automatically
+  and rotate automatically. An ECS task, a Lambda function and an EC2 instance each have a supported
+  way to receive a role, and none of them require a secret in a configuration file.
+</p>
+
+<div class="warn"><p>
+  <b>The rule with no exceptions.</b> No long-lived access keys in an application, ever. An access
+  key is a password that does not expire, and the overwhelming majority of publicised cloud breaches
+  begin with one that ended up in a repository, a log file, or a laptop backup. If you take one
+  sentence from this section, take this one.
+</p></div>
+
+<h3>Reaching into another account</h3>
+
+<p>
+  A deployment pipeline in the shared services account needs to deploy into the payments production
+  account. It does not get credentials for that account. Instead:
+</p>
+
+<div class="steps">
+  <div class="step"><div class="n">1</div><div>
+    <span class="where">TARGET ACCOUNT</span>
+    <p>A role is created in the payments account with the permissions the pipeline needs &mdash; and nothing more.</p></div></div>
+  <div class="step"><div class="n">2</div><div>
+    <span class="where">THAT ROLE'S TRUST POLICY</span>
+    <p>The role says who is allowed to assume it: specifically, the pipeline's role in the shared services account. This is the part people forget &mdash; <b>a role has two policies</b>. One says what it can do; the other says who may become it.</p></div></div>
+  <div class="step"><div class="n">3</div><div>
+    <span class="where">CALLING ACCOUNT</span>
+    <p>The pipeline calls <code>sts:AssumeRole</code> and receives temporary credentials, valid for a set period, for the target account.</p></div></div>
+  <div class="step"><div class="n">4</div><div>
+    <span class="where">CLOUDTRAIL, BOTH ACCOUNTS</span>
+    <p>The assumption and every subsequent call are recorded, with the original identity preserved. That trail is the audit evidence, and it is the reason this pattern is acceptable to a risk function where a shared credential would not be.</p></div></div>
+</div>
+
+<p>
+  When the other party is a <b>third party</b> rather than another of your own accounts, the trust
+  policy should also require an <b>external ID</b> &mdash; a shared value the third party supplies on
+  every assume call. It exists specifically to prevent the
+  <a class="gt" href="#g-confused">confused deputy</a> problem, where a vendor who holds many
+  customers' role ARNs could be tricked into acting against the wrong one.
+</p>
+
+<div class="say"><p>
+  <b>Say this out loud.</b> "People federate through Identity Center from the corporate directory and
+  get temporary credentials. Workloads get IAM roles &mdash; never keys. Cross-account access is role
+  assumption with an explicit trust policy, and an external ID when the caller is a third party."
+</p></div>
+
+<!-- ==================================================================== -->
+<h2 id="s5"><span class="num">SECTION 5</span>Inside one VPC</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<p>
+  A <b>VPC</b> is your own private network inside AWS. You choose its address range, you cut it into
+  subnets, and you decide what each subnet can reach. Everything in this section is the part most
+  people half-know, and the half they are missing is usually the route table.
+</p>
+
+<h3>Address planning &mdash; the decision that is hardest to undo</h3>
+
+<p>
+  A VPC gets a <b>CIDR block</b>, which is just a range of IP addresses written as
+  <code>10.20.0.0/16</code>. The number after the slash says how many addresses: a <code>/16</code>
+  gives you about 65,000, a <code>/24</code> gives you 256.
+</p>
+
+<div class="warn"><p>
+  <b>Two ranges that overlap can never be connected.</b> If your payments VPC and the data centre
+  both use <code>10.0.0.0/16</code>, no amount of routing will let them talk, because a packet for
+  <code>10.0.3.7</code> is ambiguous. The only fixes are re-addressing an entire environment or
+  translating addresses in between, and both are projects rather than changes. <b>This is the single
+  most expensive landing-zone mistake</b>, and it is normally made in week one by someone who did not
+  know there would eventually be forty VPCs and an acquisition.
+</p></div>
+
+<p>
+  So: allocate ranges centrally from one plan, for the whole estate, including the data centre and
+  room for acquisitions. AWS has a service for exactly this &mdash; <b>VPC IP Address Manager</b>,
+  usually called IPAM &mdash; which hands out non-overlapping ranges and tracks what is used.
+</p>
+
+<p>
+  On sizing, the useful advice is unfashionable: <b>be generous.</b> A <code>/16</code> per VPC and a
+  <code>/20</code> or <code>/21</code> per subnet costs nothing. Addresses are free; running out is a
+  migration. The instinct to be efficient with address space is inherited from a world where it was
+  scarce, and it is not scarce here.
+</p>
+
+<h3>The three subnet tiers</h3>
+
+<div class="fig"><pre><code>   VPC  10.20.0.0/16      ap-southeast-2 (Sydney)
+
+              AZ-a                AZ-b                AZ-c
+   ┌──────────────────┬──────────────────┬──────────────────┐
+   │ PUBLIC  10.20.0  │ PUBLIC  10.20.1  │ PUBLIC  10.20.2  │  route to IGW
+   │  load balancer   │  load balancer   │  load balancer   │  NAT gateway lives here
+   │  NAT gateway     │  NAT gateway     │  NAT gateway     │
+   ├──────────────────┼──────────────────┼──────────────────┤
+   │ PRIVATE 10.20.16 │ PRIVATE 10.20.17 │ PRIVATE 10.20.18 │  route OUT via NAT
+   │  ECS tasks       │  ECS tasks       │  ECS tasks       │  nothing can reach IN
+   │  Lambda (in-VPC) │                  │                  │
+   ├──────────────────┼──────────────────┼──────────────────┤
+   │ ISOLATED 10.20.32│ ISOLATED 10.20.33│ ISOLATED 10.20.34│  NO route out at all
+   │  Aurora writer   │  Aurora replica  │  Aurora replica  │
+   └──────────────────┴──────────────────┴──────────────────┘
+        │
+        └── Internet Gateway (IGW) — attached to the VPC, not to a subnet</code></pre></div>
+<p class="cap">figure 3 — three tiers across three availability zones; the tier is defined by the route table, not by a setting</p>
+
+<div class="note"><p>
+  <b>The misconception worth correcting now.</b> There is no "public" checkbox on a subnet. A subnet
+  is public <b>because its route table has a route to the internet gateway</b>, and private because it
+  does not. That is the whole difference. If you understand route tables, VPC networking stops being
+  mysterious; if you do not, it never stops being mysterious.
+</p></div>
+
+<p>
+  Three tiers rather than two is a deliberate choice. The isolated tier has no route to the internet
+  at all &mdash; not even outbound through NAT. Your database lives there. It means a compromised
+  database host cannot call out to an attacker's server, which is a control you can point at in a
+  security review.
+</p>
+
+<h3>The NAT gateway, and why it appears on the bill</h3>
+
+<p>
+  Resources in a private subnet often still need to reach <i>out</i> &mdash; to download a package, to
+  call a partner API, to reach an AWS service. A <b>NAT gateway</b> sits in a public subnet and makes
+  that possible in one direction only: your workload can start a conversation outward, and nothing on
+  the internet can start one inward.
+</p>
+
+<p>
+  Two things about it that matter architecturally:
+</p>
+
+<ul>
+  <li><b>One per availability zone, for resilience.</b> A NAT gateway lives in a single zone. If you put one in zone A and zone B's workloads route through it, then losing zone A takes out zone B's outbound traffic too &mdash; you have quietly created a dependency between two things that were supposed to be independent.</li>
+  <li><b>It is charged per hour and per gigabyte processed.</b> On estates with chatty workloads, NAT data processing is frequently one of the larger surprises on an AWS bill. Most of it is usually traffic to AWS services that should never have gone through NAT at all &mdash; which is <a href="#s6">the next section</a>.</li>
+</ul>
+
+<h3>Security groups and network ACLs</h3>
+
+<div class="tw"><table>
+  <thead><tr><th>&nbsp;</th><th>Security group</th><th>Network ACL</th></tr></thead>
+  <tbody>
+    <tr><td><b>Attaches to</b></td><td>The resource (an instance, a task, a load balancer)</td><td>The subnet</td></tr>
+    <tr><td><b>Stateful?</b></td><td><b>Yes.</b> Allow traffic in and the reply is automatically allowed out.</td><td><b>No.</b> You must allow the reply explicitly, in the other direction.</td></tr>
+    <tr><td><b>Rules</b></td><td>Allow only. Anything not allowed is denied.</td><td>Allow <i>and</i> deny, evaluated in number order.</td></tr>
+    <tr><td><b>Can reference</b></td><td><b>Another security group</b> &mdash; "the database accepts traffic from the application's security group"</td><td>IP ranges only.</td></tr>
+    <tr><td><b>Use it for</b></td><td>Almost everything. This is your primary network control.</td><td>A coarse subnet-wide deny that survives someone misconfiguring a security group.</td></tr>
+  </tbody>
+</table></div>
+
+<p>
+  The strongest single habit here: <b>reference security groups rather than IP ranges.</b> Saying "the
+  database accepts connections from the application tier's security group" stays correct when the
+  application scales, moves zone or gets replaced. Saying "the database accepts <code>10.20.16.0/20</code>"
+  is correct until somebody adds a subnet.
+</p>
+
+<div class="say"><p>
+  <b>Say this out loud.</b> "Three subnet tiers &mdash; public for load balancers and NAT, private for
+  compute, isolated for data with no outbound route at all. A subnet is public because of its route
+  table, not a setting. NAT gateway per availability zone so I don't couple two zones together, and
+  security groups referencing each other rather than CIDR ranges."
+</p></div>
+
+<!-- ==================================================================== -->
+<h2 id="s6"><span class="num">SECTION 6</span>Reaching AWS services without touching the internet</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<p>
+  Here is something that surprises people. S3, DynamoDB, Secrets Manager, KMS and most other AWS
+  services have <b>public endpoints</b>. When your application in a private subnet writes to S3, by
+  default that request goes out through the NAT gateway, onto the public internet, and back into AWS.
+  It is encrypted, and it is authenticated, and it still left your network &mdash; and you paid the
+  NAT gateway for every gigabyte of it.
+</p>
+
+<p>
+  <b>VPC endpoints</b> fix that. They give you a private path from your VPC to an AWS service. There
+  are two kinds and the difference is worth knowing precisely.
+</p>
+
+<div class="tw"><table>
+  <thead><tr><th>&nbsp;</th><th>Gateway endpoint</th><th>Interface endpoint</th></tr></thead>
+  <tbody>
+    <tr><td><b>Works for</b></td><td><b>S3 and DynamoDB only.</b> Those two, nothing else.</td><td>Almost every other AWS service, and third-party services published through PrivateLink.</td></tr>
+    <tr><td><b>How it works</b></td><td>Adds a route to your route table pointing at the service. No IP address of its own.</td><td>Creates a network interface with a private IP address <i>inside your subnet</i>, and DNS resolves the service name to it.</td></tr>
+    <tr><td><b>Cost</b></td><td><b>Free.</b> No hourly charge, no data charge.</td><td>Charged per hour, per availability zone, plus per gigabyte.</td></tr>
+    <tr><td><b>Reachable from on-premises?</b></td><td>No &mdash; it is a route table entry, and routes do not extend over a VPN or Direct Connect.</td><td>Yes. It has a real private IP address, so anything that can reach your VPC can reach it.</td></tr>
+    <tr><td><b>Built on PrivateLink?</b></td><td>No.</td><td>Yes.</td></tr>
+  </tbody>
+</table></div>
+
+<p>
+  The practical reading of that table: <b>put gateway endpoints for S3 and DynamoDB in every VPC,
+  always, because they are free and they remove traffic from your NAT bill.</b> Add interface
+  endpoints deliberately, for the services you actually use, because they cost money per zone and a
+  long list of them adds up.
+</p>
+
+<h3>The control nobody uses, and should</h3>
+
+<p>
+  A VPC endpoint can carry an <b>endpoint policy</b>. That policy decides which resources are
+  reachable <i>through this endpoint</i>. So you can say: traffic leaving this VPC through the S3
+  endpoint may only reach our own buckets.
+</p>
+
+<p>
+  That is a genuine data-exfiltration control, and it is one of the better answers available to the
+  question <i>"how would you stop someone copying data to a bucket they control?"</i>. IAM policy
+  alone answers who may call S3; the endpoint policy answers which S3 they may reach from inside your
+  network.
+</p>
+
+<div class="say"><p>
+  <b>Say this out loud.</b> "Gateway endpoints for S3 and DynamoDB in every VPC &mdash; they're free
+  and they take that traffic off the NAT gateway. Interface endpoints for the services we actually
+  use, sized per availability zone because that's how they're charged. And an endpoint policy
+  restricting S3 to our own buckets, which is a real exfiltration control rather than just plumbing."
+</p></div>
+
+<!-- ==================================================================== -->
+<h2 id="s7"><span class="num">SECTION 7</span>Connecting VPCs to each other</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<p>
+  This sounds like one question with one answer, and it is four questions. The thing that separates
+  them is <b>whether you want to join two networks together, or expose one service to a consumer.</b>
+</p>
+
+<div class="tw"><table>
+  <thead><tr><th>Option</th><th>What it does</th><th>Choose it when</th><th>The catch</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><b>VPC peering</b></td>
+      <td>Joins two VPCs so their private addresses can reach each other.</td>
+      <td>You have two VPCs and expect to keep having two.</td>
+      <td class="sw"><b>No transitive routing.</b> If A peers with B and B peers with C, A still cannot reach C. Ten VPCs fully connected needs forty-five peerings, and forty-five sets of route table entries.</td>
+    </tr>
+    <tr>
+      <td><b>Transit Gateway</b></td>
+      <td>A hub. Every VPC attaches once, and the hub routes between them.</td>
+      <td>More than a handful of VPCs, or you want central control of who may reach whom.</td>
+      <td class="sw">Charged per attachment per hour and per gigabyte. It is also a thing that can fail, so it belongs in your resilience thinking.</td>
+    </tr>
+    <tr>
+      <td><b>PrivateLink</b></td>
+      <td>Exposes <i>one service</i> to consumers, one-way, without joining the networks at all.</td>
+      <td>A consumer needs your service but has no business reaching the rest of your network &mdash; another business unit, a partner, a SaaS vendor.</td>
+      <td class="sw">One-way by design, and per-endpoint cost. <b>Overlapping address ranges do not matter</b>, which is sometimes the entire reason to choose it.</td>
+    </tr>
+    <tr>
+      <td><b>VPC Lattice</b></td>
+      <td>Service-to-service connectivity with policy, at the application layer, across accounts and VPCs.</td>
+      <td>You want service-level access control without building a service mesh or thinking about routes.</td>
+      <td class="sw">Newer, and a different model from route-based networking &mdash; so it is an architectural commitment, not a drop-in.</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<div class="fig"><pre><code>   Do you need to JOIN two networks, or EXPOSE one service?
+
+     EXPOSE a service ──────────────────► PrivateLink
+        (one-way, consumer never reaches the rest of your network,
+         overlapping CIDRs are irrelevant)
+
+     JOIN networks ↓
+
+       Two VPCs, and it will stay two? ──► VPC peering
+       More than a handful? ────────────► Transit Gateway
+       Want per-service policy instead
+       of routes? ─────────────────────► VPC Lattice
+
+   And the control point people forget:
+     Transit Gateway ROUTE TABLES let you say
+     "prod may reach shared services, but prod and dev may never reach each other."
+     That is network segmentation, enforced centrally, in one place.</code></pre></div>
+<p class="cap">figure 4 — the decision; the first question is the one that matters</p>
+
+<div class="keyq">
+  <p class="hd">The point that makes this sound senior</p>
+  <p>
+    Peering and Transit Gateway <b>join networks</b> &mdash; afterwards, two things that were separate
+    can route to each other, and the separation is gone. PrivateLink <b>exposes a service</b> &mdash;
+    afterwards, a consumer can call one endpoint and nothing else, and the networks remain strangers.
+  </p>
+  <p>
+    In a bank, that difference is usually a risk decision rather than a networking one. When a partner
+    or a different business unit needs access, "we joined our networks" and "we published one service
+    endpoint" are very different sentences in a security review.
+  </p>
+</div>
+
+<!-- ==================================================================== -->
+<h2 id="s8"><span class="num">SECTION 8</span>Reaching the data centre</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<p>
+  Most enterprise AWS estates are not standalone. There is a data centre with a mainframe, a core
+  banking system, an identity directory, or twenty years of file transfers, and AWS has to reach it.
+  Two mechanisms.
+</p>
+
+<div class="tw"><table>
+  <thead><tr><th>&nbsp;</th><th>Site-to-Site VPN</th><th>Direct Connect</th></tr></thead>
+  <tbody>
+    <tr><td><b>What it is</b></td><td>An encrypted tunnel across the public internet.</td><td>A private physical circuit from your data centre into AWS, through a partner facility.</td></tr>
+    <tr><td><b>Time to get it</b></td><td>Hours.</td><td>Weeks to months. It involves a carrier.</td></tr>
+    <tr><td><b>Latency</b></td><td>Whatever the internet is doing today. Variable.</td><td>Consistent and predictable. This is usually the real reason to buy it.</td></tr>
+    <tr><td><b>Bandwidth</b></td><td>Limited per tunnel; you scale by adding tunnels.</td><td>Ordered as a fixed capacity, up to very high speeds.</td></tr>
+    <tr><td><b>Encrypted?</b></td><td><b>Yes,</b> by definition.</td><td><b>No, not by default.</b> It is private, which is not the same thing. See below.</td></tr>
+    <tr><td><b>Cost</b></td><td>Low.</td><td>Port charges plus data transfer, and a contract.</td></tr>
+  </tbody>
+</table></div>
+
+<div class="warn"><p>
+  <b>The trap that catches people in interviews.</b> Direct Connect is a <b>private</b> circuit. It is
+  not an <b>encrypted</b> one. If your control requirement says "all data in transit must be
+  encrypted" &mdash; and in banking it does &mdash; then Direct Connect alone does not satisfy it. You
+  either run a VPN over the Direct Connect, or use MACsec where the connection supports it, or
+  terminate TLS end-to-end at the application. Saying "we used Direct Connect so it's encrypted" is a
+  wrong answer that sounds right, which is exactly what a good interviewer is fishing for.
+</p></div>
+
+<h3>The resilience pattern a bank will expect you to describe</h3>
+
+<div class="fig"><pre><code>   NOT THIS                          THIS
+   ────────                          ────
+
+   Data centre                       Data centre
+        │                             │        │
+        │  one circuit                │        │  two circuits,
+        │  one location               │        │  two DIFFERENT locations
+        ▼                             ▼        ▼
+   ┌──────────┐                  ┌────────┐ ┌────────┐
+   │ DX site  │                  │DX site1│ │DX site2│
+   └────┬─────┘                  └───┬────┘ └───┬────┘
+        │                            └────┬─────┘
+        ▼                                 ▼
+       AWS                               AWS
+                                          ▲
+   A single circuit is a                  │
+   single point of failure,          Site-to-Site VPN
+   and the carrier will tell         as a third path,
+   you so in the contract.           cheap, already there.</code></pre></div>
+<p class="cap">figure 5 — the answer is "two circuits at two locations, with VPN as backup", and you should know it costs real money</p>
+
+<p>
+  One more piece of vocabulary: a <b>Direct Connect gateway</b> lets a single circuit reach VPCs in
+  multiple Regions and multiple accounts, rather than terminating in one VPC. Without it, you are
+  ordering circuits per VPC, which nobody does.
+</p>
+
+<!-- ==================================================================== -->
+<h2 id="s9"><span class="num">SECTION 9</span>DNS across the estate</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<p>
+  DNS is the part that works perfectly in every demonstration and then breaks on the first day of
+  real integration, when something in AWS tries to resolve a hostname that only the data centre knows
+  about.
+</p>
+
+<p>
+  <b>Route 53 private hosted zones</b> hold names that exist only inside your network &mdash;
+  <code>payments.internal</code> resolving to a private IP address. A private hosted zone is
+  associated with one or more VPCs, and only those VPCs can resolve it.
+</p>
+
+<p>
+  For the hybrid case there are two pieces, and their names describe the direction of the query:
+</p>
+
+<ul>
+  <li><b>Resolver inbound endpoint</b> &mdash; lets your <i>data centre</i> resolve names that live in AWS. Queries come <i>in</i>.</li>
+  <li><b>Resolver outbound endpoint</b>, with forwarding rules &mdash; lets your <i>AWS workloads</i> resolve names that live in the data centre. Queries go <i>out</i>. The rule says "anything ending in <code>corp.internal</code>, ask these on-premises name servers".</li>
+</ul>
+
+<div class="fig"><pre><code>   AWS                                          DATA CENTRE
+   ┌────────────────────────────────┐           ┌──────────────────┐
+   │ Network account                │           │                  │
+   │                                │           │                  │
+   │  Route 53 private hosted zones │           │  corporate DNS   │
+   │    payments.internal           │           │  corp.internal   │
+   │    fraud.internal              │           │                  │
+   │         ▲                      │           │        ▲         │
+   │         │ shared to all VPCs   │           │        │         │
+   │         │ via RAM              │           │        │         │
+   │                                │           │        │         │
+   │  Resolver INBOUND  ◄───────────┼───────────┼────────┘         │
+   │    (they resolve our names)    │           │                  │
+   │                                │           │                  │
+   │  Resolver OUTBOUND ────────────┼───────────┼───────► corporate│
+   │    rule: *.corp.internal       │           │         DNS      │
+   └────────────────────────────────┘           └──────────────────┘</code></pre></div>
+<p class="cap">figure 6 — one DNS design for the whole estate, owned by the network account</p>
+
+<p>
+  The pattern that scales: <b>hosted zones live in the network account and are shared to the other
+  accounts</b> using <b>AWS Resource Access Manager</b> (RAM) &mdash; the service for sharing AWS
+  resources across accounts in an organisation. One DNS design, centrally owned, rather than forty
+  teams each inventing names.
+</p>
+
+<!-- ==================================================================== -->
+<h2 id="s10"><span class="num">SECTION 10</span>The shared services account</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<p>
+  Some things should exist once for the whole organisation rather than once per application. They
+  live in the Infrastructure OU, usually split across a network account and a shared services
+  account.
+</p>
+
+<div class="tw"><table>
+  <thead><tr><th>Lives centrally</th><th>Why</th></tr></thead>
+  <tbody>
+    <tr><td><b>The Transit Gateway</b> and the VPC attachments</td><td>One hub, one set of route tables, one place where "prod may not reach dev" is enforced.</td></tr>
+    <tr><td><b>Outbound internet path</b> (NAT, or a firewall)</td><td>One place to inspect and log everything leaving the organisation. Also cheaper than a NAT gateway in every VPC.</td></tr>
+    <tr><td><b>DNS resolver endpoints</b> and hosted zones</td><td>One naming design, shared out. See <a href="#s9">Section 9</a>.</td></tr>
+    <tr><td><b>Direct Connect</b> and its gateway</td><td>The circuit is a physical asset. It cannot sensibly belong to an application team.</td></tr>
+    <tr><td><b>CI/CD, container registry, golden images</b></td><td>One pipeline and one approved base image for everyone, which is also how you get patching under control.</td></tr>
+  </tbody>
+</table></div>
+
+<h3>Central egress versus egress everywhere &mdash; the trade-off</h3>
+
+<p>
+  <b>Central egress:</b> all outbound internet traffic from every account goes through one inspected
+  path in the network account. You get one place to log it, one place to apply a firewall, and one
+  set of source addresses a partner can add to their allow-list. You also get a single point of
+  failure and a component every workload now depends on, plus Transit Gateway data charges on traffic
+  that used to be local.
+</p>
+
+<p>
+  <b>Egress per VPC:</b> simpler, more resilient, no shared dependency. But inspection and logging
+  are now in forty places, source addresses are unpredictable, and your NAT gateway bill is
+  multiplied by the number of VPCs.
+</p>
+
+<p>
+  There is no universally right answer, and that is the point. Regulated organisations almost always
+  choose central egress because <b>the inspection and the audit trail are the requirement</b>, and
+  they accept the dependency and pay to make it resilient. Say which you would pick, and say what you
+  are accepting.
+</p>
+
+<h3>The shared VPC pattern</h3>
+
+<p>
+  A variation worth knowing: using RAM, a network team can own a VPC and <b>share its subnets</b> to
+  other accounts. Application teams then deploy into subnets they do not own and cannot modify. The
+  network team keeps control of routing, and the application accounts keep their own IAM, quotas and
+  billing.
+</p>
+
+<p>
+  It is a good fit for organisations with a strong central network function and a lot of small
+  applications. It is a poor fit where teams need to move fast and independently, because every
+  network change becomes a ticket.
+</p>
+
+<!-- ==================================================================== -->
+<h2 id="s11"><span class="num">SECTION 11</span>Building it &mdash; Control Tower, or your own</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<p>
+  <b>AWS Control Tower</b> sets up and governs a multi-account environment for you. Specifically, it
+  creates the organisation, a <b>Security OU</b> containing a <b>Log Archive account</b> and an
+  <b>Audit account</b>, a set of controls it can apply and monitor, and <b>Account Factory</b> &mdash;
+  a way to create new accounts that already conform.
+</p>
+
+<p>
+  That is roughly the first three months of a hand-built landing zone, available on the first
+  afternoon.
+</p>
+
+<div class="tw"><table>
+  <thead><tr><th>&nbsp;</th><th>Control Tower</th><th>Build your own with Terraform or CDK</th></tr></thead>
+  <tbody>
+    <tr><td><b>Choose when</b></td><td>Greenfield, or an organisation that wants a defensible standard quickly. Almost always the right starting point.</td><td>You already have a large organisation with established tooling, or you need a structure Control Tower will not express.</td></tr>
+    <tr><td><b>Gives you</b></td><td>Opinionated structure, managed controls, Account Factory, drift detection.</td><td>Exactly what you write, and nothing else.</td></tr>
+    <tr><td><b>Costs you</b></td><td>Its opinions. Some things are done Control Tower's way or not at all.</td><td>Months, and a team to maintain it afterwards.</td></tr>
+    <tr><td><b>For complex regulated estates</b></td><td colspan="2"><b>Landing Zone Accelerator on AWS</b> sits between the two &mdash; a deployable solution for organisations with heavy compliance requirements that Control Tower alone does not cover.</td></tr>
+  </tbody>
+</table></div>
+
+<div class="say"><p>
+  <b>Say this out loud.</b> "I'd start with Control Tower unless there's a specific reason not to. It
+  gives me the Security OU with Log Archive and Audit accounts, a control baseline and Account Factory
+  on day one, and the alternative is three months of building the same thing less well. Where the
+  compliance requirements go beyond it, Landing Zone Accelerator is the next step rather than
+  hand-rolling."
+</p></div>
+
+<div class="note"><p>
+  <b>What this book does not cover, and where it goes.</b> How the landing zone is <i>expressed as
+  code</i> &mdash; CloudFormation, CDK or Terraform &mdash; how it is deployed through a pipeline, and
+  how you prove to an auditor that the controls are working, all belong to
+  <b>Book 03 &middot; Operate &amp; prove</b>. That book is not written yet.
+</p></div>
+
+<!-- ==================================================================== -->
+<h2 id="s12"><span class="num">SECTION 12</span>Worked design &mdash; PayFlow at bank scale</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<div class="note"><p>
+  <b>The brief.</b> PayFlow is going into a bank. Two services and two databases become a regulated
+  production platform: three environments, an external partner sending payment instructions, a core
+  banking system still in the data centre, Australian data residency, and an auditor who will ask who
+  touched what.
+</p></div>
+
+<div class="fig"><pre><code>  ORGANISATION ROOT
+  │
+  ├─ Security OU ──── ① Log Archive   every CloudTrail, VPC flow log, write-once
+  │                   ② Audit         read-only, security team, GuardDuty findings
+  │
+  ├─ Infrastructure OU
+  │   └─ ③ Network account
+  │        ┌──────────────────────────────────────────────────────┐
+  │        │  Transit Gateway  ── route tables: prod ⇄ shared     │
+  │        │                      prod ⇎ nonprod  (never)         │
+  │        │  Inspection VPC + central egress (NAT + firewall)     │
+  │        │  Route 53 private hosted zones, resolver endpoints    │
+  │        │  Direct Connect gateway ──────────► DATA CENTRE       │
+  │        └──────────────────────────────────────────────────────┘
+  │   └─ ④ Shared Services   CI/CD, ECR, golden images
+  │
+  └─ Workloads OU
+      ├─ Prod OU ──── ⑤ payflow-prod
+      │                 VPC 10.20.0.0/16, 3 AZ
+      │                 public   → ALB
+      │                 private  → ⑦ accounts + transactions (Fargate)
+      │                 isolated → ⑧ Aurora PostgreSQL, no route out
+      │                 gateway endpoints: S3, DynamoDB  (free)
+      │                 interface endpoints: Secrets Manager, KMS, ECR
+      │
+      │              ⑥ partner-ingress-prod
+      │                 API Gateway + OAuth ← ⑨ PARTNER, over the internet
+      │                 ingestion service (Fargate, its own IAM role)
+      │                 reaches payflow-prod via PrivateLink, NOT peering
+      │
+      └─ NonProd OU ── payflow-dev, payflow-test   (same shape, smaller)</code></pre></div>
+<p class="cap">figure 7 — the account and network map; numbers match the walkthrough below</p>
+
+<h3>One partner payment, followed all the way down</h3>
+
+<div class="steps">
+  <div class="step"><div class="n">9</div><div>
+    <span class="where">THE PARTNER, ON THE INTERNET</span>
+    <p>The partner's system requests an OAuth token from your authorisation server using its client credentials, then calls <code>POST /payments</code> with that token and an idempotency key.</p>
+    <span class="risk">Boundary 1. Everything before this point is outside your control. The token identifies the partner's application — it is not a person, and it is not an AWS identity.</span></div></div>
+
+  <div class="step"><div class="n">6</div><div>
+    <span class="where">PARTNER-INGRESS ACCOUNT · API GATEWAY</span>
+    <p>WAF filters obvious abuse. API Gateway validates the token, applies the partner's throttle and usage plan, checks the request against the schema, and rejects anything malformed before it reaches your code.</p>
+    <span class="risk">This account holds nothing valuable. If it is compromised, the attacker is in a building with no money in it — which is the entire reason it is a separate account.</span></div></div>
+
+  <div class="step"><div class="n">6</div><div>
+    <span class="where">INGESTION SERVICE (FARGATE)</span>
+    <p>Runs with its own IAM role. <b>Here the identity changes hands:</b> the partner's OAuth identity stops at this service, and everything from here on uses the service's AWS role. The service is responsible for carrying the partner's tenant identity forward as data, so attribution is not lost.</p>
+    <span class="risk">Get this wrong and you have a confused deputy — a powerful service acting on a request without remembering whose request it was.</span></div></div>
+
+  <div class="step"><div class="n">6</div><div>
+    <span class="where">PRIVATELINK, NOT PEERING</span>
+    <p>The ingestion account reaches exactly one endpoint in the payments account. The two networks are never joined.</p>
+    <span class="risk">Boundary 2, and the design decision a security reviewer will focus on. Peering here would mean an internet-facing account has a route into the account holding the ledger.</span></div></div>
+
+  <div class="step"><div class="n">5</div><div>
+    <span class="where">PAYFLOW-PROD · ALB IN THE PUBLIC SUBNET</span>
+    <p>Terminates TLS and routes to the transactions service. "Public subnet" means it has a route to the internet gateway — it does not mean this listener is open to the internet, which its security group decides.</p></div></div>
+
+  <div class="step"><div class="n">7</div><div>
+    <span class="where">TRANSACTIONS SERVICE · PRIVATE SUBNET</span>
+    <p>No inbound route from the internet exists. It fetches the database credential from Secrets Manager and the encryption key from KMS <b>through interface endpoints</b>, so neither request leaves the VPC.</p>
+    <span class="risk">Without those endpoints, both calls go out through the NAT gateway to public AWS endpoints — encrypted, but off your network, and billed per gigabyte.</span></div></div>
+
+  <div class="step"><div class="n">8</div><div>
+    <span class="where">AURORA · ISOLATED SUBNET</span>
+    <p>The ledger write commits. This subnet has no route out at all — not even through NAT. A compromised database host cannot call an attacker's server, and that sentence is the control.</p>
+    <span class="risk">Boundary 3, and the strongest one in the design, because it is enforced by the absence of a route rather than by a rule someone could change.</span></div></div>
+
+  <div class="step"><div class="n">3</div><div>
+    <span class="where">NETWORK ACCOUNT · TRANSIT GATEWAY</span>
+    <p>The core banking notification travels over Direct Connect to the data centre. The Transit Gateway's route tables allow prod to reach shared services and the data centre, and never allow prod and non-prod to see each other.</p>
+    <span class="risk">Direct Connect is private, not encrypted. The requirement for encryption in transit is met separately — mutual TLS to the core banking endpoint.</span></div></div>
+
+  <div class="step"><div class="n">1</div><div>
+    <span class="where">LOG ARCHIVE ACCOUNT</span>
+    <p>Every API call in every account, plus VPC flow logs, lands here. The bucket cannot be modified or deleted, enforced by a service control policy that even the account's own root user cannot escape.</p>
+    <span class="risk">This is the evidence. If it can be altered by anyone who can reach the account, it is not evidence.</span></div></div>
+</div>
+
+<div class="keyq">
+  <p class="hd">The three boundaries, and why they are the answer</p>
+  <p>
+    A partner request crosses <b>three</b> boundaries before it reaches money. <b>One:</b> the
+    internet into an account that holds nothing. <b>Two:</b> PrivateLink into the payments account,
+    exposing one endpoint rather than joining two networks. <b>Three:</b> into an isolated subnet with
+    no route out.
+  </p>
+  <p>
+    Each one is a different <i>kind</i> of control &mdash; an account boundary, a service boundary,
+    and a routing boundary. That is what "defence in depth" means concretely, and describing it this
+    way is far stronger than listing the services involved.
+  </p>
+</div>
+
+<!-- ==================================================================== -->
+<h2 id="s13"><span class="num">SECTION 13</span>Ten interview questions, with model answers</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<p>
+  Cover the answers, attempt each one aloud, then read. The model answers are written at the length
+  you would actually speak &mdash; roughly forty-five seconds each.
+</p>
+
+<div class="qa"><p class="q">1. Why would you use multiple AWS accounts instead of one?</p>
+<p>"The account is the strongest isolation boundary AWS offers. It separates blast radius, service quotas, billing and IAM in a single move &mdash; everything smaller is a wall inside the same building. Service control policies also only attach at account or OU level, so if I need a hard ceiling I need an account to hang it on. The cost is that accounts must be created and governed automatically, which is why I'd use Control Tower rather than doing it by hand."</p></div>
+
+<div class="qa"><p class="q">2. Why should nothing run in the management account?</p>
+<p>"Because service control policies don't apply to it. Anything running there sits outside my strongest preventive control. It's also the account that can create accounts and alter the organisation, so it's the highest-value target in the estate. It holds billing and organisation administration only, with a very short access list and the root credentials in a safe."</p></div>
+
+<div class="qa"><p class="q">3. What's the difference between an SCP and an IAM policy?</p>
+<p>"An IAM policy is the only one that grants anything. An SCP only ever subtracts &mdash; it sets the maximum available permission for an account. An action succeeds only if the IAM policy allows it <i>and</i> the SCP doesn't deny it. And SCPs apply to the root user of a member account, which is what makes them a genuine ceiling rather than a default someone can switch off."</p></div>
+
+<div class="qa"><p class="q">4. How would you stop developers deploying outside Australia?</p>
+<p>"A service control policy denying every Region except ap-southeast-2 and ap-southeast-4, attached at the organisational-unit level. That's preventive &mdash; the API call fails. I'd avoid answering this with AWS Config, because Config is detective: the resource gets created and I find out afterwards. I'd still run Config alongside it, for the report."</p></div>
+
+<div class="qa"><p class="q">5. What makes a subnet public?</p>
+<p>"Its route table has a route to the internet gateway. There's no public checkbox. A private subnet routes outbound through a NAT gateway instead, and an isolated subnet has no outbound route at all &mdash; which is where I'd put a database, so a compromised host can't call out."</p></div>
+
+<div class="qa"><p class="q">6. Your NAT gateway bill is enormous. What do you look at first?</p>
+<p>"Whether traffic to AWS services is going through it. By default a private subnet reaches S3 over the public endpoint, through NAT, and you're charged per gigabyte. Gateway endpoints for S3 and DynamoDB are free and remove that entirely, so they go in every VPC as a matter of course. Then I'd add interface endpoints for the services we actually use &mdash; those do cost money, per availability zone, so they're a deliberate list rather than all of them."</p></div>
+
+<div class="qa"><p class="q">7. Ten VPCs need to talk to each other. Peering or Transit Gateway?</p>
+<p>"Transit Gateway. Peering isn't transitive, so full connectivity across ten VPCs is forty-five peerings and forty-five sets of route table entries, and it stops being maintainable well before that. Transit Gateway also gives me route tables at the hub, which is where I'd enforce that production and non-production can never reach each other. The trade-offs are per-attachment and per-gigabyte cost, and a shared component I now have to make resilient."</p></div>
+
+<div class="qa"><p class="q">8. A partner needs access to one of your services. How?</p>
+<p>"PrivateLink, so I expose one service rather than joining two networks. The consumer reaches a single endpoint and has no route to anything else, and overlapping address ranges stop being a problem. If I peered instead, I'd be telling a security review that an external party has a route into my network, which is a different and much harder conversation."</p></div>
+
+<div class="qa"><p class="q">9. The requirement says all data in transit must be encrypted, and we have Direct Connect. Are we compliant?</p>
+<p>"No. Direct Connect is private, not encrypted &mdash; those are different properties. I'd meet the requirement with a VPN running over the Direct Connect, or MACsec if the connection supports it, or end-to-end TLS at the application layer, which I'd usually want anyway. Private connectivity reduces exposure; it doesn't satisfy an encryption control."</p></div>
+
+<div class="qa"><p class="q">10. How do you make Direct Connect resilient?</p>
+<p>"Two connections at two different Direct Connect locations, so a single facility or carrier failure doesn't take the link down, plus a Site-to-Site VPN as a lower-bandwidth backup path. I'd also be clear with the business that this is a real cost and a real lead time &mdash; circuits take weeks to months &mdash; so it belongs in the plan early rather than being discovered during testing."</p></div>
+
+<!-- ==================================================================== -->
+<h2 id="s14"><span class="num">SECTION 14</span>Four exercises</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<p>
+  Draw these yourself before looking anything up. <b>What good looks like</b> tells you what the
+  answer must contain, not what the answer is.
+</p>
+
+<div class="ex">
+  <p class="meta">Exercise 1 · account structure</p>
+  <h4>A general insurer moving forty applications to AWS</h4>
+  <p>Three environments each. Two of the applications handle health data with stricter controls than the rest. There is a small platform team of five. Design the organisation: OUs, accounts, and the three guardrails you would apply first.</p>
+  <p><b>What good looks like:</b> you organise OUs by the policy that applies, not by the business unit. You put the health-data applications in their own OU rather than relying on tags. You name Control Tower and Account Factory rather than describing account creation by hand. You can say why nothing runs in the management account.</p>
+</div>
+
+<div class="ex">
+  <p class="meta">Exercise 2 · address planning</p>
+  <h4>A telco with an existing 10.0.0.0/8 estate on-premises</h4>
+  <p>They want AWS connected to it, and they are acquiring a company next year whose addressing is unknown. Plan the address space and say how you would handle the acquisition.</p>
+  <p><b>What good looks like:</b> you reserve a contiguous range for AWS out of what the data centre is not using, rather than starting at 10.0. You size generously and can say why efficiency is the wrong instinct. You name IPAM. For the acquisition you say PrivateLink or a NAT-based interconnect, because overlapping ranges cannot be routed and re-addressing someone else's estate is not a plan.</p>
+</div>
+
+<div class="ex">
+  <p class="meta">Exercise 3 · connectivity</p>
+  <h4>Central egress, or egress in every VPC?</h4>
+  <p>Twenty-five VPCs across fifteen accounts. Security want every outbound connection inspected and logged. The platform team is worried about a single point of failure. Make the call and defend it.</p>
+  <p><b>What good looks like:</b> you pick one and name what you are accepting. You mention Transit Gateway data-processing charges on traffic that used to be local. You mention that a partner allow-listing your source addresses effectively decides this for you. You say how you would make the central path resilient rather than pretending it isn't a dependency.</p>
+</div>
+
+<div class="ex">
+  <p class="meta">Exercise 4 · the whole thing, timed</p>
+  <h4>Whiteboard a landing zone in twenty minutes</h4>
+  <p>"We're a mid-sized bank with no AWS presence. Design our landing zone." Twenty minutes, out loud, with a drawing. Set a timer.</p>
+  <p><b>What good looks like:</b> you ask about data residency, the data centre and the regulator before you draw anything. You draw the OU structure before the network. You name three guardrails without being asked. You cover DNS, which almost everybody forgets. And you finish, which is most of the exercise &mdash; timed communication is the skill being measured, not completeness.</p>
+</div>
+
+<div class="note"><p>
+  <b>Bring exercise 4 to the Headmaster chat.</b> It is the one that maps directly to the interview
+  format, and it is the piece of your preparation that has never been assessed. Twenty minutes, your
+  drawing, no preparation &mdash; I will review it the way a panel would.
+</p></div>
+
+<!-- ==================================================================== -->
+<h2 id="sg"><span class="num">GLOSSARY</span>Every term in this book, in ordinary language</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<div class="tw"><table class="gl">
+  <tbody>
+    <tr id="g-lz"><td><b>Landing zone</b></td><td>The account structure, network and guardrails that exist before any application does. <b>Why it matters:</b> in an enterprise engagement it is usually the first thing you are asked to design, before anyone has agreed what the applications are.</td></tr>
+    <tr id="g-org"><td><b>AWS Organizations</b></td><td>The service that groups AWS accounts under one management account for billing and policy. <b>Why it matters:</b> it is where the hard guardrails attach, so nothing else in this book works without it.</td></tr>
+    <tr id="g-ou"><td><b>Organisational unit (OU)</b></td><td>A folder of accounts inside an organisation. Policies attached to an OU flow down to every account in it. <b>Why it matters:</b> naming OUs after policies rather than departments is what stops the structure rotting at the next reorganisation.</td></tr>
+    <tr id="g-mgmt"><td><b>Management account</b></td><td>The account that created the organisation and where billing consolidates. <b>Why it matters:</b> SCPs do not apply to it, so nothing should run in it.</td></tr>
+    <tr id="g-scp"><td><b>Service control policy (SCP)</b></td><td>An organisation-level rule setting the maximum permissions for an account. It can only subtract, never grant. <b>Why it matters:</b> it is the only control that binds even a member account's root user &mdash; and it is preventive, unlike AWS Config.</td></tr>
+    <tr id="g-boundary"><td><b>Permission boundary</b></td><td>A ceiling attached to one IAM role, capping what that role — and any role it creates — may do. <b>Why it matters:</b> it exists for delegation, letting a team create their own roles without escalating their own privileges.</td></tr>
+    <tr id="g-preventive"><td><b>Preventive vs detective</b></td><td>Preventive stops the action (an SCP makes the API call fail). Detective reports it afterwards (AWS Config finds the non-compliant resource). <b>Why it matters:</b> offering a detective control as the answer to "how would you stop that?" is a common and costly interview mistake.</td></tr>
+    <tr id="g-idc"><td><b>IAM Identity Center</b></td><td>How people sign in to AWS, federated from the corporate directory such as Entra ID, receiving temporary credentials. <b>Why it matters:</b> joiners and leavers are handled by the process that already exists, and no long-lived credential is created.</td></tr>
+    <tr id="g-assume"><td><b>Assume role / trust policy</b></td><td>A role has two policies: one saying what it can do, and a <i>trust policy</i> saying who may become it. <b>Why it matters:</b> this is how cross-account access works without anyone sharing credentials, and CloudTrail records the original identity.</td></tr>
+    <tr id="g-confused"><td><b>Confused deputy</b></td><td>A trusted service being tricked into using its own high privileges on behalf of a caller who should not have them. <b>Why it matters:</b> it is why a third party's trust policy should require an external ID, and why an ingestion service must carry the caller's identity forward.</td></tr>
+    <tr id="g-vpc"><td><b>VPC</b></td><td>Your own private network inside AWS: an address range, subnets, and rules about what can reach what. <b>Why it matters:</b> it is the unit most network decisions are made in.</td></tr>
+    <tr id="g-cidr"><td><b>CIDR block</b></td><td>A range of IP addresses written as <code>10.20.0.0/16</code>. The number after the slash says how large the range is — smaller number, bigger range. <b>Why it matters:</b> two overlapping ranges can never be connected, and fixing that means re-addressing an environment.</td></tr>
+    <tr id="g-ipam"><td><b>IPAM</b></td><td>VPC IP Address Manager — the AWS service that hands out non-overlapping address ranges across an estate and tracks what is used. <b>Why it matters:</b> it is the answer to "how do you stop two teams picking the same range?"</td></tr>
+    <tr id="g-route"><td><b>Route table</b></td><td>The list of "traffic for this destination goes to that target" attached to a subnet. <b>Why it matters:</b> it is what makes a subnet public or private. There is no other setting.</td></tr>
+    <tr id="g-igw"><td><b>Internet gateway (IGW)</b></td><td>Attached to a VPC; a route to it is what gives a subnet two-way internet reachability. <b>Why it matters:</b> only public subnets route to it, which is the definition of public.</td></tr>
+    <tr id="g-nat"><td><b>NAT gateway</b></td><td>Lets resources in a private subnet start connections outward, while nothing on the internet can start one inward. <b>Why it matters:</b> one per availability zone or you couple two zones together — and it is charged per hour and per gigabyte, which is a common bill surprise.</td></tr>
+    <tr id="g-sg"><td><b>Security group</b></td><td>A stateful firewall attached to a resource: allow traffic in and the reply is automatically allowed out. Can reference other security groups. <b>Why it matters:</b> referencing groups instead of IP ranges keeps the rule correct as the system changes.</td></tr>
+    <tr id="g-nacl"><td><b>Network ACL</b></td><td>A stateless allow-and-deny list at the subnet level; you must permit the return traffic explicitly. <b>Why it matters:</b> it is a coarse backstop that survives a misconfigured security group, not your primary control.</td></tr>
+    <tr id="g-vpce"><td><b>VPC endpoint</b></td><td>A private path from your VPC to an AWS service. <b>Gateway</b> endpoints serve S3 and DynamoDB only and are free. <b>Interface</b> endpoints serve almost everything else, create a network interface in your subnet, and are charged per hour and per gigabyte. <b>Why it matters:</b> without them, traffic to AWS services leaves your network through NAT and you pay for it.</td></tr>
+    <tr id="g-eppolicy"><td><b>Endpoint policy</b></td><td>A policy on a VPC endpoint restricting which resources are reachable through it — for example, only your own S3 buckets. <b>Why it matters:</b> it is a genuine data-exfiltration control, and it is widely under-used.</td></tr>
+    <tr id="g-privatelink"><td><b>PrivateLink</b></td><td>Exposes one service to a consumer, one-way, without joining the two networks. <b>Why it matters:</b> overlapping address ranges stop mattering, and "we published one endpoint" is a far easier security conversation than "we joined our networks".</td></tr>
+    <tr id="g-peering"><td><b>VPC peering</b></td><td>Joins two VPCs so they can route to each other. <b>Why it matters:</b> it is not transitive, so it does not scale — ten fully-connected VPCs would need forty-five peerings.</td></tr>
+    <tr id="g-tgw"><td><b>Transit Gateway</b></td><td>A routing hub that every VPC attaches to once. <b>Why it matters:</b> its route tables are where you enforce "production and non-production may never reach each other", centrally and in one place.</td></tr>
+    <tr id="g-lattice"><td><b>VPC Lattice</b></td><td>Service-to-service connectivity and access policy at the application layer, across accounts, without route tables. <b>Why it matters:</b> it is a different model from route-based networking, so adopting it is an architectural decision rather than a configuration change.</td></tr>
+    <tr id="g-dx"><td><b>Direct Connect</b></td><td>A private physical circuit from your data centre into AWS. <b>Why it matters:</b> it gives consistent latency and bandwidth, takes weeks to months to provision, and is <b>private but not encrypted</b> — which is the trap in most interview questions about it.</td></tr>
+    <tr id="g-vpn"><td><b>Site-to-Site VPN</b></td><td>An encrypted tunnel to your data centre over the public internet. <b>Why it matters:</b> available in hours and always encrypted, but with the internet's variable latency — usually the backup path rather than the primary one.</td></tr>
+    <tr id="g-phz"><td><b>Private hosted zone</b></td><td>A Route 53 DNS zone that only resolves inside the VPCs you associate it with. <b>Why it matters:</b> it is how internal names exist without being published to the world.</td></tr>
+    <tr id="g-resolver"><td><b>Resolver endpoints</b></td><td>Inbound lets the data centre resolve AWS names; outbound plus a forwarding rule lets AWS workloads resolve data-centre names. <b>Why it matters:</b> hybrid DNS is the thing that works in every demo and breaks on the first real integration.</td></tr>
+    <tr id="g-ram"><td><b>Resource Access Manager (RAM)</b></td><td>Shares AWS resources — subnets, Transit Gateways, hosted zones — across accounts in an organisation. <b>Why it matters:</b> it is what makes central ownership of the network possible without central ownership of everything.</td></tr>
+    <tr id="g-ct"><td><b>Control Tower</b></td><td>Sets up and governs a multi-account environment: the Security OU with Log Archive and Audit accounts, a control baseline, and Account Factory for new accounts. <b>Why it matters:</b> it is roughly the first three months of a hand-built landing zone, available on the first afternoon.</td></tr>
+    <tr id="g-blast"><td><b>Blast radius</b></td><td>How much breaks, and how many customers notice, when one thing fails or is compromised. <b>Why it matters:</b> it is the first and best argument for more than one account.</td></tr>
+  </tbody>
+</table></div>
+
+<!-- ==================================================================== -->
+<h2 id="sr"><span class="num">REFERENCES</span>Official sources, and when they were checked</h2>
+<p class="top"><a href="#toc">&uarr; contents</a></p>
+
+<p>
+  Everything asserted in this book was checked against these pages on <b>21 September 2026</b>. Both
+  the services and AWS's own recommendations move, so verify before a design review rather than
+  quoting this page.
+</p>
+
+<h3>Accounts and guardrails</h3>
+<ul class="refs">
+  <li><a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html">AWS Organizations &mdash; Service control policies</a> &mdash; confirms that SCPs grant nothing, do not affect the management account, do not restrict service-linked roles, and <i>do</i> apply to a member account's root user. <span class="rw">Read this one properly; four interview answers come straight out of it.</span></li>
+  <li><a href="https://docs.aws.amazon.com/controltower/latest/userguide/aws-multi-account-landing-zone.html">Control Tower &mdash; multi-account landing zone</a> &mdash; the Security, Sandbox, Infrastructure and Workloads OU structure.</li>
+  <li><a href="https://docs.aws.amazon.com/controltower/latest/userguide/how-control-tower-works.html">How Control Tower works</a> &mdash; the Log Archive and Audit accounts, and the note that preventive controls do not apply to the management account.</li>
+  <li><a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/designing-control-tower-landing-zone/account-structure-ous.html">AWS Prescriptive Guidance &mdash; account structure and OUs</a> &mdash; <span class="rw">the closest thing to a reference design, and useful language to borrow in an interview.</span></li>
+</ul>
+
+<h3>Network</h3>
+<ul class="refs">
+  <li><a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC user guide</a> &mdash; subnets, route tables, gateways.</li>
+  <li><a href="https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html">Gateway endpoints</a> &mdash; confirms S3 and DynamoDB only, and no additional charge.</li>
+  <li><a href="https://docs.aws.amazon.com/vpc/latest/privatelink/what-is-privatelink.html">AWS PrivateLink</a> &mdash; interface endpoints and publishing your own service.</li>
+  <li><a href="https://docs.aws.amazon.com/vpc/latest/tgw/what-is-transit-gateway.html">Transit Gateway</a> &mdash; attachments and route tables, which is where segmentation is enforced.</li>
+  <li><a href="https://docs.aws.amazon.com/vpc/latest/ipam/what-it-is-ipam.html">VPC IP Address Manager</a> &mdash; planning address space across an estate.</li>
+</ul>
+
+<h3>Hybrid and DNS</h3>
+<ul class="refs">
+  <li><a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/Welcome.html">Direct Connect user guide</a> &mdash; connections, gateways and resilience options. <span class="rw">Check the resilience toolkit section before answering a DR question.</span></li>
+  <li><a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">Site-to-Site VPN</a> &mdash; tunnels, and using VPN as a Direct Connect backup.</li>
+  <li><a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver.html">Route 53 Resolver</a> &mdash; inbound and outbound endpoints for hybrid DNS.</li>
+  <li><a href="https://docs.aws.amazon.com/ram/latest/userguide/what-is.html">Resource Access Manager</a> &mdash; sharing subnets, Transit Gateways and hosted zones across accounts.</li>
+</ul>
+
+<h3>Wider reading</h3>
+<ul class="refs">
+  <li><a href="https://docs.aws.amazon.com/whitepapers/latest/organizing-your-aws-environment/organizing-your-aws-environment.html">Organizing Your AWS Environment Using Multiple Accounts</a> &mdash; <span class="rw">the best single document on this topic. If you read only one thing from this list, read this.</span></li>
+  <li><a href="https://aws.amazon.com/architecture/security-identity-compliance/">AWS Architecture Center &mdash; security and identity</a> &mdash; reference architectures worth recognising by sight.</li>
+</ul>
+
+
+<p class="foot">Book 02 · The AWS Landing Zone · written Mon 21 Sep 2026 (Melbourne) · every assertion checked against official AWS documentation on that date · <a href="index.html">AWS contents</a></p>
+
+</div>
+</html>

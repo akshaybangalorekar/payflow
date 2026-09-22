@@ -68,7 +68,16 @@
   td code{font-size:12.5px;}
   .foot{margin-top:54px;padding-top:20px;border-top:1px solid var(--line);
     font-family:var(--f-mono);font-size:12px;color:var(--ink-3);}
-  @media (max-width:560px){ .cmd pre{font-size:11.5px;} }
+  .toc{background:var(--surface);border:1px solid var(--line);border-radius:5px;padding:22px 24px;margin:28px 0 8px;}
+  .toc .hd{font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-3);margin:0 0 16px;}
+  .toc ol{list-style:none;margin:0;padding:0;counter-reset:toc;display:flex;flex-direction:column;gap:13px;max-width:none;}
+  .toc li{counter-increment:toc;display:grid;grid-template-columns:30px 1fr;gap:10px;margin:0;}
+  .toc li::before{content:counter(toc,decimal-leading-zero);font-family:var(--f-mono);
+    font-size:11px;font-weight:600;color:var(--accent);padding-top:4px;}
+  .toc .t{grid-column:2;font-weight:600;font-size:15px;display:block;}
+  .toc .p{grid-column:2;color:var(--ink-2);font-size:13.5px;display:block;line-height:1.5;}
+  @media (max-width:560px){ .cmd pre{font-size:11.5px;} .toc li{grid-template-columns:24px 1fr;} }
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 </style>
 
@@ -87,6 +96,19 @@
   Accounts is published on your Mac at <b>18081</b>, transactions at <b>18082</b>.
   Inside the container network they are still 8081 and 8082.
 </p></div>
+
+<div class="toc">
+  <p class="hd">What's covered</p>
+  <ol>
+    <li><span class="t">Running the stack</span><span class="p">Start, stop and rebuild. The four commands that cover most days, including the one that wipes your data.</span></li>
+    <li><span class="t">When something is wrong</span><span class="p">The diagnosis sequence, in order. Where to look first, how to read container states, and how to get inside a running container.</span></li>
+    <li><span class="t">Using the API</span><span class="p">Your real endpoints with working <code>curl</code> commands — create an account, move money, check a balance, test idempotency.</span></li>
+    <li><span class="t">Looking in the databases</span><span class="p">Open a SQL prompt inside the database container with no client installed, and the handful of <code>psql</code> commands worth knowing.</span></li>
+    <li><span class="t">Housekeeping</span><span class="p">Finding and reclaiming the disk space Docker quietly accumulates.</span></li>
+    <li><span class="t">Git, as used here</span><span class="p">Checking what changed, reading a diff properly, and committing. Short list, used constantly.</span></li>
+    <li><span class="t">The flags worth memorising</span><span class="p">Eight single letters that appear everywhere. Learn these and most commands stop looking cryptic.</span></li>
+  </ol>
+</div>
 
 <!-- ============================================================ -->
 <h2><span class="num">SECTION 1</span>Running the stack</h2>
@@ -289,6 +311,6 @@ git push</pre>
   </tbody>
 </table></div>
 
-<p class="foot">PayFlow · written 21 Sep 2026 · pair with "How One Transfer Travels" for the concepts</p>
+<p class="foot">PayFlow · written 21 Sep 2026 · pair with "Alice Sends Bob $250" for the concepts</p>
 
 </div>

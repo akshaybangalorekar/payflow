@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payments Primer | Westpac TL Interview Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SF Mono', Consolas, monospace;
+  --bg: #14181d; --surface: #1b2129; --surface2: #20262f;
+  --border: rgba(255,255,255,0.10); --border-bright: rgba(255,255,255,0.22);
+  --text: #e6edf3; --dim: #93a1ad;
+  --navy: #7ba7d4; --navy-dim: rgba(123,167,212,0.12);
+  --terra: #f08c56; --terra-dim: rgba(240,140,86,0.12);
+  --sage: #9cc84a; --sage-dim: rgba(156,200,74,0.12);
+  --gold: #e3a04b; --red: #ef7070; --red-dim: rgba(239,112,112,0.10);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; font-family: var(--font-body); color: var(--text); background: var(--bg);
+  background-image: linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 56px 56px; background-attachment: fixed;
+  overflow-wrap: break-word;
+}
+.wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px 80px; }
+nav.top {
+  position: sticky; top: 0; z-index: 50; background: var(--surface);
+  border-bottom: 1px solid var(--border); padding: 10px 18px;
+  display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center;
+}
+nav.top .brand { font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--navy); letter-spacing: 1px; text-transform: uppercase; margin-right: 10px; }
+nav.top a { font-family: var(--font-mono); font-size: 11.5px; color: var(--dim); text-decoration: none; padding: 3px 8px; border-radius: 5px; }
+nav.top a:hover { background: var(--navy-dim); color: var(--text); }
+nav.top a.on { background: var(--navy); color: var(--surface); }
+header.hero { padding: 44px 0 10px; }
+.kicker { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--terra); margin-bottom: 10px; }
+h1 { font-size: clamp(26px, 4vw, 38px); line-height: 1.15; margin: 0 0 10px; color: var(--navy); letter-spacing: -0.5px; }
+.sub { font-size: 16.5px; color: var(--dim); max-width: 70ch; line-height: 1.6; margin: 0; }
+section { margin-top: 46px; }
+.section-label {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--navy); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+.section-label::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--terra); }
+h2 { font-size: 21px; margin: 34px 0 8px; color: var(--navy); }
+h3 { font-size: 16.5px; margin: 22px 0 6px; color: var(--text); }
+p { line-height: 1.65; font-size: 15px; margin: 8px 0; }
+.ve-card { background: var(--surface); border: 1px solid var(--border); border-radius: 11px; padding: 18px 20px; }
+.ve-card--elev { background: var(--surface2); box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
+.ve-card--hero { background: linear-gradient(120deg, var(--navy-dim), var(--surface) 60%); border-color: var(--border-bright); }
+.say {
+  border-left: 4px solid var(--terra); background: var(--terra-dim); border-radius: 0 9px 9px 0;
+  padding: 13px 16px; margin: 16px 0; font-size: 14.5px; line-height: 1.6;
+}
+.say .lbl { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--terra); display: block; margin-bottom: 5px; }
+.note { border-left: 4px solid var(--sage); background: var(--sage-dim); border-radius: 0 9px 9px 0; padding: 12px 16px; margin: 16px 0; font-size: 14.5px; line-height: 1.6; }
+.note .lbl { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--sage); display: block; margin-bottom: 5px; }
+.warn { border-left: 4px solid var(--gold); background: rgba(180,83,9,0.08); border-radius: 0 9px 9px 0; padding: 12px 16px; margin: 16px 0; font-size: 14px; line-height: 1.6; }
+.warn .lbl { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 5px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+@media (max-width: 820px) { .grid2 { grid-template-columns: 1fr; } }
+.grid2 > *, .grid3 > * { min-width: 0; }
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 18px 0; }
+.kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.kpi .v { font-size: 26px; font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; }
+.kpi .l { font-family: var(--font-mono); font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px; color: var(--dim); margin-top: 4px; }
+.table-wrap { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin: 14px 0; }
+.table-scroll { overflow-x: auto; }
+table.dt { width: 100%; border-collapse: collapse; font-size: 13.5px; line-height: 1.5; }
+table.dt th { background: var(--surface2); font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--dim); text-align: left; padding: 10px 14px; border-bottom: 2px solid var(--border-bright); white-space: nowrap; }
+table.dt td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+table.dt tbody tr:nth-child(even) { background: var(--navy-dim); }
+table.dt tbody tr:last-child td { border-bottom: none; }
+table.dt code, p code, li code, .say code, .note code { font-family: var(--font-mono); font-size: 12px; background: var(--navy-dim); color: var(--navy); padding: 1px 5px; border-radius: 4px; }
+.tag { font-family: var(--font-mono); font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 5px; background: var(--navy-dim); color: var(--navy); white-space: nowrap; display: inline-block; }
+.tag--terra { background: var(--terra-dim); color: var(--terra); }
+.tag--sage { background: var(--sage-dim); color: var(--sage); }
+.tag--red { background: var(--red-dim); color: var(--red); }
+ul.nl, ol.nl { list-style: none; padding: 0; margin: 8px 0; }
+ul.nl li, ol.nl li { padding-left: 16px; position: relative; line-height: 1.65; font-size: 14.5px; margin: 5px 0; }
+ul.nl li::before { content: '\203A'; position: absolute; left: 0; color: var(--terra); font-weight: 700; }
+ol.nl { counter-reset: it; }
+ol.nl li { counter-increment: it; padding-left: 26px; }
+ol.nl li::before { content: counter(it) "."; position: absolute; left: 0; color: var(--terra); font-weight: 700; font-family: var(--font-mono); font-size: 13px; }
+.fig { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 18px 12px; margin: 20px 0; }
+.fig svg { width: 100%; height: auto; display: block; }
+.fig .cap { font-family: var(--font-mono); font-size: 11px; color: var(--dim); text-align: center; margin-top: 12px; }
+details.col { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin: 12px 0; }
+details.col summary { padding: 12px 18px; background: var(--surface); font-family: var(--font-mono); font-size: 12px; font-weight: 600; cursor: pointer; list-style: none; color: var(--text); }
+details.col summary::-webkit-details-marker { display: none; }
+details.col summary::before { content: '\25B8'; font-size: 10px; color: var(--dim); margin-right: 8px; display: inline-block; transition: transform .15s ease; }
+details.col[open] summary::before { transform: rotate(90deg); }
+details.col .bd { padding: 4px 18px 16px; border-top: 1px solid var(--border); font-size: 14px; line-height: 1.6; }
+footer.pn { display: flex; justify-content: space-between; gap: 12px; margin-top: 56px; border-top: 1px solid var(--border); padding-top: 18px; }
+footer.pn a { font-family: var(--font-mono); font-size: 12px; color: var(--navy); text-decoration: none; }
+footer.pn a:hover { text-decoration: underline; }
+.lead { font-size: 17px; line-height: 1.65; color: var(--text); max-width: 75ch; }
+a { color: var(--navy); }
+a.navcard { text-decoration: none; color: inherit; display: block; transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
+a.navcard:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.35); border-color: var(--terra); }
+a.navcard h3 { color: var(--navy); }
+a.navcard .pill { margin-bottom: 0; }
+.pill { font-family: var(--font-mono); font-size: 10px; padding: 2px 8px; border-radius: 99px; border: 1px solid var(--border-bright); color: var(--dim); }
+</style>
+<style>
+svg text { font-family: var(--font-body); }
+svg .h  { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 1.4px; fill: var(--dim); }
+svg .t  { font-size: 13px; font-weight: 600; fill: var(--text); }
+svg .s  { font-size: 11.5px; fill: var(--dim); }
+svg .a  { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .9px; fill: var(--navy); }
+svg .o  { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .9px; fill: var(--terra); }
+svg .g  { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .9px; fill: var(--sage); }
+svg .bx  { fill: var(--surface2); stroke: var(--border-bright); stroke-width: 1.1; }
+svg .bxn { fill: var(--navy-dim);  stroke: var(--navy);  stroke-width: 1.1; }
+svg .bxt { fill: var(--terra-dim); stroke: var(--terra); stroke-width: 1.1; }
+svg .bxs { fill: var(--sage-dim);  stroke: var(--sage);  stroke-width: 1.1; }
+svg .ln  { stroke: var(--border-bright); stroke-width: 1.5; fill: none; }
+svg .lnn { stroke: var(--navy);  stroke-width: 1.6; fill: none; }
+svg .lnt { stroke: var(--terra); stroke-width: 1.6; fill: none; }
+svg .lns { stroke: var(--sage);  stroke-width: 1.6; fill: none; }
+svg .mk  { fill: var(--border-bright); }
+svg .mkn { fill: var(--navy); }
+svg .mkt { fill: var(--terra); }
+svg .mks { fill: var(--sage); }
+.fig { overflow-x: auto; }
+.fig svg { min-width: 720px; }
+@media (max-width: 780px) { .fig svg { min-width: 680px; } }
+
+/* ── post-it wall ─────────────────────────────────────────────────────── */
+.pi-legend { display: flex; flex-wrap: wrap; gap: 9px; margin: 10px 0 4px; }
+.pi-key { font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; letter-spacing: 1px;
+  text-transform: uppercase; padding: 6px 12px; border-radius: 4px; color: #17202b; }
+.pk-gold{background:#f2d27c;} .pk-violet{background:#c8b6ec;} .pk-navy{background:#a6c8ee;}
+.pk-terra{background:#f4bd99;} .pk-teal{background:#a0dcd4;} .pk-sage{background:#c2e08c;}
+.pk-red{background:#f1a8a8;} .pk-slate{background:#bcc7d6;}
+
+.pi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 20px; margin: 16px 0 6px; }
+.pi { border-radius: 3px; padding: 22px 22px 24px; min-height: 210px; display: flex; flex-direction: column;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.38); position: relative; }
+.pi .n { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; opacity: .62; margin-bottom: 14px; }
+.pi .line { font-size: 17px; line-height: 1.52; font-weight: 500; }
+.pi .line strong { font-weight: 700; }
+.pi .sub { font-size: 13px; line-height: 1.55; margin-top: auto; padding-top: 16px; opacity: .86;
+  border-top: 1px solid rgba(0,0,0,0.20); }
+.pi em { font-style: italic; }
+.pi--gold  { background:#f2d27c; color:#3a2f0e; }
+.pi--violet{ background:#c8b6ec; color:#2c1f46; }
+.pi--navy  { background:#a6c8ee; color:#11283e; }
+.pi--terra { background:#f4bd99; color:#472312; }
+.pi--teal  { background:#a0dcd4; color:#0f3739; }
+.pi--sage  { background:#c2e08c; color:#26380e; }
+.pi--red   { background:#f1a8a8; color:#481414; }
+.pi--slate { background:#bcc7d6; color:#1c2532; }
+@media print {
+  body { background: #fff; }
+  .pi-grid { grid-template-columns: 1fr 1fr; }
+  .pi { box-shadow: none; border: 1px solid #999; break-inside: avoid; }
+  nav.top, footer.pn { display: none; }
+}
+</style>
+</head>
+<body>
+<nav class="top"><span class="brand">Westpac TL Role</span><a href="index.html">Start Here</a><a href="01-role-and-initiatives.html">The Role</a><a href="02-banking-story.html">My Banking Story</a><a href="03-design-patterns.html">Design Patterns</a><a href="04-integration-patterns.html">Integration Patterns</a><a href="05-things-i-dont-know.html">Honest Gaps</a><a href="06-panel-and-questions.html">Panel and Questions</a><a href="07-revision.html">Revision</a><a href="08-payments-primer.html" class="on">Payments Primer</a><a href="09-followups.html">Follow-ups</a><a href="10-nab-deep-dive.html">NAB Deep Dive</a><a href="11-postits.html">Post-its</a></nav>
+<div class="wrap">
+
+<header class="hero">
+<div class="kicker">Page 8 · start from zero</div>
+<h1>Payments, explained properly</h1>
+<p class="sub">You designed solutions in this space, so the panel will assume you know the basics cold. This page
+builds the whole domain from nothing &mdash; who the players are, what actually moves, and what the words mean &mdash;
+then gives you the flows and the follow-up questions. <strong>If you read one page twice, read this one.</strong></p>
+</header>
+
+<div class="note"><div class="lbl">How to use this page</div>
+<p>Every section ends with <strong>drop-down follow-ups</strong>. Read the section, then cover the answers and try each
+question out loud in your own words. <strong>You do not need to say it the way it is written here.</strong> Simple
+English is better &mdash; a panel trusts a plain answer more than a polished one.</p></div>
+
+<section>
+<div class="section-label">Part 1</div>
+<h2>Who is actually in the room</h2>
+
+<p class="lead">A card payment has five parties, and almost every payments question is really asking
+<em>"which party does this, and why them?"</em> Learn the five and most of the domain falls into place.</p>
+
+<div class="table-wrap"><div class="table-scroll">
+<table class="dt">
+<thead><tr><th>Party</th><th>Who they are</th><th>What they actually do</th></tr></thead>
+<tbody>
+<tr><td><strong>Cardholder</strong></td><td>The customer</td><td>Taps, dips, or types a card number.</td></tr>
+<tr><td><strong>Merchant</strong></td><td>The shop, the website</td><td>Wants to know, in about a second, whether they will get paid.</td></tr>
+<tr><td><strong>Acquirer</strong></td><td>The <em>merchant's</em> bank</td><td>Signs up the merchant, takes the payment request, puts it onto the network. <strong>Easy way to remember: the acquirer "acquires" the merchant as a customer.</strong></td></tr>
+<tr><td><strong>Scheme</strong></td><td>Visa, Mastercard, eftpos</td><td>The network in the middle. It routes the message, sets the rules, sets the deadlines, and settles the money between the banks. <strong>It does not hold anyone's money.</strong></td></tr>
+<tr><td><strong>Issuer</strong></td><td><em>Your</em> bank &mdash; the one that gave the customer the card</td><td>Makes the decision: approve or decline. <strong>This is where you worked.</strong> Often uses a <em>processor</em> (a vendor like Fiserv) to run the card platform on its behalf.</td></tr>
+</tbody></table>
+</div></div>
+
+<div class="say"><div class="lbl">Say it like this</div>
+<p>"Four-party model: cardholder, merchant, acquirer, issuer, with the scheme as the network between the two banks.
+<strong>The acquirer is the merchant's bank, the issuer is the customer's bank, and the decision is always the
+issuer's.</strong>"</p></div>
+
+<div class="fig">
+<svg viewBox="0 0 900 250" role="img" aria-label="The five parties in a card payment and the authorisation round trip between them">
+<defs>
+<marker id="pa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mkn"/></marker>
+<marker id="pb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mkt"/></marker>
+</defs>
+<text x="0" y="16" class="h">THE AUTHORISATION ROUND TRIP — SECONDS, NOT MINUTES</text>
+<rect x="0" y="34" width="150" height="56" rx="8" class="bx"/><text x="75" y="60" class="t" text-anchor="middle">cardholder</text><text x="75" y="78" class="s" text-anchor="middle">taps the card</text>
+<rect x="188" y="34" width="150" height="56" rx="8" class="bx"/><text x="263" y="60" class="t" text-anchor="middle">merchant</text><text x="263" y="78" class="s" text-anchor="middle">shop or website</text>
+<rect x="376" y="34" width="150" height="56" rx="8" class="bx"/><text x="451" y="60" class="t" text-anchor="middle">acquirer</text><text x="451" y="78" class="s" text-anchor="middle">merchant's bank</text>
+<rect x="564" y="34" width="150" height="56" rx="8" class="bx"/><text x="639" y="60" class="t" text-anchor="middle">scheme</text><text x="639" y="78" class="s" text-anchor="middle">Visa / Mastercard</text>
+<rect x="752" y="34" width="148" height="56" rx="8" class="bxn"/><text x="826" y="60" class="a" text-anchor="middle">ISSUER</text><text x="826" y="78" class="s" text-anchor="middle">your bank + processor</text>
+<line x1="152" y1="52" x2="184" y2="52" class="lnn" marker-end="url(#pa)"/>
+<line x1="340" y1="52" x2="372" y2="52" class="lnn" marker-end="url(#pa)"/>
+<line x1="528" y1="52" x2="560" y2="52" class="lnn" marker-end="url(#pa)"/>
+<line x1="716" y1="52" x2="748" y2="52" class="lnn" marker-end="url(#pa)"/>
+<path d="M 752 80 L 730 80 L 730 118 L 170 118 L 170 92" class="lnt" marker-end="url(#pb)"/>
+<text x="440" y="112" class="o" text-anchor="middle">approve + auth code, or decline + reason code</text>
+<rect x="188" y="134" width="712" height="40" rx="8" class="bxn"/>
+<text x="544" y="159" class="a" text-anchor="middle">YOUR FRAUD PLATFORM SAT INSIDE THE ISSUER'S SLICE OF THIS BUDGET</text>
+<rect x="0" y="192" width="900" height="46" rx="8" class="bxt"/>
+<text x="18" y="212" class="o">The whole round trip lives inside a scheme-mandated budget of a few hundred milliseconds.</text>
+<text x="18" y="230" class="s">Nobody in the chain owns that number. It is set by the scheme, and everyone downstream gets a slice of it.</text>
+</svg>
+<div class="cap">figure 1 — five parties, one round trip, one budget that nobody in your bank controls</div>
+</div>
+
+<details class="col"><summary>Follow-up: "Who decides whether a payment is approved?"</summary>
+<div class="bd"><p><strong>The issuer &mdash; the customer's own bank.</strong> Nobody else can, because only the issuer
+knows the balance, the limits, the card status and the customer's normal behaviour. The merchant, the acquirer and the
+scheme all just carry the question and the answer.</p></div></details>
+
+<details class="col"><summary>Follow-up: "What is a processor, and why does a bank use one?"</summary>
+<div class="bd"><p>A vendor that runs the card platform for the bank &mdash; card issuing, authorisation switching,
+posting to the ledger. Banks use one because building and certifying a card platform against every scheme is enormous,
+recurring work that is not a competitive advantage. <strong>The bank keeps the decisions; the processor runs the
+machinery.</strong> That is the same sentence as wallets and 3DS, which is why it is worth saying.</p></div></details>
+
+<details class="col"><summary>Follow-up: "Where does the money actually sit during all this?"</summary>
+<div class="bd"><p><strong>Nowhere new.</strong> During authorisation no money moves at all &mdash; the issuer just puts a
+hold on the customer's available balance. The money moves later, in settlement, between the two banks, netted through
+the scheme. That is the next section.</p></div></details>
+</section>
+
+<section>
+<div class="section-label">Part 2</div>
+<h2>Authorise, clear, settle &mdash; the three things people confuse</h2>
+
+<p class="lead">This is the single most common basic question in a payments interview, and the answer is one sentence.</p>
+
+<div class="say"><div class="lbl">The sentence that frames everything</div>
+<p><strong>"Authorisation is a promise. Clearing is the confirmation. Settlement is the money moving."</strong>
+An approved authorisation places a hold &mdash; it does not charge the account. The charge lands when clearing matches
+the hold and posts it.</p></div>
+
+<div class="fig">
+<svg viewBox="0 0 900 262" role="img" aria-label="A timeline showing authorisation in seconds, then clearing and settlement in batch hours or days later">
+<defs><marker id="pc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mk"/></marker></defs>
+<line x1="0" y1="118" x2="884" y2="118" class="ln" marker-end="url(#pc)"/>
+<line x1="60" y1="108" x2="60" y2="128" class="ln"/><line x1="400" y1="108" x2="400" y2="128" class="ln"/><line x1="700" y1="108" x2="700" y2="128" class="ln"/>
+<text x="60" y="146" class="h" text-anchor="middle">SECONDS</text>
+<text x="400" y="146" class="h" text-anchor="middle">HOURS TO A DAY</text>
+<text x="700" y="146" class="h" text-anchor="middle">NEXT BUSINESS DAY</text>
+
+<rect x="0" y="30" width="230" height="66" rx="8" class="bxn"/>
+<text x="16" y="52" class="a">1 · AUTHORISE</text>
+<text x="16" y="72" class="s">"do you promise this will be paid?"</text>
+<text x="16" y="88" class="s">a HOLD is placed. No money moves.</text>
+
+<rect x="290" y="30" width="230" height="66" rx="8" class="bx"/>
+<text x="306" y="52" class="t">2 · CLEAR</text>
+<text x="306" y="72" class="s">the merchant submits the sale.</text>
+<text x="306" y="88" class="s">The issuer matches it and POSTS it.</text>
+
+<rect x="590" y="30" width="230" height="66" rx="8" class="bx"/>
+<text x="606" y="52" class="t">3 · SETTLE</text>
+<text x="606" y="72" class="s">the banks actually exchange money,</text>
+<text x="606" y="88" class="s">netted through the scheme.</text>
+
+<rect x="0" y="176" width="436" height="72" rx="8" class="bxt"/>
+<text x="18" y="198" class="o">IF NOBODY EVER CLEARS IT</text>
+<text x="18" y="218" class="s">the hold simply expires after a few days. Nothing was charged.</text>
+<text x="18" y="236" class="s">This is why a cancelled hotel booking still shows as pending.</text>
+
+<rect x="464" y="176" width="436" height="72" rx="8" class="bxt"/>
+<text x="482" y="198" class="o">IF THE ISSUER DOESN'T ANSWER IN TIME</text>
+<text x="482" y="218" class="s">STAND-IN: the scheme or processor decides on the bank's behalf,</text>
+<text x="482" y="236" class="s">using rules the bank agreed well in advance.</text>
+</svg>
+<div class="cap">figure 2 — the authorisation is a conversation; the money is a separate, later, batch process</div>
+</div>
+
+<div class="table-wrap"><div class="table-scroll">
+<table class="dt">
+<thead><tr><th>State</th><th>In plain words</th><th>The detail that gets you credit</th></tr></thead>
+<tbody>
+<tr><td><strong>Authorised</strong></td><td>Hold placed, no money moved</td><td>The merchant is guaranteed nothing until clearing. A hold can expire unclaimed.</td></tr>
+<tr><td><strong>Cleared / posted</strong></td><td>The charge lands on the account</td><td>This is when the customer's statement actually changes.</td></tr>
+<tr><td><strong>Reversed</strong></td><td>Hold released before settlement</td><td><strong>Different from a refund</strong> — nothing was ever posted, so there is nothing to give back.</td></tr>
+<tr><td><strong>Refunded</strong></td><td>Money returned after posting</td><td>Merchant-initiated. No scheme dispute machinery involved at all.</td></tr>
+<tr><td><strong>Disputed</strong></td><td>Customer contests a posted charge</td><td>Now it enters the dispute stage machine — part 5.</td></tr>
+<tr><td><strong>Auth expired</strong></td><td>Hold dropped, clearing never arrived</td><td>Why petrol stations and hotels pre-authorise a bit more than the likely amount.</td></tr>
+<tr><td><strong>Stand-in</strong></td><td>The issuer was unreachable; someone decided for them</td><td><strong>A timeout is a business decision with a loss rate attached, not an error.</strong> Strong line.</td></tr>
+</tbody></table>
+</div></div>
+
+<details class="col"><summary>Follow-up: "What is the difference between an authorisation and a charge?"</summary>
+<div class="bd"><p>An authorisation is a <strong>hold</strong> &mdash; the bank sets money aside and promises the merchant it
+is good for it. A charge happens at <strong>clearing</strong>, when the merchant submits the sale and the issuer posts it
+to the account. <strong>Clearing is what turns the promise into the charge.</strong></p></div></details>
+
+<details class="col"><summary>Follow-up: "A customer cancelled a hotel booking but still sees the money missing. Why?"</summary>
+<div class="bd"><p>The hotel placed a hold and never cleared it. The hold only drops when it expires, typically a few days
+depending on scheme rules, <em>unless</em> the merchant sends an explicit reversal. So the customer's available balance is
+reduced even though they were never charged. <strong>Good answer to add: "the fix is the merchant sending a reversal, not
+the bank doing anything &mdash; which is worth knowing because the customer will call the bank."</strong></p></div></details>
+
+<details class="col"><summary>Follow-up: "Why do petrol stations pre-authorise more than you spend?"</summary>
+<div class="bd"><p>They do not know the amount until you finish pumping, so they authorise an estimate to be sure the
+money is there, then clear the real amount. The difference sits as a hold until it expires.</p></div></details>
+
+<details class="col"><summary>Follow-up: "What is interchange?"</summary>
+<div class="bd"><p>A fee the acquirer side pays the issuer side on every transaction, set by the scheme. <strong>It is
+why issuing cards is a business.</strong> You do not need more than that sentence.</p></div></details>
+
+<details class="col"><summary>Follow-up: "What happens if the issuer doesn't respond in time?"</summary>
+<div class="bd"><p><strong>Stand-in processing.</strong> The scheme or the processor decides on the issuer's behalf using
+rules the issuer agreed in advance &mdash; usually approve below a limit, decline above it. <strong>The architect's point:
+that means a timeout is not a technical failure, it is a decision you have delegated, with a known loss rate. Which is
+exactly why your fraud design made every timeout resolve to a defined fallback.</strong></p></div></details>
+</section>
+
+<section>
+<div class="section-label">Part 3</div>
+<h2>Tokenisation &mdash; what GPAY actually is</h2>
+
+<p class="lead">This is your ground. Two ideas carry the whole thing.</p>
+
+<div class="grid2">
+<div class="ve-card"><h3>Idea 1: the token replaces the card number</h3>
+<p>The real card number (the <strong>PAN</strong>) never goes into the phone or the merchant's systems. Instead the
+scheme issues a <strong>token</strong> &mdash; a different number that works on the payment rails but is
+<strong>domain restricted</strong>: bound to that one device or that one channel, and worthless anywhere else.</p>
+<p><strong>A stolen token is a key to a door that only opens for one lock.</strong></p></div>
+<div class="ve-card"><h3>Idea 2: the token outlives the card</h3>
+<p>When the card is lost, replaced or reissued, the PAN changes &mdash; but the scheme just updates the mapping from
+token to new PAN. <strong>The customer's wallet keeps working and they never re-add the card.</strong></p>
+<p>That automatic refresh is the entire reason the notification service exists.</p></div>
+</div>
+
+<div class="fig">
+<svg viewBox="0 0 900 290" role="img" aria-label="The wallet provisioning flow from the cardholder adding a card through to the first purchase with a token">
+<defs>
+<marker id="pd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mkn"/></marker>
+<marker id="pe" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mkt"/></marker>
+</defs>
+<text x="0" y="16" class="h">PROVISIONING — PUTTING A CARD INTO A WALLET</text>
+<rect x="0" y="32" width="178" height="60" rx="8" class="bx"/><text x="89" y="56" class="t" text-anchor="middle">cardholder</text><text x="89" y="74" class="s" text-anchor="middle">adds card in the app</text>
+<rect x="212" y="32" width="178" height="60" rx="8" class="bx"/><text x="301" y="56" class="t" text-anchor="middle">wallet</text><text x="301" y="74" class="s" text-anchor="middle">TOKEN REQUESTOR · has a TRID</text>
+<rect x="424" y="32" width="178" height="60" rx="8" class="bx"/><text x="513" y="56" class="t" text-anchor="middle">token service</text><text x="513" y="74" class="s" text-anchor="middle">runs ID&amp;V · holds the vault</text>
+<rect x="636" y="32" width="178" height="60" rx="8" class="bxn"/><text x="725" y="56" class="a" text-anchor="middle">ISSUER DECIDES</text><text x="725" y="74" class="s" text-anchor="middle">approve · decline · step up</text>
+<line x1="180" y1="62" x2="208" y2="62" class="lnn" marker-end="url(#pd)"/>
+<line x1="392" y1="62" x2="420" y2="62" class="lnn" marker-end="url(#pd)"/>
+<line x1="604" y1="62" x2="632" y2="62" class="lnn" marker-end="url(#pd)"/>
+<text x="301" y="108" class="s" text-anchor="middle">"Token Request"</text>
+<text x="513" y="108" class="s" text-anchor="middle">"Approve Provisioning" / TAR</text>
+
+<path d="M 725 92 L 725 132 L 301 132 L 301 152" class="lnt" marker-end="url(#pe)"/>
+<rect x="212" y="156" width="178" height="52" rx="8" class="bxt"/>
+<text x="301" y="178" class="o" text-anchor="middle">TOKEN CREATED</text><text x="301" y="196" class="s" text-anchor="middle">pushed to the device</text>
+<path d="M 392 182 L 424 182" class="lnt" marker-end="url(#pe)"/>
+<rect x="430" y="156" width="230" height="52" rx="8" class="bx"/>
+<text x="545" y="178" class="t" text-anchor="middle">notification back to the issuer</text><text x="545" y="196" class="s" text-anchor="middle">so the token registry stays in sync</text>
+
+<rect x="0" y="230" width="900" height="54" rx="8" class="bxs"/>
+<text x="18" y="252" class="g">FIRST PURCHASE</text>
+<text x="158" y="252" class="s">the wallet sends the token plus a one-time cryptogram. The scheme swaps the token</text>
+<text x="18" y="270" class="s">back to the real card number and routes it to the issuer as an ordinary authorisation. From the issuer's side it looks like any other payment.</text>
+</svg>
+<div class="cap">figure 3 — say the message names out loud: Token Request, Approve Provisioning, notification, then first purchase with a cryptogram</div>
+</div>
+
+<div class="warn"><div class="lbl">The naming trap — worth knowing</div>
+<p>The issuer decision step has <strong>two names for the same thing</strong>, and a message-level interviewer may use
+either. <strong>"Approve Provisioning"</strong> is the name at the Visa API layer. <strong>"TAR" (Tokenization
+Authorization Request)</strong> is the same decision as it travels on the network and processor rails &mdash; it arrives
+as a standard authorisation message carrying the wallet's ID, the device information, the wallet's own risk score, and how
+the card was added. <strong>One-liner to keep: same decision, two names, API layer versus rails layer.</strong></p></div>
+
+<div class="table-wrap"><div class="table-scroll">
+<table class="dt">
+<thead><tr><th>Token state</th><th>Who moves it there</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td><strong>Active</strong></td><td>Successful provisioning</td><td>Usable for transactions.</td></tr>
+<tr><td><strong>Suspended</strong></td><td>Issuer (fraud suspicion) or wallet (device reported lost)</td><td>Temporary and reversible.</td></tr>
+<tr><td><strong>Deleted</strong></td><td>Customer removes the card, or the issuer kills the token</td><td>Permanent. The card has to be provisioned again to use that wallet.</td></tr>
+</tbody></table>
+</div></div>
+
+<h3>And the card underneath has its own states</h3>
+<p>Worth holding separately, because the two sets get confused. A card goes: <strong>not activated</strong> (issued but
+never used) &rarr; <strong>active</strong> &rarr; then any of <strong>renewed</strong> (the expiry rolls over),
+<strong>blocked</strong> (lost, stolen or compromised), <strong>replaced</strong> (a new card number is issued), or
+<strong>closed</strong>. <strong>The one that matters for wallets is "replaced": the card number changes, the token does
+not, and the mapping is updated behind the scenes so the customer's wallet keeps working without them re-adding the
+card.</strong> That automatic refresh is the entire reason the notification service exists.</p>
+
+<details class="col"><summary>Follow-up: "Why bother with tokens at all?"</summary>
+<div class="bd"><p>Three reasons, in order of how much an interviewer cares. <strong>One: the real card number never leaves
+the bank's world</strong>, so a breach at a merchant or a phone gets you nothing. <strong>Two: it shrinks the compliance
+burden</strong> for everyone downstream, because they are no longer storing card numbers. <strong>Three: approvals go
+up</strong>, because each transaction carries a cryptogram proving the genuine device produced it, so the issuer can be
+more confident.</p></div></details>
+
+<details class="col"><summary>Follow-up: "What is ID&amp;V?"</summary>
+<div class="bd"><p>Identification and Verification &mdash; the check that the person adding the card to the wallet is
+actually the cardholder. <strong>Three outcomes: green (approve now), yellow (step up &mdash; send a one-time code or ask
+them to approve in the banking app), red (decline).</strong> The issuer owns that decision. It is exactly the same
+green/amber/red shape as your fraud decisioning, which is why it was natural work for you.</p></div></details>
+
+<details class="col"><summary>Follow-up: "What happens when the card is reissued?"</summary>
+<div class="bd"><p>The card number changes; the token does not. The scheme updates the mapping and notifies the issuer.
+<strong>The customer never notices &mdash; and that is the whole point of the token layer.</strong></p></div></details>
+
+<details class="col"><summary>Follow-up: "Who can suspend a token, and why would you?"</summary>
+<div class="bd"><p>The issuer, if it suspects fraud. Or the wallet, if the device is reported lost.
+<strong>The policy lives on the issuer side even though the wallet holds the token</strong> &mdash; that is the sentence
+to say.</p></div></details>
+
+<details class="col"><summary>Follow-up: "What is the difference between a network token and a card stored at a merchant?"</summary>
+<div class="bd"><p>A merchant storing your card ("card on file") is holding a <strong>real credential</strong> &mdash;
+if they are breached, it is a real card number, and they carry the compliance burden. A network token is
+<strong>domain restricted and carries a one-time cryptogram per transaction</strong>. One is breach risk and compliance
+scope; the other is neither. <strong>This is a genuinely good question to be asked and an easy one to win.</strong></p></div></details>
+
+<details class="col"><summary>Follow-up: "Three wallets — what actually differs?"</summary>
+<div class="bd"><p><strong>Each wallet runs its own identification and verification before the token service will issue a
+token, and each attests the cardholder differently.</strong> So "authenticated, therefore trusted" is not good enough
+&mdash; the issuer side has to carry <em>which wallet vouched for this</em>, because the level of assurance is not
+automatically the same. Same issuer backbone, three trust boundaries, one orchestration model. <strong>That sentence is
+your NAB design in one line.</strong></p></div></details>
+</section>
+
+<section>
+<div class="section-label">Part 4</div>
+<h2>3-D Secure and VCAS &mdash; in plain English</h2>
+
+<p class="lead">Tokenisation answers <em>"what number moves"</em>. 3-D Secure answers a different question:
+<strong>"is the real customer actually here?"</strong> It only applies when the card is not physically present &mdash;
+online shopping.</p>
+
+<div class="fig">
+<svg viewBox="0 0 900 236" role="img" aria-label="The two 3-D Secure outcomes: frictionless approval for low risk, and a challenge for high risk">
+<defs>
+<marker id="pf" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mks"/></marker>
+<marker id="pg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mkt"/></marker>
+</defs>
+<text x="0" y="16" class="h">CARD-NOT-PRESENT — THE ISSUER SCORES THE CHECKOUT IN REAL TIME</text>
+<rect x="0" y="34" width="180" height="58" rx="8" class="bx"/><text x="90" y="58" class="t" text-anchor="middle">shopper checks out</text><text x="90" y="76" class="s" text-anchor="middle">on a website</text>
+<rect x="212" y="34" width="200" height="58" rx="8" class="bx"/><text x="312" y="58" class="t" text-anchor="middle">authentication service</text><text x="312" y="76" class="s" text-anchor="middle">runs on the issuer's behalf</text>
+<rect x="444" y="34" width="200" height="58" rx="8" class="bxn"/><text x="544" y="58" class="a" text-anchor="middle">ISSUER SCORES IT</text><text x="544" y="76" class="s" text-anchor="middle">device · behaviour · history</text>
+<line x1="182" y1="63" x2="208" y2="63" class="lnn" marker-end="url(#pd)"/>
+<line x1="414" y1="63" x2="440" y2="63" class="lnn" marker-end="url(#pd)"/>
+<path d="M 646 48 L 686 48" class="lns" marker-end="url(#pf)"/>
+<rect x="692" y="30" width="208" height="36" rx="8" class="bxs"/><text x="796" y="53" class="g" text-anchor="middle">LOW RISK → frictionless</text>
+<path d="M 646 94 L 686 94" class="lnt" marker-end="url(#pg)"/>
+<rect x="692" y="76" width="208" height="36" rx="8" class="bxt"/><text x="796" y="99" class="o" text-anchor="middle">HIGH RISK → challenge</text>
+<text x="0" y="134" class="s">frictionless: the customer sees nothing at all — challenge: a one-time code, or approve in the banking app</text>
+
+<rect x="0" y="152" width="900" height="76" rx="8" class="bxn"/>
+<text x="18" y="176" class="a">WHY BANKS CARE, AND IT IS NOT SECURITY</text>
+<text x="18" y="198" class="s">Every challenge you show costs you sales — people abandon the checkout. But a properly authenticated transaction</text>
+<text x="18" y="216" class="s">shifts the fraud liability, so the bank wants to authenticate <tspan class="o">well</tspan>, not to authenticate <tspan class="o">often</tspan>. That tension is the whole design.</text>
+</svg>
+<div class="cap">figure 4 — the goal is not "challenge everyone". It is "challenge only the ones that need it"</div>
+</div>
+
+<p><strong>The old way</strong> was to text everyone a code at checkout. Customers hate it and abandon their baskets.
+<strong>The new way is risk-based</strong>: the issuer scores the checkout in real time using device, behaviour and
+transaction signals, and most checkouts pass with nothing visible at all.</p>
+
+<p><strong>VCAS is Visa's version of that issuer-side capability.</strong> It is EMV 3DS compliant and risk-based, and
+two of its APIs are worth naming: a <strong>Card Status API</strong> that lets the issuer manage card status in real time
+rather than through portal clicks and overnight files, and a <strong>Confirmed Marking API</strong> where the issuer
+reports back whether a transaction turned out Good, Fraud or Undetermined, so the risk models improve.</p>
+
+<div class="say"><div class="lbl">The number worth quoting</div>
+<p>An Australian issuer moving from one-time-code-for-everyone to risk-based authentication saw
+<strong>challenge rates fall 48%</strong>, abandonment drop 113 basis points and fraud drop 6 basis points.
+<strong>Fewer challenges and less fraud at the same time</strong> &mdash; which is the counter-intuitive result that makes
+the case.</p></div>
+
+<details class="col"><summary>Follow-up: "Explain 3-D Secure to someone non-technical."</summary>
+<div class="bd"><p>"When you buy online, the shop can see the card number but has no way of knowing it is really you holding
+the card. 3-D Secure is the step where your own bank checks that. <strong>If it looks normal for you, they let it through
+silently. If it looks odd, they ask you to prove it &mdash; a code, or a tap in the banking app.</strong>"</p></div></details>
+
+<details class="col"><summary>Follow-up: "Why would a bank invest in risk scoring rather than just challenging everyone?"</summary>
+<div class="bd"><p>Because <strong>every challenge costs sales.</strong> Customers abandon checkouts. So the bank wants the
+smallest number of challenges that still catches the fraud. Blanket challenging is safe for fraud and terrible for the
+business &mdash; and the business pays for the platform.</p></div></details>
+
+<details class="col"><summary>Follow-up: "What does 'liability shift' mean?"</summary>
+<div class="bd"><p>If the bank properly authenticated the transaction and it later turns out to be fraud, the loss moves
+from the merchant to the issuer. <strong>So authentication is not just a control, it changes who pays.</strong> That is why
+issuers care about doing it well.</p></div></details>
+
+<details class="col"><summary>Follow-up (the one they will ask you): "Have you integrated VCAS?"</summary>
+<div class="bd"><p><strong>Answer it straight, then pivot to what you do have.</strong> "Not VCAS specifically &mdash; my
+Visa work was tokenisation, disputes and authorisation. But the issuer-side shape is one I know well: score in real time,
+frictionless when it is low risk, step up when it is not, and own the fallback when a signal is missing. That is the same
+decision ladder I designed on the fraud path." <strong>Then ask them a question back:</strong> "Is VCAS replacing an
+existing 3DS solution or is it greenfield, and is the integration direct or through the processor?" <strong>That question
+proves you know the terrain better than a claim would.</strong></p></div></details>
+</section>
+
+<section>
+<div class="section-label">Part 5</div>
+<h2>Disputes &mdash; a workflow, not an API</h2>
+
+<p class="lead">A dispute is what happens when a customer says "I did not make that charge" or "the goods never arrived."
+<strong>The thing to understand is that it is a stage machine with deadlines and money at every step.</strong></p>
+
+<div class="fig">
+<svg viewBox="0 0 900 220" role="img" aria-label="The four dispute stages with deadlines at each transition">
+<defs><marker id="ph" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.4" markerHeight="5.4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="mkn"/></marker></defs>
+<rect x="0" y="34" width="196" height="66" rx="8" class="bxn"/><text x="98" y="58" class="a" text-anchor="middle">1 · DISPUTE</text><text x="98" y="78" class="s" text-anchor="middle">the issuer raises it</text><text x="98" y="94" class="s" text-anchor="middle">for the cardholder</text>
+<rect x="234" y="34" width="196" height="66" rx="8" class="bx"/><text x="332" y="58" class="t" text-anchor="middle">2 · REPRESENTMENT</text><text x="332" y="78" class="s" text-anchor="middle">the merchant pushes back</text><text x="332" y="94" class="s" text-anchor="middle">with evidence</text>
+<rect x="468" y="34" width="196" height="66" rx="8" class="bx"/><text x="566" y="58" class="t" text-anchor="middle">3 · PRE-ARBITRATION</text><text x="566" y="78" class="s" text-anchor="middle">last chance to settle</text><text x="566" y="94" class="s" text-anchor="middle">between the two banks</text>
+<rect x="702" y="34" width="198" height="66" rx="8" class="bxt"/><text x="801" y="58" class="o" text-anchor="middle">4 · ARBITRATION</text><text x="801" y="78" class="s" text-anchor="middle">the scheme decides.</text><text x="801" y="94" class="s" text-anchor="middle">The loser pays a fee.</text>
+<line x1="198" y1="67" x2="230" y2="67" class="lnn" marker-end="url(#ph)"/>
+<line x1="432" y1="67" x2="464" y2="67" class="lnn" marker-end="url(#ph)"/>
+<line x1="666" y1="67" x2="698" y2="67" class="lnn" marker-end="url(#ph)"/>
+<rect x="0" y="126" width="900" height="82" rx="8" class="bxt"/>
+<text x="18" y="150" class="o">EVERY ARROW HAS A DEADLINE.</text>
+<text x="238" y="150" class="s">Miss a response window and liability lands automatically — regardless of who was right.</text>
+<text x="18" y="174" class="s">That is why this is a stateful, deadline-driven workflow with money at every transition, not a request/response API.</text>
+<text x="18" y="196" class="s">And pre-arbitration exists purely because the arbitration loser pays a fee, so settling early is cheaper than being right.</text>
+</svg>
+<div class="cap">figure 5 — four stages, four deadlines. The deadlines are the design constraint, not the messages</div>
+</div>
+
+<div class="table-wrap"><div class="table-scroll">
+<table class="dt">
+<thead><tr><th>Category</th><th>Examples</th><th>How liability is decided</th></tr></thead>
+<tbody>
+<tr><td><strong>Fraud</strong></td><td>Card used without the cardholder</td><td rowspan="2"><strong>Allocation</strong> — the scheme evaluates it against its own data and <strong>assigns liability automatically, in real time.</strong> Decisioning-led.</td></tr>
+<tr><td><strong>Authorisation</strong></td><td>No authorisation obtained, wrong amount</td></tr>
+<tr><td><strong>Processing errors</strong></td><td>Duplicate charge, submitted too late</td><td rowspan="2"><strong>Collaboration</strong> — the scheme asks the merchant for evidence. <strong>If they do not respond, liability lands on them.</strong> Evidence-led.</td></tr>
+<tr><td><strong>Consumer disputes</strong></td><td>Goods never arrived, not as described</td></tr>
+</tbody></table>
+</div></div>
+
+<div class="say"><div class="lbl">The one-sentence version</div>
+<p>"<strong>Allocation is automated liability assignment. Collaboration is an evidence exchange.</strong>"</p></div>
+
+<div class="note"><div class="lbl">Your genuinely rare credential</div>
+<p>When a dispute crosses currencies, the amount recovered rarely equals the amount originally debited, because the
+exchange rate moved between the transaction and the resolution. <strong>Somebody has to decide who absorbs that difference
+and post it correctly to the general ledger.</strong> Most dispute integrations never reach that problem. Yours did.
+<strong>If they ask about disputes, get to this within a minute &mdash; it is the part almost nobody else in the market
+has touched.</strong></p></div>
+
+<details class="col"><summary>Follow-up: "Why isn't a dispute integration just a set of APIs?"</summary>
+<div class="bd"><p>Because the state lives outside your system and moves on a clock you do not control. A case can sit for
+weeks, each stage has a response deadline, and <strong>missing a deadline loses you the case regardless of merit.</strong>
+So the design is a workflow with timers, durable state and alerting on approaching deadlines &mdash; not a request and a
+response.</p></div></details>
+
+<details class="col"><summary>Follow-up: "What is a chargeback, in one sentence?"</summary>
+<div class="bd"><p>The customer's bank taking the money back from the merchant's bank, on the customer's behalf, because
+the customer contests the charge.</p></div></details>
+
+<details class="col"><summary>Follow-up: "Cross-currency dispute, the recovered amount differs. What now?"</summary>
+<div class="bd"><p>"Somebody absorbs the difference, and the design has to say who, in advance, and post it to the right
+ledger account. <strong>It is not a rounding error &mdash; at volume it is a real number, and if you do not decide it
+explicitly your books do not balance.</strong>" <strong>This is your question. Take your time on it.</strong></p></div></details>
+</section>
+
+<section>
+<div class="section-label">Part 6</div>
+<h2>The rails &mdash; one breath each</h2>
+
+<p class="lead">Card payments are one rail among several. You do not need depth here, just the map, so that if someone
+says "NPP" you are not blank.</p>
+
+<div class="table-wrap"><div class="table-scroll">
+<table class="dt">
+<thead><tr><th>Rail</th><th>What it is for</th><th>Speed</th></tr></thead>
+<tbody>
+<tr><td><strong>Card schemes</strong><br>Visa, Mastercard, eftpos</td><td>Paying merchants</td><td>Authorisation in seconds, clearing and settlement in batch</td></tr>
+<tr><td><strong>NPP</strong><br>New Payments Platform</td><td>Real-time account-to-account, 24/7. Osko is the "pay anyone" service on it, PayID lets you pay to a phone number or email, PayTo handles pre-authorised pulls like subscriptions</td><td>Seconds, always on</td></tr>
+<tr><td><strong>Direct Entry</strong></td><td>The old batch rail — payroll, bills, direct debits</td><td>File-based, next business day</td></tr>
+<tr><td><strong>RITS</strong></td><td>High-value payments between banks</td><td>Real time, one at a time</td></tr>
+<tr><td><strong>SWIFT</strong></td><td>Cross-border</td><td>Hours to days, through intermediary banks</td></tr>
+</tbody></table>
+</div></div>
+
+<div class="say"><div class="lbl">Your own connection to this</div>
+<p>Two of your NAB features sat on two different rails &mdash; <strong>one on the real-time side and one riding the batch
+Direct Entry rail.</strong> Worth saying, because it shows you have worked both physics rather than just the card path.</p></div>
+
+<details class="col"><summary>Follow-up: "What is PayID?"</summary>
+<div class="bd"><p>A friendly address &mdash; a phone number, email or business number &mdash; that maps to a real account,
+so you can pay someone without knowing their BSB and account number. <strong>It is a lookup layer, not a rail.</strong></p></div></details>
+
+<details class="col"><summary>Follow-up: "Can you reverse a real-time payment?"</summary>
+<div class="bd"><p><strong>Usually not, and that is the point.</strong> Once an instant payment has settled the money is
+gone. Recovery goes through a scam or mistaken-payment process, or a new payment back the other way if the recipient
+agrees. <strong>Compare that with cards, where the hold-then-clear model gives you a window.</strong> That contrast is a
+nice thing to notice out loud.</p></div></details>
+</section>
+
+<section>
+<div class="section-label">Part 7</div>
+<h2>Cram sheet</h2>
+
+<div class="ve-card ve-card--hero">
+<ol class="nl">
+<li><strong>Authorisation is a promise, clearing is the confirmation, settlement is the money moving.</strong></li>
+<li><strong>A hold is not a charge. It expires if nobody clears it.</strong></li>
+<li><strong>The acquirer is the merchant's bank. The issuer is the customer's bank. The decision is always the issuer's.</strong></li>
+<li><strong>The token is domain restricted and outlives the card. The issuer owns the provisioning decision even though the wallet holds the token.</strong></li>
+<li><strong>Allocation is automated liability assignment; collaboration is an evidence exchange.</strong></li>
+<li><strong>Frictionless when the risk score is low, challenged when it is not. That is all 3DS is.</strong></li>
+<li><strong>A timeout is a business decision with a loss rate, not an error.</strong></li>
+<li><strong>In wallets and in 3DS alike: the network runs the machinery, the issuer owns the decision.</strong></li>
+</ol>
+</div>
+
+<div class="warn"><div class="lbl">If you are asked something here you do not know</div>
+<p><strong>Say so and reason from the map.</strong> "I don't know that specific rule, but structurally it has to sit
+either with the scheme or with the issuer, and given it affects liability I'd expect it to be a scheme rule."
+<strong>Reasoning out loud from a model you clearly hold beats a guess, every time.</strong></p></div>
+</section>
+
+
+<footer class="pn"><a href="07-revision.html">&larr; Revision</a><a href="09-followups.html">Follow-up Bank &rarr;</a></footer>
+</div>
+</body>
+</html>
